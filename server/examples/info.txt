@@ -101,6 +101,48 @@ class client_list {
         return db.count
     }
     
+    //inc. error for client
+    func set_error_for(_name: String) -> (status: Boolean, message: String) {
+        
+        //check if exists
+        var members = db.filter{$0.name == _name}.count
+        if  members == 0 {
+           return (0,"client \(_name) not exists")
+        }
+        
+        //set error to zero
+        //remove from list
+        for (index, value) in enumerate(db) {
+            if value.name == _name {
+                db[index].error += 1
+                return (1,"set error for \(_name) to \(db[index].error)")
+            }
+        }
+        return (0,"error not set for \(_name)")
+        
+    }
+    
+    //rcv sign of life from
+    func rcv_sign_of_life_from(_name: String) -> (status: Boolean, message: String) {
+        
+        //check if exists
+        var members = db.filter{$0.name == _name}.count
+        if  members == 0 {
+           return (0,"client \(_name) not exists")
+        }
+        
+        //set error to zero
+        //remove from list
+        for (index, value) in enumerate(db) {
+            if value.name == _name {
+                db[index].error = 0
+                return (1,"set sign of life from \(_name) to 0")
+            }
+        }
+        return (0,"sign of life not set for \(_name)")
+        
+    }
+    
     //get client list
     func get_client_list() -> (Array<client>) {
         return db
@@ -182,6 +224,14 @@ println(test.get_client_count())
 add = test.rem_client("7722",_port: 33,_name: "jan")
 println("\(add.message)")
 println(test.get_client_count())
+
+add = test.set_error_for("felix")
+println("\(add.message)")
+
+add = test.rcv_sign_of_life_from("felix")
+println("\(add.message)")
+
+
 
 
 
