@@ -12,6 +12,8 @@
 		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
 		DABA8CF51A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */; };
 		DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CFE1A3ECB0B00070009 /* Clients.swift */; };
+		DACB12521A3F2B440091940D /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB12511A3F2B440091940D /* Messages.swift */; };
+		DACB12541A3F319F0091940D /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB12531A3F319F0091940D /* Helpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,8 @@
 		DABA8CF31A3EC8CE00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsSWIFT_ServerTests.swift; sourceTree = "<group>"; };
 		DABA8CFE1A3ECB0B00070009 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
+		DACB12511A3F2B440091940D /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		DACB12531A3F319F0091940D /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +82,9 @@
 				DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */,
 				DABA8CE51A3EC8CD00070009 /* Images.xcassets */,
 				DABA8CFE1A3ECB0B00070009 /* Clients.swift */,
+				DACB12511A3F2B440091940D /* Messages.swift */,
 				DABA8CE71A3EC8CD00070009 /* MainMenu.xib */,
+				DACB12531A3F319F0091940D /* Helpers.swift */,
 				DABA8CE11A3EC8CD00070009 /* Supporting Files */,
 			);
 			path = WhatsSWIFT_Server;
@@ -209,7 +215,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */,
+				DACB12521A3F2B440091940D /* Messages.swift in Sources */,
 				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
+				DACB12541A3F319F0091940D /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
