@@ -8,5 +8,25 @@
 
 import Foundation
 
-println("Hello, World!")
+class Connection{
+    
+    private func receivedMessageBuffer() -> Message {
+        
+    }
 
+    private func sendMessageBuffer() -> Message {
+        
+    }
+    
+    func sendMessage() -> Message {
+        
+    }
+    
+    func receiveMessage() -> Message {
+        
+    }
+    
+    func sendMessage() -> Message {
+        
+    }
+}
