@@ -1,0 +1,414 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */; };
+		DABA8CE61A3EC8CD00070009 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE51A3EC8CD00070009 /* Images.xcassets */; };
+		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
+		DABA8CF51A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */; };
+		DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CFE1A3ECB0B00070009 /* Clients.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DABA8CEF1A3EC8CE00070009 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DABA8CD61A3EC8CD00070009 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DABA8CDD1A3EC8CD00070009;
+			remoteInfo = WhatsSWIFT_Server;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsSWIFT_Server.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DABA8CE21A3EC8CD00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DABA8CE51A3EC8CD00070009 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DABA8CE81A3EC8CD00070009 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		DABA8CEE1A3EC8CE00070009 /* WhatsSWIFT_ServerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhatsSWIFT_ServerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DABA8CF31A3EC8CE00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsSWIFT_ServerTests.swift; sourceTree = "<group>"; };
+		DABA8CFE1A3ECB0B00070009 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DABA8CDB1A3EC8CD00070009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DABA8CEB1A3EC8CE00070009 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DABA8CD51A3EC8CD00070009 = {
+			isa = PBXGroup;
+			children = (
+				DABA8CE01A3EC8CD00070009 /* WhatsSWIFT_Server */,
+				DABA8CF11A3EC8CE00070009 /* WhatsSWIFT_ServerTests */,
+				DABA8CDF1A3EC8CD00070009 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DABA8CDF1A3EC8CD00070009 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */,
+				DABA8CEE1A3EC8CE00070009 /* WhatsSWIFT_ServerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DABA8CE01A3EC8CD00070009 /* WhatsSWIFT_Server */ = {
+			isa = PBXGroup;
+			children = (
+				DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */,
+				DABA8CE51A3EC8CD00070009 /* Images.xcassets */,
+				DABA8CFE1A3ECB0B00070009 /* Clients.swift */,
+				DABA8CE71A3EC8CD00070009 /* MainMenu.xib */,
+				DABA8CE11A3EC8CD00070009 /* Supporting Files */,
+			);
+			path = WhatsSWIFT_Server;
+			sourceTree = "<group>";
+		};
+		DABA8CE11A3EC8CD00070009 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DABA8CE21A3EC8CD00070009 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DABA8CF11A3EC8CE00070009 /* WhatsSWIFT_ServerTests */ = {
+			isa = PBXGroup;
+			children = (
+				DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */,
+				DABA8CF21A3EC8CE00070009 /* Supporting Files */,
+			);
+			path = WhatsSWIFT_ServerTests;
+			sourceTree = "<group>";
+		};
+		DABA8CF21A3EC8CE00070009 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DABA8CF31A3EC8CE00070009 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DABA8CDD1A3EC8CD00070009 /* WhatsSWIFT_Server */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DABA8CF81A3EC8CE00070009 /* Build configuration list for PBXNativeTarget "WhatsSWIFT_Server" */;
+			buildPhases = (
+				DABA8CDA1A3EC8CD00070009 /* Sources */,
+				DABA8CDB1A3EC8CD00070009 /* Frameworks */,
+				DABA8CDC1A3EC8CD00070009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WhatsSWIFT_Server;
+			productName = WhatsSWIFT_Server;
+			productReference = DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DABA8CED1A3EC8CE00070009 /* WhatsSWIFT_ServerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DABA8CFB1A3EC8CE00070009 /* Build configuration list for PBXNativeTarget "WhatsSWIFT_ServerTests" */;
+			buildPhases = (
+				DABA8CEA1A3EC8CE00070009 /* Sources */,
+				DABA8CEB1A3EC8CE00070009 /* Frameworks */,
+				DABA8CEC1A3EC8CE00070009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DABA8CF01A3EC8CE00070009 /* PBXTargetDependency */,
+			);
+			name = WhatsSWIFT_ServerTests;
+			productName = WhatsSWIFT_ServerTests;
+			productReference = DABA8CEE1A3EC8CE00070009 /* WhatsSWIFT_ServerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DABA8CD61A3EC8CD00070009 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Bauer, Daniel";
+				TargetAttributes = {
+					DABA8CDD1A3EC8CD00070009 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					DABA8CED1A3EC8CE00070009 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = DABA8CDD1A3EC8CD00070009;
+					};
+				};
+			};
+			buildConfigurationList = DABA8CD91A3EC8CD00070009 /* Build configuration list for PBXProject "WhatsSWIFT_Server" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DABA8CD51A3EC8CD00070009;
+			productRefGroup = DABA8CDF1A3EC8CD00070009 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DABA8CDD1A3EC8CD00070009 /* WhatsSWIFT_Server */,
+				DABA8CED1A3EC8CE00070009 /* WhatsSWIFT_ServerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DABA8CDC1A3EC8CD00070009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABA8CE61A3EC8CD00070009 /* Images.xcassets in Resources */,
+				DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DABA8CEC1A3EC8CE00070009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DABA8CDA1A3EC8CD00070009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */,
+				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DABA8CEA1A3EC8CE00070009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DABA8CF51A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DABA8CF01A3EC8CE00070009 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DABA8CDD1A3EC8CD00070009 /* WhatsSWIFT_Server */;
+			targetProxy = DABA8CEF1A3EC8CE00070009 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DABA8CE71A3EC8CD00070009 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DABA8CE81A3EC8CD00070009 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DABA8CF61A3EC8CE00070009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DABA8CF71A3EC8CE00070009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DABA8CF91A3EC8CE00070009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WhatsSWIFT_Server/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DABA8CFA1A3EC8CE00070009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WhatsSWIFT_Server/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DABA8CFC1A3EC8CE00070009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WhatsSWIFT_ServerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhatsSWIFT_Server.app/Contents/MacOS/WhatsSWIFT_Server";
+			};
+			name = Debug;
+		};
+		DABA8CFD1A3EC8CE00070009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = WhatsSWIFT_ServerTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhatsSWIFT_Server.app/Contents/MacOS/WhatsSWIFT_Server";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DABA8CD91A3EC8CD00070009 /* Build configuration list for PBXProject "WhatsSWIFT_Server" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DABA8CF61A3EC8CE00070009 /* Debug */,
+				DABA8CF71A3EC8CE00070009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DABA8CF81A3EC8CE00070009 /* Build configuration list for PBXNativeTarget "WhatsSWIFT_Server" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DABA8CF91A3EC8CE00070009 /* Debug */,
+				DABA8CFA1A3EC8CE00070009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DABA8CFB1A3EC8CE00070009 /* Build configuration list for PBXNativeTarget "WhatsSWIFT_ServerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DABA8CFC1A3EC8CE00070009 /* Debug */,
+				DABA8CFD1A3EC8CE00070009 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DABA8CD61A3EC8CD00070009 /* Project object */;
+}
