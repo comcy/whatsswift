@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>WhatsSWIFT_Server.xcscheme</key>
+		<key>whatsSwift_Connection.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>DABA8CDD1A3EC8CD00070009</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DABA8CED1A3EC8CE00070009</key>
+		<key>FC57192E1A3ED10E009D7EF0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
