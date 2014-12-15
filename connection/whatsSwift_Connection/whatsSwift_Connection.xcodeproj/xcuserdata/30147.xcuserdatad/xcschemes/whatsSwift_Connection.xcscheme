@@ -14,24 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DABA8CDD1A3EC8CD00070009"
-               BuildableName = "WhatsSWIFT_Server.app"
-               BlueprintName = "WhatsSWIFT_Server"
-               ReferencedContainer = "container:WhatsSWIFT_Server.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DABA8CED1A3EC8CE00070009"
-               BuildableName = "WhatsSWIFT_ServerTests.xctest"
-               BlueprintName = "WhatsSWIFT_ServerTests"
-               ReferencedContainer = "container:WhatsSWIFT_Server.xcodeproj">
+               BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
+               BuildableName = "whatsSwift_Connection"
+               BlueprintName = "whatsSwift_Connection"
+               ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -42,24 +28,14 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DABA8CED1A3EC8CE00070009"
-               BuildableName = "WhatsSWIFT_ServerTests.xctest"
-               BlueprintName = "WhatsSWIFT_ServerTests"
-               ReferencedContainer = "container:WhatsSWIFT_Server.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DABA8CDD1A3EC8CD00070009"
-            BuildableName = "WhatsSWIFT_Server.app"
-            BlueprintName = "WhatsSWIFT_Server"
-            ReferencedContainer = "container:WhatsSWIFT_Server.xcodeproj">
+            BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
+            BuildableName = "whatsSwift_Connection"
+            BlueprintName = "whatsSwift_Connection"
+            ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -75,10 +51,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DABA8CDD1A3EC8CD00070009"
-            BuildableName = "WhatsSWIFT_Server.app"
-            BlueprintName = "WhatsSWIFT_Server"
-            ReferencedContainer = "container:WhatsSWIFT_Server.xcodeproj">
+            BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
+            BuildableName = "whatsSwift_Connection"
+            BlueprintName = "whatsSwift_Connection"
+            ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -93,10 +69,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DABA8CDD1A3EC8CD00070009"
-            BuildableName = "WhatsSWIFT_Server.app"
-            BlueprintName = "WhatsSWIFT_Server"
-            ReferencedContainer = "container:WhatsSWIFT_Server.xcodeproj">
+            BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
+            BuildableName = "whatsSwift_Connection"
+            BlueprintName = "whatsSwift_Connection"
+            ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
