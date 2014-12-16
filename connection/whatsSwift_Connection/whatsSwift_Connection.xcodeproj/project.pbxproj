@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FC5719331A3ED10E009D7EF0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC5719321A3ED10E009D7EF0 /* main.swift */; };
+		724C85621A401C370079796C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724C85611A401C370079796C /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FC57192D1A3ED10E009D7EF0 /* CopyFiles */ = {
+		724C855C1A401C370079796C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -23,12 +23,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FC57192F1A3ED10E009D7EF0 /* whatsSwift_Connection */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = whatsSwift_Connection; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC5719321A3ED10E009D7EF0 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		724C855E1A401C370079796C /* WhatsSWIFT_Connection */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WhatsSWIFT_Connection; sourceTree = BUILT_PRODUCTS_DIR; };
+		724C85611A401C370079796C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FC57192C1A3ED10E009D7EF0 /* Frameworks */ = {
+		724C855B1A401C370079796C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -38,94 +38,94 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FC5719261A3ED10E009D7EF0 = {
+		724C85551A401C370079796C = {
 			isa = PBXGroup;
 			children = (
-				FC5719311A3ED10E009D7EF0 /* whatsSwift_Connection */,
-				FC5719301A3ED10E009D7EF0 /* Products */,
+				724C85601A401C370079796C /* WhatsSWIFT_Connection */,
+				724C855F1A401C370079796C /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		FC5719301A3ED10E009D7EF0 /* Products */ = {
+		724C855F1A401C370079796C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FC57192F1A3ED10E009D7EF0 /* whatsSwift_Connection */,
+				724C855E1A401C370079796C /* WhatsSWIFT_Connection */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FC5719311A3ED10E009D7EF0 /* whatsSwift_Connection */ = {
+		724C85601A401C370079796C /* WhatsSWIFT_Connection */ = {
 			isa = PBXGroup;
 			children = (
-				FC5719321A3ED10E009D7EF0 /* main.swift */,
+				724C85611A401C370079796C /* main.swift */,
 			);
-			path = whatsSwift_Connection;
+			path = WhatsSWIFT_Connection;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FC57192E1A3ED10E009D7EF0 /* whatsSwift_Connection */ = {
+		724C855D1A401C370079796C /* WhatsSWIFT_Connection */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FC5719361A3ED10E009D7EF0 /* Build configuration list for PBXNativeTarget "whatsSwift_Connection" */;
+			buildConfigurationList = 724C85651A401C370079796C /* Build configuration list for PBXNativeTarget "WhatsSWIFT_Connection" */;
 			buildPhases = (
-				FC57192B1A3ED10E009D7EF0 /* Sources */,
-				FC57192C1A3ED10E009D7EF0 /* Frameworks */,
-				FC57192D1A3ED10E009D7EF0 /* CopyFiles */,
+				724C855A1A401C370079796C /* Sources */,
+				724C855B1A401C370079796C /* Frameworks */,
+				724C855C1A401C370079796C /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = whatsSwift_Connection;
-			productName = whatsSwift_Connection;
-			productReference = FC57192F1A3ED10E009D7EF0 /* whatsSwift_Connection */;
+			name = WhatsSWIFT_Connection;
+			productName = WhatsSWIFT_Connection;
+			productReference = 724C855E1A401C370079796C /* WhatsSWIFT_Connection */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FC5719271A3ED10E009D7EF0 /* Project object */ = {
+		724C85561A401C370079796C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0610;
-				ORGANIZATIONNAME = "Silfang, Christian";
+				ORGANIZATIONNAME = comcy;
 				TargetAttributes = {
-					FC57192E1A3ED10E009D7EF0 = {
-						CreatedOnToolsVersion = 6.1;
+					724C855D1A401C370079796C = {
+						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
 			};
-			buildConfigurationList = FC57192A1A3ED10E009D7EF0 /* Build configuration list for PBXProject "whatsSwift_Connection" */;
+			buildConfigurationList = 724C85591A401C370079796C /* Build configuration list for PBXProject "WhatsSWIFT_Connection" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = FC5719261A3ED10E009D7EF0;
-			productRefGroup = FC5719301A3ED10E009D7EF0 /* Products */;
+			mainGroup = 724C85551A401C370079796C;
+			productRefGroup = 724C855F1A401C370079796C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FC57192E1A3ED10E009D7EF0 /* whatsSwift_Connection */,
+				724C855D1A401C370079796C /* WhatsSWIFT_Connection */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		FC57192B1A3ED10E009D7EF0 /* Sources */ = {
+		724C855A1A401C370079796C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC5719331A3ED10E009D7EF0 /* main.swift in Sources */,
+				724C85621A401C370079796C /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		FC5719341A3ED10E009D7EF0 /* Debug */ = {
+		724C85631A401C370079796C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -158,7 +158,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -166,7 +166,7 @@
 			};
 			name = Debug;
 		};
-		FC5719351A3ED10E009D7EF0 /* Release */ = {
+		724C85641A401C370079796C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -194,20 +194,20 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
 			name = Release;
 		};
-		FC5719371A3ED10E009D7EF0 /* Debug */ = {
+		724C85661A401C370079796C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		FC5719381A3ED10E009D7EF0 /* Release */ = {
+		724C85671A401C370079796C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -217,24 +217,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FC57192A1A3ED10E009D7EF0 /* Build configuration list for PBXProject "whatsSwift_Connection" */ = {
+		724C85591A401C370079796C /* Build configuration list for PBXProject "WhatsSWIFT_Connection" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FC5719341A3ED10E009D7EF0 /* Debug */,
-				FC5719351A3ED10E009D7EF0 /* Release */,
+				724C85631A401C370079796C /* Debug */,
+				724C85641A401C370079796C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FC5719361A3ED10E009D7EF0 /* Build configuration list for PBXNativeTarget "whatsSwift_Connection" */ = {
+		724C85651A401C370079796C /* Build configuration list for PBXNativeTarget "WhatsSWIFT_Connection" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FC5719371A3ED10E009D7EF0 /* Debug */,
-				FC5719381A3ED10E009D7EF0 /* Release */,
+				724C85661A401C370079796C /* Debug */,
+				724C85671A401C370079796C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FC5719271A3ED10E009D7EF0 /* Project object */;
+	rootObject = 724C85561A401C370079796C /* Project object */;
 }
