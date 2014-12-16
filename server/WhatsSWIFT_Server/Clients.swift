@@ -31,7 +31,6 @@ struct client {
 class client_list {
     
     //vars
-    let max_clients = 100
     var id:Int = 0
     
     //client db

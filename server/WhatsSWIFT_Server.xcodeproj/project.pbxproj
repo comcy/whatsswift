@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA376F401A4050820058A8A5 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA376F3F1A4050820058A8A5 /* Params.swift */; };
 		DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */; };
 		DABA8CE61A3EC8CD00070009 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE51A3EC8CD00070009 /* Images.xcassets */; };
 		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA376F3F1A4050820058A8A5 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 		DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsSWIFT_Server.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABA8CE21A3EC8CD00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				DACB12511A3F2B440091940D /* Messages.swift */,
 				DABA8CE71A3EC8CD00070009 /* MainMenu.xib */,
 				DACB12531A3F319F0091940D /* Helpers.swift */,
+				DA376F3F1A4050820058A8A5 /* Params.swift */,
 				DABA8CE11A3EC8CD00070009 /* Supporting Files */,
 			);
 			path = WhatsSWIFT_Server;
@@ -217,6 +220,7 @@
 				DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */,
 				DACB12521A3F2B440091940D /* Messages.swift in Sources */,
 				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
+				DA376F401A4050820058A8A5 /* Params.swift in Sources */,
 				DACB12541A3F319F0091940D /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
