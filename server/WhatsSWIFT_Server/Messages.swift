@@ -23,7 +23,7 @@
 import Foundation
 
 /* message */
-struct message {
+struct s_message {
     
     var id:UInt64 = 0
     var name:String = ""
@@ -38,7 +38,7 @@ class message_list {
     var id:UInt64 = 0
     
     //client db
-    var db : Array<message> = Array<message>()
+    var db : Array<s_message> = Array<s_message>()
     
     //get message count
     func get_message_count() -> (Int) {
@@ -53,7 +53,7 @@ class message_list {
         
         //generate tmp message struct
         id += 1
-        var tmp_message = message(id: id,name: _name, message: _message, time: timestamp)
+        var tmp_message = s_message(id: id,name: _name, message: _message, time: timestamp)
         
         //add message to db
         db.append(tmp_message)
@@ -61,7 +61,7 @@ class message_list {
     }
     
     //get last message
-    func get_last_message() -> (message) {
+    func get_last_message() -> (s_message) {
         
         return db[db.count-1]
     }

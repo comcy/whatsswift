@@ -28,6 +28,33 @@ func addFakeClients(db: client_list) {
     
 }
 
+/* msg */
+struct message {
+    
+    var ip:String = ""
+    var message:String = ""
+    var name:String = ""
+    var port:Int = 0
+    var type:Int = 0
+    
+}
+
+/* add some fake connection */
+class connection_debug {
+    
+    func sendMessage(message) -> (Boolean) {
+        return 1
+    }
+    
+    func receiveMessage() -> (status: Boolean,msg: message) {
+        var msg = message(ip: "192.168.2.222", message: "du held", name: "Hannes", port: 12587, type: 0)
+        
+        return (1,msg)
+    }
+    
+
+}
+
 
 
 

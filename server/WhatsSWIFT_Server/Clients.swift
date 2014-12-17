@@ -16,7 +16,7 @@
 import Foundation
 
 /* client */
-struct client {
+struct s_client {
     
     var id:Int = 0
     var ip:String = ""
@@ -34,7 +34,7 @@ class client_list {
     var id:Int = 0
     
     //client db
-    var db : Array<client> = Array<client>()
+    var db : Array<s_client> = Array<s_client>()
     
     //get client count
     func get_client_count() -> (Int) {
@@ -84,7 +84,7 @@ class client_list {
     }
     
     //get client list
-    func get_client_list() -> (Array<client>) {
+    func get_client_list() -> (Array<s_client>) {
         return db
     }
     
@@ -102,7 +102,7 @@ class client_list {
         
         //generate tmp client struct
         id += 1
-        var tmp_client = client(id: id,ip: _ip, port: _port, name: _name, type: _type, time: timestamp, error: 0)
+        var tmp_client = s_client(id: id,ip: _ip, port: _port, name: _name, type: _type, time: timestamp, error: 0)
         
         //add client to db
         if db.count < max_clients {

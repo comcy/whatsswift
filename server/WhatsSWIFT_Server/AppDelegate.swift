@@ -19,6 +19,7 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource {
     
+    /* ---------------------------- */
     //outlet
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var i_server_name: NSTextField!
@@ -30,19 +31,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
     @IBOutlet weak var o_clients: NSTableView!
     
+    /* ---------------------------- */
     /* async gcd */
     private let queue_global = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
     private let queue_concur = dispatch_queue_create ("concur" , DISPATCH_QUEUE_CONCURRENT)
     private let queue_serial = dispatch_queue_create("serial", DISPATCH_QUEUE_SERIAL)
     
+    /* ---------------------------- */
     /* obj */
     var msg_db = message_list()
     var client_db = client_list()
+    var connection = connection_debug() // -> replace with original
     
+    /* ---------------------------- */
     /* vars */
     var server_status:Int = 0 // 0=offline, 1=online, -1=error
-    var refresh_timer = NSTimer()
+    var client_refresh_timer = NSTimer()
+    var msg_refresh_timer = NSTimer()
 
+    /* ---------------------------- */
     /* startup */
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         add_log("initialize server")
@@ -50,18 +57,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //debug
         addFakeClients(client_db)
 
-        //init
+        //init values
         o_server_ip.stringValue = ""
         o_curr_clients.integerValue = client_db.get_client_count()
         o_curr_status.stringValue = "offline"
+        button_start_stopp.title = "start server"
         
     }
 
+    /* ---------------------------- */
     /* shutdowm */
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
     
+    /* ---------------------------- */
     /* send echo after timer and inc. error. if error is to high then disconnect */
     func client_refresh_cylce() {
         add_log("start to refresh \(client_db.get_client_count()) clients")
@@ -86,7 +96,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 if err.status == 1 {
                     //connection send echo
                     //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
-                    // +++++++++ connection send echo
+                    self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: 2))
                 }
                 
                 //refresh client count on gui
@@ -95,9 +105,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         }
     }
     
-    /* button - start, stopp server */
+    /* ---------------------------- */
+    /* msg refresh cycle. check connection for new messages */
+    func msg_refresh_cycle() {
+        //add_log("start to refresh msg")
+        
+        // async
+        dispatch_async(queue_global) {
+            
+        }
+
+        
+    }
+    
+    /* ---------------------------- */
+    /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
+        
+        button_start_stopp.title = "sffafs"
         
         //check conditions
         if i_server_name.stringValue == "" || i_server_pass.stringValue == "" {
@@ -113,10 +139,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             o_status_indicator.startAnimation(sender)
             i_server_name.editable = false
             i_server_pass.editable = false
+            button_start_stopp.title = "stop server"
             
             //echo timer
-            add_log("start refresh timer interval: \(refresh_time) [sec]")
-            refresh_timer = NSTimer.scheduledTimerWithTimeInterval(refresh_time, target: self, selector: Selector("client_refresh_cylce"), userInfo: nil,repeats: true)
+            add_log("start echo refresh timer interval: \(client_refresh_time) [sec]")
+            client_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(client_refresh_time, target: self, selector: Selector("client_refresh_cylce"), userInfo: nil,repeats: true)
+            
+            //msg timer
+            add_log("start msg refresh timer interval: \(msg_refresh_time) [sec]")
+            msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
             
         }
         
@@ -128,10 +159,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             o_status_indicator.stopAnimation(sender)
             i_server_name.editable = true
             i_server_pass.editable = true
+            button_start_stopp.title = "start server"
             
             //echo timer
-            add_log("stopp refresh timer interval: \(refresh_time) [sec]")
-            refresh_timer.invalidate()
+            add_log("stopp echo refresh timer interval: \(client_refresh_time) [sec]")
+            client_refresh_timer.invalidate()
+            
+            //echo timer
+            add_log("stopp msg refresh timer interval: \(msg_refresh_time) [sec]")
+            msg_refresh_timer.invalidate()
             
         }
         
@@ -140,6 +176,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
     }
     
+    /* ---------------------------- */
     /* add text to log */
     func add_log(text: String) -> (Bool) {
         
@@ -163,29 +200,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     }
     
     //++++++++++++++++++++++++++++++++++++
-    
-    func numberOfRowsInTableView(aTableView: NSTableView!) -> Int
-    {
-    let numberOfRows:Int = getDataArray().count
-    return numberOfRows
-    }
-    
-    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row rowIndex: Int) -> AnyObject!
-    {
-        var newString: (AnyObject?) = getDataArray().objectAtIndex(rowIndex).objectForKey(tableColumn.identifier)
-        println(newString!)
-        return newString!
-    }
-    
-    func getDataArray () -> NSArray{
-        var dataArray:[NSDictionary] = [["FirstName": "Debasis", "LastName": "Das"],
-            ["FirstName": "Nishant", "LastName": "Singh"],
-            ["FirstName": "John", "LastName": "Doe"],
-            ["FirstName": "Jane", "LastName": "Doe"],
-            ["FirstName": "Mary", "LastName": "Jane"]];
-        println(dataArray);
-        return dataArray;
-    }
 }
 
 
