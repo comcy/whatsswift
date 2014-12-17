@@ -57,7 +57,7 @@ class message_list {
         
         //add message to db
         db.append(tmp_message)
-        return (1,"message from \(_name) with id \(id) successfully added - \(_message)")
+        return (1,"message from \(_name) with id \(id) successfully added to list")
     }
     
     //get last message

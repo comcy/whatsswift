@@ -15,6 +15,13 @@
 /* import */
 import Cocoa
 
+extension NSTextView {
+    func appendString(string:String) {
+        self.string! += string
+        self.scrollRangeToVisible(NSRange(location:countElements(self.string!), length: 0))
+    }
+}
+
 /* main */
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource {
@@ -26,10 +33,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var i_server_pass: NSSecureTextField!
     @IBOutlet weak var o_server_ip: NSTextField!
     @IBOutlet weak var o_curr_clients: NSTextField!
+    @IBOutlet weak var o_current_msg: NSTextField!
     @IBOutlet weak var o_curr_status: NSTextField!
     @IBOutlet weak var o_log: NSScrollView!
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
-    @IBOutlet weak var o_clients: NSTableView!
+    @IBOutlet var texter: NSTextView!
+    
+
     
     /* ---------------------------- */
     /* async gcd */
@@ -60,6 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //init values
         o_server_ip.stringValue = ""
         o_curr_clients.integerValue = client_db.get_client_count()
+        o_current_msg.integerValue = msg_db.get_message_count()
         o_curr_status.stringValue = "offline"
         button_start_stopp.title = "start server"
         
@@ -77,7 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         add_log("start to refresh \(client_db.get_client_count()) clients")
         
         // async
-        dispatch_async(queue_global) {
+        dispatch_async(queue_serial) {
             
             //parse clients
             for (index, value) in enumerate(self.client_db.get_client_list()) {
@@ -86,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 if value.error >= max_error {
                     //rem client
                     var rem = self.client_db.rem_client(value.ip,_port: value.port,_name: value.name)
-                    //self.add_log("\(rem.message) -> reason: not alive")
+                    self.add_log("\(rem.message) -> reason: not alive")
                 }
                 
                 //inc. error
@@ -95,8 +106,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //check if exists
                 if err.status == 1 {
                     //connection send echo
-                    //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                     self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: 2))
+                    self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                 }
                 
                 //refresh client count on gui
@@ -109,9 +120,45 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* msg refresh cycle. check connection for new messages */
     func msg_refresh_cycle() {
         //add_log("start to refresh msg")
+        //self.texter.appendString("dfdffff \n")
+        //texter.textStorage().mutableString().setString("")
+        //texter.textStorage?.mutableString.setString("fdfdf")
         
-        // async
-        dispatch_async(queue_global) {
+        
+                // async
+        dispatch_async(queue_serial) {
+            
+            //check for msg
+            var tmp_msg =  self.connection.receiveMessage()
+            
+            //if new message send broadcast and add to msg_db
+            if tmp_msg.status == 1 {
+                
+                //set sign of life and check if connected
+                var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
+                
+                //if connected
+                if check.status == 1 {
+                    
+                    //add message to list
+                    var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
+                    self.add_log("\(list.message)")
+                    
+                    for (index, value) in enumerate(self.client_db.get_client_list()) {
+                        //send message
+                        self.connection.sendMessage(message(ip: value.ip, message: tmp_msg.msg.message, name: tmp_msg.msg.name, port: value.port, type: 3))
+                        self.add_log("send message from \(tmp_msg.msg.name) with id \(self.msg_db.get_message_count()) to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                        
+                        //refresh msg count on gui
+                        self.o_current_msg.integerValue = self.msg_db.get_message_count()
+                    }
+                }
+                else {
+                    self.add_log("message not delivered -> reason: \(check.message)")
+                    return
+                }
+                
+            }
             
         }
 
@@ -123,16 +170,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
         
-        button_start_stopp.title = "sffafs"
-        
-        //check conditions
-        if i_server_name.stringValue == "" || i_server_pass.stringValue == "" {
-            add_log("can not start server -> empty data")
-            //return
-        }
-        
         //if offline go online
         if server_status == 0 {
+            
+            //check conditions
+            if i_server_name.stringValue == "" || i_server_pass.stringValue == "" {
+                add_log("can not start server -> empty data")
+                //return
+            }
             
             add_log("start server \(i_server_name.stringValue) at IP: 192.168.0.100")
             o_curr_status.stringValue = "online"
@@ -168,7 +213,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //echo timer
             add_log("stopp msg refresh timer interval: \(msg_refresh_time) [sec]")
             msg_refresh_timer.invalidate()
-            
         }
         
         if server_status==1 { server_status = 0}
@@ -195,7 +239,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             return o_log.contentView.documentView as NSTextView
             }
         }
-        textField.insertText(text)
+        //textField.insertText(text)
+        texter.insertText("dfdfdf \n")
+        //texter.appendString(text)
+        //texter.string! += text
         return true
     }
     
