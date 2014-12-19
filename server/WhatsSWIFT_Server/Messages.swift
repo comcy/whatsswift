@@ -37,6 +37,11 @@ class message_list {
     //vars
     var id:UInt64 = 0
     
+    //init
+    init() {
+        
+    }
+    
     //client db
     var db : Array<s_message> = Array<s_message>()
     

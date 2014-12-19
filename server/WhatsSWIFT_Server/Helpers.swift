@@ -51,7 +51,7 @@ class connection_debug {
         tmp.append(message(ip: "192.168.2.222", message: "44rtggf", name: "Hannes", port: 12587, type: 0))
         tmp.append(message(ip: "192.168.2.222", message: "rzzzr", name: "Lisa", port: 12587, type: 0))
         tmp.append(message(ip: "192.168.2.222", message: "fgrgrg", name: "Mike", port: 12587, type: 0))
-        tmp.append(message(ip: "192.168.2.222", message: "rzgr", name: "Jan", port: 12587, type: 0))
+        tmp.append(message(ip: "192.168.2.222", message: "rzgr", name: "Hannes", port: 12587, type: 0))
         tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Hannes", port: 12587, type: 0))
         
         var diceRoll = Int(arc4random_uniform(5))

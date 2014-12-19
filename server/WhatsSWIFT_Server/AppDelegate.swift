@@ -14,6 +14,7 @@
 
 /* import */
 import Cocoa
+import AppKit
 
 extension NSTextView {
     func appendString(string:String) {
@@ -35,10 +36,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var o_curr_clients: NSTextField!
     @IBOutlet weak var o_current_msg: NSTextField!
     @IBOutlet weak var o_curr_status: NSTextField!
-    @IBOutlet weak var o_log: NSScrollView!
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
-    @IBOutlet var texter: NSTextView!
     
+    //@IBOutlet var texter: NSTextView!
+    //@IBOutlet weak var o_log: NSScrollView!
+    
+    //@IBOutlet weak var table: NSTableView!
 
     
     /* ---------------------------- */
@@ -73,9 +76,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         o_current_msg.integerValue = msg_db.get_message_count()
         o_curr_status.stringValue = "offline"
         button_start_stopp.title = "start server"
+
+        
         
     }
-
+    
     /* ---------------------------- */
     /* shutdowm */
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -113,6 +118,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //refresh client count on gui
                 self.o_curr_clients.integerValue = self.client_db.get_client_count()
             }
+            
+            //refresh list
+            self.tabe.reloadData()
         }
     }
     
@@ -123,11 +131,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //self.texter.appendString("dfdffff \n")
         //texter.textStorage().mutableString().setString("")
         //texter.textStorage?.mutableString.setString("fdfdf")
+        //tabe.reloadData()
         
-        
-                // async
+        // async
         dispatch_async(queue_serial) {
-            
+        
             //check for msg
             var tmp_msg =  self.connection.receiveMessage()
             
@@ -159,16 +167,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 }
                 
             }
-            
         }
 
         
     }
     
+    
+
+    
     /* ---------------------------- */
     /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
+        
+        //numberOfRowsInTableView(table)
+        //tableView(table,"", row: 1)
         
         //if offline go online
         if server_status == 0 {
@@ -194,10 +207,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             add_log("start msg refresh timer interval: \(msg_refresh_time) [sec]")
             msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
             
+            server_status = 1
         }
-        
-        //if online go offline
-        if server_status == 1 {
+        else if server_status == 1 {
             
             add_log("stopp server")
             o_curr_status.stringValue = "offline"
@@ -213,10 +225,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //echo timer
             add_log("stopp msg refresh timer interval: \(msg_refresh_time) [sec]")
             msg_refresh_timer.invalidate()
+            
+            server_status = 0
         }
-        
-        if server_status==1 { server_status = 0}
-        if server_status==0 { server_status = 1}
         
     }
     
@@ -234,19 +245,75 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         print(text)
         
         //scrollview out
-        var textField : NSTextView {
+        /*var textField : NSTextView {
             get {
-            return o_log.contentView.documentView as NSTextView
+            //return o_log.contentView.documentView as NSTextView
             }
-        }
+        }*/
         //textField.insertText(text)
-        texter.insertText("dfdfdf \n")
+        //texter.insertText("dfdfdf \n")
         //texter.appendString(text)
         //texter.string! += text
         return true
     }
     
-    //++++++++++++++++++++++++++++++++++++
+    /* ---------------------------- */
+    /* clients table */
+    @IBOutlet weak var tabe: NSTableView!
+    
+    //update rows
+    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+        let numberOfRows:Int = client_db.get_client_count()
+        //let numberOfRows:Int = getDataArray().count
+        return numberOfRows
+    }
+    
+    //set data
+    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject!
+    {
+        //show identifier
+        //var string:String = "row " + String(row) + ", Col" + String(tableColumn.identifier)
+        //println(string)
+        //return string
+        
+        //clients
+        var clients : Array<s_client> = client_db.get_client_list()
+        var string = ""
+        if client_db.get_client_count() != 0 {
+        switch tableColumn.identifier {
+            case "Name":
+                string = clients[row].name
+            case "ID":
+                string = "\(clients[row].id)"
+            case "IP":
+                string = clients[row].ip
+            case "Port":
+                string = "\(clients[row].port)"
+            case "Type":
+                string = clients[row].type
+            case "Error":
+                string = "\(clients[row].error)"
+            case "Connected":
+                string = clients[row].time
+            default:
+                string = ":)"
+            
+        }
+        }
+        //var newString = getDataArray().objectAtIndex(row).objectForKey(tableColumn.identifier)
+        //println("\(row)  \(tableColumn.identifier)")
+        return string
+    }
+    /*func getDataArray () -> NSArray{
+        var dataArray:[NSDictionary] = [["FirstName": "Debasis", "LastName": "Das"],
+            ["FirstName": "Nishant", "LastName": "Singh"],
+            ["FirstName": "John", "LastName": "Doe"],
+            ["FirstName": "Jane", "LastName": "Doe"],
+            ["FirstName": "Mary", "LastName": "Jane"]];
+        //println(dataArray);
+        return dataArray;
+    }*/
+    
 }
 
 
