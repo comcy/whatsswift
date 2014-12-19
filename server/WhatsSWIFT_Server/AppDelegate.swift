@@ -34,14 +34,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var i_server_pass: NSSecureTextField!
     @IBOutlet weak var o_server_ip: NSTextField!
     @IBOutlet weak var o_curr_clients: NSTextField!
+    @IBOutlet weak var o_log_info: NSTextField!
     @IBOutlet weak var o_current_msg: NSTextField!
     @IBOutlet weak var o_curr_status: NSTextField!
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
+    @IBOutlet var o_log: NSTextView!
     
-    //@IBOutlet var texter: NSTextView!
-    //@IBOutlet weak var o_log: NSScrollView!
-    
-    //@IBOutlet weak var table: NSTableView!
 
     
     /* ---------------------------- */
@@ -76,8 +74,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         o_current_msg.integerValue = msg_db.get_message_count()
         o_curr_status.stringValue = "offline"
         button_start_stopp.title = "start server"
-
-        
+        o_log_info.stringValue = "Log (max. \(max_log_entries) entries)"
         
     }
     
@@ -112,7 +109,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 if err.status == 1 {
                     //connection send echo
                     self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: 2))
-                    self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                    //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                 }
                 
                 //refresh client count on gui
@@ -127,11 +124,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* ---------------------------- */
     /* msg refresh cycle. check connection for new messages */
     func msg_refresh_cycle() {
-        //add_log("start to refresh msg")
-        //self.texter.appendString("dfdffff \n")
-        //texter.textStorage().mutableString().setString("")
-        //texter.textStorage?.mutableString.setString("fdfdf")
-        //tabe.reloadData()
         
         // async
         dispatch_async(queue_serial) {
@@ -151,11 +143,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     //add message to list
                     var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
                     self.add_log("\(list.message)")
+                    self.add_log("broadcast message from \(tmp_msg.msg.name) to \(self.client_db.get_client_count()) clients")
                     
                     for (index, value) in enumerate(self.client_db.get_client_list()) {
                         //send message
                         self.connection.sendMessage(message(ip: value.ip, message: tmp_msg.msg.message, name: tmp_msg.msg.name, port: value.port, type: 3))
-                        self.add_log("send message from \(tmp_msg.msg.name) with id \(self.msg_db.get_message_count()) to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                        //self.add_log("send message from \(tmp_msg.msg.name) with id \(self.msg_db.get_message_count()) to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                         
                         //refresh msg count on gui
                         self.o_current_msg.integerValue = self.msg_db.get_message_count()
@@ -168,7 +161,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 
             }
         }
-
+        
+        //refresh list
+        self.tabe.reloadData()
         
     }
     
@@ -179,9 +174,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
-        
-        //numberOfRowsInTableView(table)
-        //tableView(table,"", row: 1)
         
         //if offline go online
         if server_status == 0 {
@@ -233,27 +225,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     
     /* ---------------------------- */
     /* add text to log */
+    var entries:Int = 0
     func add_log(text: String) -> (Bool) {
         
         //generate timestamp
         var timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
         
         //generate string
-        var text:String = "Log: \(timestamp) -> \(text) \n"
+        var text:String = "\(timestamp) -> \(text) \n"
         
         //system output
-        print(text)
+        print(colorizeText(text).string)
         
-        //scrollview out
-        /*var textField : NSTextView {
-            get {
-            //return o_log.contentView.documentView as NSTextView
+        //textview out
+        dispatch_async(dispatch_get_main_queue()) {
+            //add text
+            self.o_log.string! += colorizeText(text).string
+            if self.entries >= max_log_entries {
+                self.o_log.string! = ""
+                self.entries = 0
             }
-        }*/
-        //textField.insertText(text)
-        //texter.insertText("dfdfdf \n")
-        //texter.appendString(text)
-        //texter.string! += text
+            self.o_log.scrollRangeToVisible(NSRange(location: countElements(self.o_log.string!), length: 0))
+        }
+        entries++
         return true
     }
     

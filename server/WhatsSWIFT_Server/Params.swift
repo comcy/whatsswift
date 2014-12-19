@@ -24,4 +24,6 @@ var msg_refresh_time = 1.5 //sec
 //max error count befor disconnect (refresh_time*max_error) = time sec
 var max_error:Int = 10
 //max number of simultanious connected clients
-let max_clients = 100
+var max_clients = 100
+//max count of log entries
+var max_log_entries:Int = 500

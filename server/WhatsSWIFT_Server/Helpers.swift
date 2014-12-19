@@ -16,6 +16,34 @@
 import Foundation
 import Cocoa
 
+/* colorize text */
+func colorizeText(ressource: String) -> NSMutableAttributedString {
+    var theRessource = ressource
+    var attributedString = NSMutableAttributedString(string: theRessource)
+    let aColor = NSColor.redColor()
+    let aRange = NSMakeRange(0, 2)
+    attributedString.addAttribute(NSForegroundColorAttributeName, value:aColor, range:aRange)
+    return attributedString
+}
+
+/* colorize text 2 */
+func attributeString(ressource: String) -> NSMutableAttributedString{
+    var attributedRessource = NSMutableAttributedString(string: ressource)
+    let theCompleteRange = NSMakeRange(0, countElements(ressource))
+    let theFont = NSFont(name: "Menlo Bold", size: 11)
+    let theColor = NSColor.whiteColor()
+    
+    // style
+    attributedRessource.addAttribute(NSFontAttributeName, value: theFont!, range: theCompleteRange)
+    
+    // text color
+    attributedRessource.addAttribute(NSForegroundColorAttributeName, value: theColor, range: theCompleteRange)
+    
+    // background color
+    attributedRessource.addAttribute(NSBackgroundColorAttributeName, value: NSColor.redColor(), range: NSMakeRange(10,20))
+    return attributedRessource
+}
+
 /* add some fake clients */
 func addFakeClients(db: client_list) {
     
