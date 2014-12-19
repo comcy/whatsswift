@@ -33,6 +33,11 @@ class client_list {
     //vars
     var id:Int = 0
     
+    //init
+    init() {
+        
+    }
+    
     //client db
     var db : Array<s_client> = Array<s_client>()
     

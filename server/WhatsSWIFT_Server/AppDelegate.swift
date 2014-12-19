@@ -14,6 +14,7 @@
 
 /* import */
 import Cocoa
+import AppKit
 
 extension NSTextView {
     func appendString(string:String) {
@@ -33,11 +34,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var i_server_pass: NSSecureTextField!
     @IBOutlet weak var o_server_ip: NSTextField!
     @IBOutlet weak var o_curr_clients: NSTextField!
+    @IBOutlet weak var o_log_info: NSTextField!
     @IBOutlet weak var o_current_msg: NSTextField!
     @IBOutlet weak var o_curr_status: NSTextField!
-    @IBOutlet weak var o_log: NSScrollView!
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
-    @IBOutlet var texter: NSTextView!
+    @IBOutlet var o_log: NSTextView!
     
 
     
@@ -73,9 +74,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         o_current_msg.integerValue = msg_db.get_message_count()
         o_curr_status.stringValue = "offline"
         button_start_stopp.title = "start server"
+        o_log_info.stringValue = "Log (max. \(max_log_entries) entries)"
         
     }
-
+    
     /* ---------------------------- */
     /* shutdowm */
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -107,27 +109,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 if err.status == 1 {
                     //connection send echo
                     self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: 2))
-                    self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                    //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                 }
                 
                 //refresh client count on gui
                 self.o_curr_clients.integerValue = self.client_db.get_client_count()
             }
+            
+            //refresh list
+            self.tabe.reloadData()
         }
     }
     
     /* ---------------------------- */
     /* msg refresh cycle. check connection for new messages */
     func msg_refresh_cycle() {
-        //add_log("start to refresh msg")
-        //self.texter.appendString("dfdffff \n")
-        //texter.textStorage().mutableString().setString("")
-        //texter.textStorage?.mutableString.setString("fdfdf")
         
-        
-                // async
+        // async
         dispatch_async(queue_serial) {
-            
+        
             //check for msg
             var tmp_msg =  self.connection.receiveMessage()
             
@@ -143,11 +143,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     //add message to list
                     var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
                     self.add_log("\(list.message)")
+                    self.add_log("broadcast message from \(tmp_msg.msg.name) to \(self.client_db.get_client_count()) clients")
                     
                     for (index, value) in enumerate(self.client_db.get_client_list()) {
                         //send message
                         self.connection.sendMessage(message(ip: value.ip, message: tmp_msg.msg.message, name: tmp_msg.msg.name, port: value.port, type: 3))
-                        self.add_log("send message from \(tmp_msg.msg.name) with id \(self.msg_db.get_message_count()) to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                        //self.add_log("send message from \(tmp_msg.msg.name) with id \(self.msg_db.get_message_count()) to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                         
                         //refresh msg count on gui
                         self.o_current_msg.integerValue = self.msg_db.get_message_count()
@@ -159,11 +160,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 }
                 
             }
-            
         }
-
+        
+        //refresh list
+        self.tabe.reloadData()
         
     }
+    
+    
+
     
     /* ---------------------------- */
     /* button - start, stop server */
@@ -194,10 +199,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             add_log("start msg refresh timer interval: \(msg_refresh_time) [sec]")
             msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
             
+            server_status = 1
         }
-        
-        //if online go offline
-        if server_status == 1 {
+        else if server_status == 1 {
             
             add_log("stopp server")
             o_curr_status.stringValue = "offline"
@@ -213,40 +217,97 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //echo timer
             add_log("stopp msg refresh timer interval: \(msg_refresh_time) [sec]")
             msg_refresh_timer.invalidate()
+            
+            server_status = 0
         }
-        
-        if server_status==1 { server_status = 0}
-        if server_status==0 { server_status = 1}
         
     }
     
     /* ---------------------------- */
     /* add text to log */
+    var entries:Int = 0
     func add_log(text: String) -> (Bool) {
         
         //generate timestamp
         var timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
         
         //generate string
-        var text:String = "Log: \(timestamp) -> \(text) \n"
+        var text:String = "\(timestamp) -> \(text) \n"
         
         //system output
-        print(text)
+        print(colorizeText(text).string)
         
-        //scrollview out
-        var textField : NSTextView {
-            get {
-            return o_log.contentView.documentView as NSTextView
+        //textview out
+        dispatch_async(dispatch_get_main_queue()) {
+            //add text
+            self.o_log.string! += colorizeText(text).string
+            if self.entries >= max_log_entries {
+                self.o_log.string! = ""
+                self.entries = 0
             }
+            self.o_log.scrollRangeToVisible(NSRange(location: countElements(self.o_log.string!), length: 0))
         }
-        //textField.insertText(text)
-        texter.insertText("dfdfdf \n")
-        //texter.appendString(text)
-        //texter.string! += text
+        entries++
         return true
     }
     
-    //++++++++++++++++++++++++++++++++++++
+    /* ---------------------------- */
+    /* clients table */
+    @IBOutlet weak var tabe: NSTableView!
+    
+    //update rows
+    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+        let numberOfRows:Int = client_db.get_client_count()
+        //let numberOfRows:Int = getDataArray().count
+        return numberOfRows
+    }
+    
+    //set data
+    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject!
+    {
+        //show identifier
+        //var string:String = "row " + String(row) + ", Col" + String(tableColumn.identifier)
+        //println(string)
+        //return string
+        
+        //clients
+        var clients : Array<s_client> = client_db.get_client_list()
+        var string = ""
+        if client_db.get_client_count() != 0 {
+        switch tableColumn.identifier {
+            case "Name":
+                string = clients[row].name
+            case "ID":
+                string = "\(clients[row].id)"
+            case "IP":
+                string = clients[row].ip
+            case "Port":
+                string = "\(clients[row].port)"
+            case "Type":
+                string = clients[row].type
+            case "Error":
+                string = "\(clients[row].error)"
+            case "Connected":
+                string = clients[row].time
+            default:
+                string = ":)"
+            
+        }
+        }
+        //var newString = getDataArray().objectAtIndex(row).objectForKey(tableColumn.identifier)
+        //println("\(row)  \(tableColumn.identifier)")
+        return string
+    }
+    /*func getDataArray () -> NSArray{
+        var dataArray:[NSDictionary] = [["FirstName": "Debasis", "LastName": "Das"],
+            ["FirstName": "Nishant", "LastName": "Singh"],
+            ["FirstName": "John", "LastName": "Doe"],
+            ["FirstName": "Jane", "LastName": "Doe"],
+            ["FirstName": "Mary", "LastName": "Jane"]];
+        //println(dataArray);
+        return dataArray;
+    }*/
+    
 }
 
 
