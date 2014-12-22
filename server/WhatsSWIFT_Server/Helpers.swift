@@ -52,8 +52,16 @@ func addFakeClients(db: client_list) {
     db.add_client("192.168.2.233", _port: 12587, _name: "Mike", _type: "osx_client")
     db.add_client("192.168.2.232", _port: 12587, _name: "Jan", _type: "osx_client")
     db.add_client("192.168.2.235", _port: 12587, _name: "Hannes", _type: "osx_client")
+    db.add_client("192.168.2.239", _port: 12587, _name: "Lukas", _type: "osx_client")
     
-    
+}
+
+/* append extension */
+extension NSTextView {
+    func appendString(string:String) {
+        self.string! += string
+        self.scrollRangeToVisible(NSRange(location:countElements(self.string!), length: 0))
+    }
 }
 
 /* msg */
@@ -67,6 +75,11 @@ struct message {
     
 }
 
+/* enum msg type */
+enum msg_type: Int {
+    case CONNECT = 0, DISCONNECT = 1, ECHO = 2, MESSAGE = 3
+}
+
 /* add some fake connection */
 class connection_debug {
     
@@ -74,20 +87,36 @@ class connection_debug {
         return 1
     }
     
-    func receiveMessage() -> (status: Boolean,msg: message) {
+    //get random fake message
+    func receiveMessage() -> (status: Bool,msg: message) {
+        
         var tmp:Array<message> = Array<message>()
-        tmp.append(message(ip: "192.168.2.222", message: "44rtggf", name: "Hannes", port: 12587, type: 0))
-        tmp.append(message(ip: "192.168.2.222", message: "rzzzr", name: "Lisa", port: 12587, type: 0))
-        tmp.append(message(ip: "192.168.2.222", message: "fgrgrg", name: "Mike", port: 12587, type: 0))
+        tmp.append(message(ip: "192.168.2.222", message: "44rtggf", name: "Hannes", port: 12587, type: 1))
+        tmp.append(message(ip: "192.168.2.222", message: "rzzzr", name: "Lisa", port: 12587, type: 3))
+        tmp.append(message(ip: "192.168.2.222", message: "fgrgrg", name: "Mike", port: 12587, type: 3))
         tmp.append(message(ip: "192.168.2.222", message: "rzgr", name: "Hannes", port: 12587, type: 0))
-        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Hannes", port: 12587, type: 0))
+        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Hannes", port: 12587, type: 3))
+        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Lukas", port: 12587, type: 2))
+        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Hannes", port: 12587, type: 2))
         
-        var diceRoll = Int(arc4random_uniform(5))
+        var diceRoll = Int(arc4random_uniform(7))
         
-        return (1,tmp[diceRoll])
+        //return (0,tmp[0])
+        return (true,tmp[diceRoll])
     }
     
 
+}
+
+/* fake array for table view */
+func getDataArray () -> NSArray{
+var dataArray:[NSDictionary] = [["FirstName": "Debasis", "LastName": "Das"],
+["FirstName": "Nishant", "LastName": "Singh"],
+["FirstName": "John", "LastName": "Doe"],
+["FirstName": "Jane", "LastName": "Doe"],
+["FirstName": "Mary", "LastName": "Jane"]];
+//println(dataArray);
+return dataArray;
 }
 
 

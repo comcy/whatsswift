@@ -33,13 +33,14 @@ class client_list {
     //vars
     var id:Int = 0
     
-    //init
-    init() {
-        
-    }
-    
     //client db
     var db : Array<s_client> = Array<s_client>()
+    
+    //init
+    init() {
+        //clear all
+        db.removeAll(keepCapacity: true)
+    }
     
     //get client count
     func get_client_count() -> (Int) {
@@ -47,44 +48,42 @@ class client_list {
     }
     
     //inc. error for client
-    func set_error_for(_name: String) -> (status: Boolean, message: String) {
+    func set_error_for(_name: String) -> (status: Bool, message: String) {
         
         //check if exists
         var members = db.filter{$0.name == _name}.count
         if  members == 0 {
-            return (0,"client \(_name) not exists")
+            return (false,"client '\(_name)' not exists")
         }
         
-        //set error to zero
-        //remove from list
+        //set error
         for (index, value) in enumerate(db) {
             if value.name == _name {
                 db[index].error += 1
-                return (1,"set error for \(_name) to \(db[index].error)")
+                return (true,"set error for '\(_name)' to '\(db[index].error)'")
             }
         }
-        return (0,"error not set for \(_name)")
+        return (false,"error not set for '\(_name)'")
         
     }
     
     //rcv sign of life from
-    func rcv_sign_of_life_from(_name: String) -> (status: Boolean, message: String) {
+    func rcv_sign_of_life_from(_name: String) -> (status: Bool, message: String) {
         
         //check if exists
         var members = db.filter{$0.name == _name}.count
         if  members == 0 {
-            return (0,"client \(_name) not exists")
+            return (false,"client '\(_name)' not exists")
         }
         
         //set error to zero
-        //remove from list
         for (index, value) in enumerate(db) {
             if value.name == _name {
                 db[index].error = 0
-                return (1,"set sign of life from \(_name) to 0")
+                return (true,"set error from '\(_name)' to 0")
             }
         }
-        return (0,"sign of life not set for \(_name)")
+        return (false,"sign of life not set for '\(_name)'")
         
     }
     
@@ -94,7 +93,7 @@ class client_list {
     }
     
     //add client to list.
-    func add_client(_ip: String, _port: Int, _name: String, _type: String) -> (status: Boolean, message: String) {
+    func add_client(_ip: String, _port: Int, _name: String, _type: String) -> (status: Bool, message: String) {
         
         //generate timestamp
         var timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
@@ -102,7 +101,7 @@ class client_list {
         //check if exists
         var members = db.filter{$0.name == _name}.count
         if  members != 0 {
-            return (0,"client \(_name) already exists")
+            return (false,"client '\(_name)' already exists")
         }
         
         //generate tmp client struct
@@ -112,21 +111,21 @@ class client_list {
         //add client to db
         if db.count < max_clients {
             db.append(tmp_client)
-            return (1,"client \(_name) with id \(id) successfully added")
+            return (true,"client '\(_name)' with id '\(id)' successfully connected")
         }
         else {
-            return (0,"max. number of clients reached")
+            return (false,"max. number of clients reached")
         }
         
     }
     
     //rem client from list
-    func rem_client(_ip: String, _port: Int, _name: String) -> (status: Boolean, message: String) {
+    func rem_client(_ip: String, _port: Int, _name: String) -> (status: Bool, message: String) {
         
         //check if exists
         var members = db.filter{$0.name == _name}.count
         if  members == 0 {
-            return (0,"client \(_name) not exists")
+            return (false,"client '\(_name)' not exists")
         }
         
         //remove from list
@@ -140,10 +139,10 @@ class client_list {
         //check if exists
         members = db.filter{$0.name == _name}.count
         if  members != 0 {
-            return (0,"client \(_name) not removed")
+            return (false,"client '\(_name)' not disconnected")
         }
         else {
-            return (1,"client \(_name) successfully removed")
+            return (true,"client '\(_name)' successfully disconnected")
         }
     }
     

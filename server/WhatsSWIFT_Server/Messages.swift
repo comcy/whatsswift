@@ -37,13 +37,14 @@ class message_list {
     //vars
     var id:UInt64 = 0
     
+    //message db
+    var db : Array<s_message> = Array<s_message>()
+    
     //init
     init() {
-        
+        //clear all
+        db.removeAll(keepCapacity: true)
     }
-    
-    //client db
-    var db : Array<s_message> = Array<s_message>()
     
     //get message count
     func get_message_count() -> (Int) {
@@ -51,7 +52,7 @@ class message_list {
     }
     
     //add message to list
-    func add_message( _name: String, _message: String) -> (status: Boolean, message: String) {
+    func add_message( _name: String, _message: String) -> (status: Bool, message: String) {
         
         //generate timestamp
         var timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
@@ -62,7 +63,7 @@ class message_list {
         
         //add message to db
         db.append(tmp_message)
-        return (1,"message from \(_name) with id \(id) successfully added to list")
+        return (true,"message from '\(_name)' with id '\(id)' successfully added to list")
     }
     
     //get last message

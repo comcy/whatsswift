@@ -16,13 +16,6 @@
 import Cocoa
 import AppKit
 
-extension NSTextView {
-    func appendString(string:String) {
-        self.string! += string
-        self.scrollRangeToVisible(NSRange(location:countElements(self.string!), length: 0))
-    }
-}
-
 /* main */
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource {
@@ -39,8 +32,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var o_curr_status: NSTextField!
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
     @IBOutlet var o_log: NSTextView!
-    
-
     
     /* ---------------------------- */
     /* async gcd */
@@ -87,9 +78,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* ---------------------------- */
     /* send echo after timer and inc. error. if error is to high then disconnect */
     func client_refresh_cylce() {
-        add_log("start to refresh \(client_db.get_client_count()) clients")
+        add_log("send echo to '\(client_db.get_client_count())' clients")
         
-        // async
+        //async
         dispatch_async(queue_serial) {
             
             //parse clients
@@ -105,76 +96,122 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //inc. error
                 var err = self.client_db.set_error_for(value.name)
                 
-                //check if exists
-                if err.status == 1 {
-                    //connection send echo
+                //check if exists and send echo
+                if err.status {
+                    //connection send echo to...
                     self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: 2))
                     //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                 }
                 
                 //refresh client count on gui
                 self.o_curr_clients.integerValue = self.client_db.get_client_count()
+                
+                //refresh msg count on gui
+                self.o_current_msg.integerValue = self.msg_db.get_message_count()
+                
+                //refresh client table
+                self.tabe.reloadData()
             }
-            
-            //refresh list
-            self.tabe.reloadData()
         }
     }
     
     /* ---------------------------- */
-    /* msg refresh cycle. check connection for new messages */
+    /* send broadcast */
+    func sendBroadcast(text: String, sender_name: String) {
+        
+        //iterate clients
+        for (index, value) in enumerate(self.client_db.get_client_list()) {
+            //send message
+            self.connection.sendMessage(message(ip: value.ip, message: text, name: sender_name, port: value.port, type: 3))
+        }
+        
+    }
+    
+    /* ---------------------------- */
+    /* msg refresh cycle. check connection afer timer for new messages */
     func msg_refresh_cycle() {
         
-        // async
+        //async
         dispatch_async(queue_serial) {
         
             //check for msg
             var tmp_msg =  self.connection.receiveMessage()
             
-            //if new message send broadcast and add to msg_db
-            if tmp_msg.status == 1 {
+            //if new message check type and send broadcast and add to msg_db
+            if tmp_msg.status {
                 
-                //set sign of life and check if connected
-                var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
-                
-                //if connected
-                if check.status == 1 {
+                //switch type
+                switch tmp_msg.msg.type {
                     
-                    //add message to list
-                    var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
-                    self.add_log("\(list.message)")
-                    self.add_log("broadcast message from \(tmp_msg.msg.name) to \(self.client_db.get_client_count()) clients")
-                    
-                    for (index, value) in enumerate(self.client_db.get_client_list()) {
-                        //send message
-                        self.connection.sendMessage(message(ip: value.ip, message: tmp_msg.msg.message, name: tmp_msg.msg.name, port: value.port, type: 3))
-                        //self.add_log("send message from \(tmp_msg.msg.name) with id \(self.msg_db.get_message_count()) to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                    case 0: /*connect*/
+                        self.add_log("'\(tmp_msg.msg.name)' connecting to server")
                         
-                        //refresh msg count on gui
-                        self.o_current_msg.integerValue = self.msg_db.get_message_count()
-                    }
-                }
-                else {
-                    self.add_log("message not delivered -> reason: \(check.message)")
-                    return
+                        //add client
+                        var check = self.client_db.add_client(tmp_msg.msg.ip, _port: tmp_msg.msg.port, _name: tmp_msg.msg.name, _type: "osx_client")
+                        self.add_log(check.message)
+                        
+                        //send info to clients
+                        if check.status { self.sendBroadcast("\(tmp_msg.msg.name) connected", sender_name: self.i_server_name.stringValue) }
+                    break
+                    case 1: /*disconnect*/
+                        self.add_log("'\(tmp_msg.msg.name)' disconnecting from server")
+                        
+                        //rem client
+                        var check = self.client_db.rem_client(tmp_msg.msg.ip, _port: tmp_msg.msg.port, _name: tmp_msg.msg.name)
+                        self.add_log(check.message)
+                        
+                        //send info to clients
+                        if check.status { self.sendBroadcast("'\(tmp_msg.msg.name)' disconnected", sender_name: self.i_server_name.stringValue) }
+                    break
+                    case 2: /*echo*/
+
+                        //set sign of life and check if connected
+                        var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
+                        self.add_log("rcv echo - \(check.message)")
+                    break
+                    case 3: /*message*/
+                        self.add_log("rcv msg from '\(tmp_msg.msg.name)'")
+                        
+                        //set sign of life and check if connected
+                        var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
+                        
+                        if check.status {
+                            //add message to list
+                            var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
+                            self.add_log("\(list.message)")
+                            self.add_log("broadcast message from '\(tmp_msg.msg.name)' to '\(self.client_db.get_client_count())' clients")
+                        
+                            //send message to clients
+                            self.sendBroadcast(tmp_msg.msg.message, sender_name: tmp_msg.msg.name)
+                        }
+                        else {
+                            self.add_log("\(check.message)")
+                        }
+                    break
+                    default: /*default*/
+                        self.add_log("msg from '\(tmp_msg.msg.name)' not valid -> reason: incorrect type")
+                    break
                 }
                 
             }
+            
+            //refresh client count on gui
+            self.o_curr_clients.integerValue = self.client_db.get_client_count()
+            
+            //refresh msg count on gui
+            self.o_current_msg.integerValue = self.msg_db.get_message_count()
+            
+            //refresh client table
+            self.tabe.reloadData()
         }
         
-        //refresh list
-        self.tabe.reloadData()
-        
     }
-    
-    
-
     
     /* ---------------------------- */
     /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
-        
+
         //if offline go online
         if server_status == 0 {
             
@@ -192,18 +229,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             button_start_stopp.title = "stop server"
             
             //echo timer
-            add_log("start echo refresh timer interval: \(client_refresh_time) [sec]")
+            add_log("start echo refresh timer interval: '\(client_refresh_time)' [sec]")
             client_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(client_refresh_time, target: self, selector: Selector("client_refresh_cylce"), userInfo: nil,repeats: true)
             
             //msg timer
-            add_log("start msg refresh timer interval: \(msg_refresh_time) [sec]")
+            add_log("start msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
             
             server_status = 1
         }
         else if server_status == 1 {
             
-            add_log("stopp server")
+            add_log("stop server")
             o_curr_status.stringValue = "offline"
             o_status_indicator.stopAnimation(sender)
             i_server_name.editable = true
@@ -211,11 +248,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             button_start_stopp.title = "start server"
             
             //echo timer
-            add_log("stopp echo refresh timer interval: \(client_refresh_time) [sec]")
+            add_log("stop echo refresh timer interval: '\(client_refresh_time)' [sec]")
             client_refresh_timer.invalidate()
             
             //echo timer
-            add_log("stopp msg refresh timer interval: \(msg_refresh_time) [sec]")
+            add_log("stop msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer.invalidate()
             
             server_status = 0
@@ -236,11 +273,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
         //system output
         print(colorizeText(text).string)
-        
+
         //textview out
         dispatch_async(dispatch_get_main_queue()) {
             //add text
             self.o_log.string! += colorizeText(text).string
+            
             if self.entries >= max_log_entries {
                 self.o_log.string! = ""
                 self.entries = 0
@@ -298,15 +336,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //println("\(row)  \(tableColumn.identifier)")
         return string
     }
-    /*func getDataArray () -> NSArray{
-        var dataArray:[NSDictionary] = [["FirstName": "Debasis", "LastName": "Das"],
-            ["FirstName": "Nishant", "LastName": "Singh"],
-            ["FirstName": "John", "LastName": "Doe"],
-            ["FirstName": "Jane", "LastName": "Doe"],
-            ["FirstName": "Mary", "LastName": "Jane"]];
-        //println(dataArray);
-        return dataArray;
-    }*/
     
 }
 
