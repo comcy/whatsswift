@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
-               BuildableName = "whatsSwift_Connection"
-               BlueprintName = "whatsSwift_Connection"
-               ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
+               BlueprintIdentifier = "72C8D3791A47660E001E7E1A"
+               BuildableName = "WhatsSWIFT_Connection"
+               BlueprintName = "WhatsSWIFT_Connection"
+               ReferencedContainer = "container:WhatsSWIFT_Connection.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
-            BuildableName = "whatsSwift_Connection"
-            BlueprintName = "whatsSwift_Connection"
-            ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
+            BlueprintIdentifier = "72C8D3791A47660E001E7E1A"
+            BuildableName = "WhatsSWIFT_Connection"
+            BlueprintName = "WhatsSWIFT_Connection"
+            ReferencedContainer = "container:WhatsSWIFT_Connection.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,10 +51,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
-            BuildableName = "whatsSwift_Connection"
-            BlueprintName = "whatsSwift_Connection"
-            ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
+            BlueprintIdentifier = "72C8D3791A47660E001E7E1A"
+            BuildableName = "WhatsSWIFT_Connection"
+            BlueprintName = "WhatsSWIFT_Connection"
+            ReferencedContainer = "container:WhatsSWIFT_Connection.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,10 +69,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FC57192E1A3ED10E009D7EF0"
-            BuildableName = "whatsSwift_Connection"
-            BlueprintName = "whatsSwift_Connection"
-            ReferencedContainer = "container:whatsSwift_Connection.xcodeproj">
+            BlueprintIdentifier = "72C8D3791A47660E001E7E1A"
+            BuildableName = "WhatsSWIFT_Connection"
+            BlueprintName = "WhatsSWIFT_Connection"
+            ReferencedContainer = "container:WhatsSWIFT_Connection.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
