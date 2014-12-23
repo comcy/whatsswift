@@ -50,7 +50,36 @@ class Socket{
         
         outputStream.write(&readBytes, maxLength: readBytes.count)
         
-        
     }
+    
+    //testClient
+    func testclient(){
+        //new socket connecting to Google on port 80
+        var client:TCPClient = TCPClient(addr: "141.18.44.62", port: 8585)
+        
+        //connection
+        var (success,errmsg)=client.connect(timeout: 120)
+        if success{
+            //send data/request
+            var (success,errmsg)=client.send(str:"Hallo -> Ficken!?" )
+            if success{
+                //read data/answer
+                var data=client.read(1024*10)
+                if let d=data{
+                    //print received data on console
+                    if let str=String(bytes: d, encoding: NSUTF8StringEncoding){
+                        println(str)
+                    }
+                }
+            }else{
+                println(errmsg)
+            }
+        }else{
+            println(errmsg)
+        }
+    }
+    
+    
+    
 
 }

@@ -31,7 +31,7 @@ con.splitString(testString)
 
 let socket = Socket()
 
-socket.snd()
+socket.testclient()
 
 //socket.rcv()
 
