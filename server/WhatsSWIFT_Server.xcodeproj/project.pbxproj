@@ -17,7 +17,6 @@
 		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
 		DABA8CF51A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */; };
 		DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CFE1A3ECB0B00070009 /* Clients.swift */; };
-		DAC2EDD01A497E6800753C38 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC2EDCF1A497E6800753C38 /* Connection.swift */; };
 		DACB12521A3F2B440091940D /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB12511A3F2B440091940D /* Messages.swift */; };
 		DACB12541A3F319F0091940D /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB12531A3F319F0091940D /* Helpers.swift */; };
 /* End PBXBuildFile section */
@@ -47,7 +46,6 @@
 		DABA8CF31A3EC8CE00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsSWIFT_ServerTests.swift; sourceTree = "<group>"; };
 		DABA8CFE1A3ECB0B00070009 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
-		DAC2EDCF1A497E6800753C38 /* Connection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Connection.swift; path = ../../connection/whatsSwift_Connection/whatsSwift_Connection/Connection.swift; sourceTree = "<group>"; };
 		DACB12511A3F2B440091940D /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		DACB12531A3F319F0091940D /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,7 +93,6 @@
 		DABA8CE01A3EC8CD00070009 /* WhatsSWIFT_Server */ = {
 			isa = PBXGroup;
 			children = (
-				DAC2EDCF1A497E6800753C38 /* Connection.swift */,
 				DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */,
 				DABA8CE51A3EC8CD00070009 /* Images.xcassets */,
 				DABA8CFE1A3ECB0B00070009 /* Clients.swift */,
@@ -233,7 +230,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */,
-				DAC2EDD01A497E6800753C38 /* Connection.swift in Sources */,
 				DACB12521A3F2B440091940D /* Messages.swift in Sources */,
 				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
 				DAB629F11A49B60700E34290 /* ytcpsocket.swift in Sources */,
