@@ -68,7 +68,7 @@ func colorizeText(ressource: String) -> NSMutableAttributedString {
 func attributeString(ressource: String) -> NSMutableAttributedString{
     var attributedRessource = NSMutableAttributedString(string: ressource)
     let theCompleteRange = NSMakeRange(0, countElements(ressource))
-    let theFont = NSFont(name: "Menlo Bold", size: 11)
+    let theFont = NSFont(name: "Menlo Bold", size: 5)
     let theColor = NSColor.whiteColor()
     
     // style
@@ -91,6 +91,12 @@ func addFakeClients(db: client_list) {
     db.add_client("192.168.2.232", _port: 12587, _name: "Jan", _type: "osx_client")
     db.add_client("192.168.2.235", _port: 12587, _name: "Hannes", _type: "osx_client")
     db.add_client("192.168.2.239", _port: 12587, _name: "Lukas", _type: "osx_client")
+    db.add_client("192.168.2.235", _port: 12587, _name: "xcbcbb", _type: "osx_client")
+    db.add_client("192.168.2.239", _port: 12587, _name: "ccccccc", _type: "osx_client")
+    db.add_client("192.168.2.235", _port: 12587, _name: "et46gdg", _type: "osx_client")
+    db.add_client("192.168.2.239", _port: 12587, _name: "46efxf", _type: "osx_client")
+    db.add_client("192.168.2.235", _port: 12587, _name: "frgdgb", _type: "osx_client")
+    db.add_client("192.168.2.239", _port: 12587, _name: "rzzuuf", _type: "osx_client")
     
 }
 
@@ -126,8 +132,41 @@ enum server_state: Int {
 /* add some fake connection */
 class connection_debug {
     
+    let port = 1234
+    var input :NSInputStream?
+    var output :NSOutputStream?
+    
+    init() {
+        
+    }
+    
+    func streamSend() {
+        
+        NSStream.getStreamsToHostWithName("localhost", port:port, inputStream: &input, outputStream: nil)
+        let inputStream = input!
+        inputStream.open()
+        var readByte :UInt8 = 0
+        while true{
+            inputStream.read(&readByte, maxLength: 1)
+            println(String(UnicodeScalar(readByte)))
+        }
+        
+    }
+    
+    func streamRvc() {
+         
+        NSStream.getStreamsToHostWithName("localhost", port:port, inputStream:nil , outputStream: &output)
+        let outputStream = output!
+        outputStream.open()
+        
+        let str = "Apple Swift!\n"
+        var writeByte = [UInt8] (str.utf8)
+        outputStream.write(&writeByte, maxLength: 15)
+    }
+    
     func sendMessage(message) -> (Boolean) {
         return 1
+        
     }
     
     //get random fake message

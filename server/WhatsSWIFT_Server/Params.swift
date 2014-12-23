@@ -21,7 +21,7 @@ import Foundation
 var client_refresh_time = 5.0 //sec
 
 //msg refresh time
-var msg_refresh_time = 2.5 //sec
+var msg_refresh_time = 0.1 //sec
 
 //max error count befor disconnect (refresh_time*max_error) = time sec
 var max_error:Int = 10

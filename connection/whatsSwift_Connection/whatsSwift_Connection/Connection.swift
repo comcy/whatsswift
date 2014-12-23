@@ -18,13 +18,13 @@ import Foundation
 //  * type: type of message
 //
 
-struct message {
+/*struct message {
     var ip:String = ""
     var port:Int = 0
     var message:String = ""
     var name:String = ""
     var type:Int = 2 // echo
-}
+}*/
 
 //
 // Class: Connection

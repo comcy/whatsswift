@@ -15,6 +15,8 @@
 /* import */
 import Cocoa
 import AppKit
+import Security
+import Foundation
 
 /* main */
 @NSApplicationMain
@@ -61,12 +63,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
 
         //init values
         o_server_ip.stringValue = ""
-        o_curr_clients.integerValue = client_db.get_client_count()
+        o_curr_clients.stringValue = "\(client_db.get_client_count()) / \(max_clients)"
         o_current_msg.integerValue = msg_db.get_message_count()
         o_curr_status.stringValue = "offline"
         button_start_stopp.title = "start server"
         o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
-        
+        tabe.usesAlternatingRowBackgroundColors = true
     }
     
     /* ---------------------------- */
@@ -193,7 +195,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             dispatch_async(dispatch_get_main_queue()) {
                 
                 //refresh client count on gui
-                self.o_curr_clients.integerValue = self.client_db.get_client_count()
+                self.o_curr_clients.stringValue = "\(self.client_db.get_client_count()) / \(max_clients)"
             
                 //refresh msg count on gui
                 self.o_current_msg.integerValue = self.msg_db.get_message_count()
@@ -209,6 +211,40 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            //echoService to echo back what the client send
+            func echoService(client c:TCPClient){
+                //print connection details on console
+                println("newclient from:\(c.addr)[\(c.port)]")
+                //read from client and send data back
+                var d=c.read(1024*10)
+                c.send(data: d!)
+                //close connection
+                c.close()
+            }
+
+            
+        //testserver listening on localhost on port 8080
+        var server:TCPServer = TCPServer(addr: "141.18.44.62", port: 8585)
+        //listen on incoming connections
+        var (success,msg)=server.listen()
+        if success{
+            while true{
+                if var client=server.accept(){
+                    println("accept")
+                    echoService(client: client)
+                }else{
+                    println("accept error")
+                }
+            }
+        }else{
+            println(msg)
+        }
+            
+        }
+
         
         //if offline go online
         if server == server_state.OFFLINE {
@@ -281,7 +317,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
         //write to file
         if o_log_to_file.integerValue == 1 { writeToFile(text) }
-
+        
         //textview out
         dispatch_async(dispatch_get_main_queue()) {
             //add text
