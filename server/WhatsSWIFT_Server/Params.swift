@@ -27,3 +27,5 @@ var max_error:Int = 10
 var max_clients = 100
 //max count of log entries
 var max_log_entries:Int = 500
+//logfile location
+var logfile_location = "/tmp/"

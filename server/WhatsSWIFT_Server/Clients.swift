@@ -80,7 +80,7 @@ class client_list {
         for (index, value) in enumerate(db) {
             if value.name == _name {
                 db[index].error = 0
-                return (true,"set error from '\(_name)' to 0")
+                return (true,"set error from '\(_name)' to '0'")
             }
         }
         return (false,"sign of life not set for '\(_name)'")

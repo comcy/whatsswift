@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     
     /* ---------------------------- */
     /* vars */
-    var server_status:Int = 0 // 0=offline, 1=online, -1=error
+    var server = server_state.OFFLINE
     var client_refresh_timer = NSTimer()
     var msg_refresh_timer = NSTimer()
 
@@ -65,7 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         o_current_msg.integerValue = msg_db.get_message_count()
         o_curr_status.stringValue = "offline"
         button_start_stopp.title = "start server"
-        o_log_info.stringValue = "Log (max. \(max_log_entries) entries)"
+        o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
         
     }
     
@@ -99,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //check if exists and send echo
                 if err.status {
                     //connection send echo to...
-                    self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: 2))
+                    self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: msg_type.ECHO.rawValue))
                     //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                 }
                 
@@ -211,13 +211,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
-
+        
         //if offline go online
-        if server_status == 0 {
+        if server == server_state.OFFLINE {
             
             //check conditions
             if i_server_name.stringValue == "" || i_server_pass.stringValue == "" {
                 add_log("can not start server -> empty data")
+                
+                //sound
+                playSound("Funk.aiff")
                 //return
             }
             
@@ -236,9 +239,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             add_log("start msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
             
-            server_status = 1
+            //set state
+            server = server_state.ONLINE
         }
-        else if server_status == 1 {
+        else if server == server_state.ONLINE {
             
             add_log("stop server")
             o_curr_status.stringValue = "offline"
@@ -255,9 +259,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             add_log("stop msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer.invalidate()
             
-            server_status = 0
+            //set state
+            server = server_state.OFFLINE
         }
         
+        //sound
+        playSound("Submarine.aiff")
     }
     
     /* ---------------------------- */
@@ -273,6 +280,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
         //system output
         print(colorizeText(text).string)
+        
+        //write to file
+        if o_log_to_file.integerValue == 1 { writeToFile(text) }
 
         //textview out
         dispatch_async(dispatch_get_main_queue()) {
@@ -287,6 +297,34 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         }
         entries++
         return true
+    }
+    
+    /* ---------------------------- */
+    /* file handler */
+    @IBOutlet weak var o_log_to_file: NSButton!
+    @IBAction func o_log_to_file_a(sender: AnyObject) {
+    
+        //start log
+        if o_log_to_file.integerValue == 1 {
+            
+            //generate timestamp
+            var timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
+            let newtimestamp = timestamp.stringByReplacingOccurrencesOfString(" ", withString: "_", options: NSStringCompareOptions.LiteralSearch, range: nil)
+    
+            //generate log name / path
+            logfile_location = "\(logfile_location)whatsswift_log_\(newtimestamp).txt"
+            
+            //log
+            add_log("generate logfile at '\(logfile_location)'")
+            add_log("start log to file")
+            
+        }
+        else {
+            
+            //log
+            add_log("stop log to file")
+        }
+        
     }
     
     /* ---------------------------- */

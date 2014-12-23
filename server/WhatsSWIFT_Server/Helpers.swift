@@ -16,6 +16,44 @@
 import Foundation
 import Cocoa
 
+/* log to file */
+func writeToFile(text: String) {
+    
+    //location
+    let location = logfile_location.stringByExpandingTildeInPath
+    
+    //stream
+    if var outputs = NSOutputStream(toFileAtPath: location, append:true){
+        
+        //open file
+        outputs.open()
+        
+        //write
+        if outputs.hasSpaceAvailable == true {
+            let data: NSData = text.dataUsingEncoding(NSUTF8StringEncoding)!
+            var result = outputs.write(UnsafePointer<UInt8>(data.bytes), maxLength: data.length)
+            //println("bytes written:\(result)")
+        }
+        
+        //close file
+        outputs.close()
+    }
+    
+}
+
+/* play sound */
+func playSound(name: String) {
+    
+    //sounds at: cd /System/Library/Sounds/
+    /*  Basso.aiff	Frog.aiff	Hero.aiff	Pop.aiff	Submarine.aiff
+        Blow.aiff	Funk.aiff	Morse.aiff	Purr.aiff	Tink.aiff
+        Bottle.aiff	Glass.aiff	Ping.aiff	Sosumi.aiff */
+    
+    var mySound = NSSound(named: name)
+    mySound?.volume = 1.0
+    mySound?.play()
+}
+
 /* colorize text */
 func colorizeText(ressource: String) -> NSMutableAttributedString {
     var theRessource = ressource
@@ -78,6 +116,11 @@ struct message {
 /* enum msg type */
 enum msg_type: Int {
     case CONNECT = 0, DISCONNECT = 1, ECHO = 2, MESSAGE = 3
+}
+
+/* enum server stat */
+enum server_state: Int {
+    case OFFLINE = 0, ONLINE = 1, ERROR = -1
 }
 
 /* add some fake connection */

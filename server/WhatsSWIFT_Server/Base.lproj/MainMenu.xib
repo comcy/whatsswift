@@ -23,6 +23,7 @@
                 <outlet property="o_log" destination="7tr-1H-Bjz" id="q0Q-fR-r7o"/>
                 <outlet property="o_log_info" destination="lU1-ih-EzN" id="FIO-oh-3rW"/>
                 <outlet property="o_log_into" destination="lU1-ih-EzN" id="dEk-8W-A6E"/>
+                <outlet property="o_log_to_file" destination="UmP-XM-AHJ" id="ywc-dG-wvw"/>
                 <outlet property="o_server_ip" destination="Rlh-BP-zyY" id="8Hc-DO-r5r"/>
                 <outlet property="o_status_indicator" destination="juY-gW-Uyz" id="sQ0-3u-ddJ"/>
                 <outlet property="server_name" destination="PWL-0i-JEe" id="mSK-tV-2g3"/>
@@ -908,7 +909,7 @@
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="SS8-jn-EwZ">
+                        <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.010791366906474821" horizontal="YES" id="SS8-jn-EwZ">
                             <rect key="frame" x="1" y="118.77508997917175" width="238" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -950,7 +951,7 @@
                         </scroller>
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lU1-ih-EzN">
-                        <rect key="frame" x="20" y="202" width="554" height="17"/>
+                        <rect key="frame" x="20" y="200" width="367" height="20"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="lHL-RW-J5I">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -965,6 +966,16 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UmP-XM-AHJ">
+                        <rect key="frame" x="486" y="200" width="88" height="20"/>
+                        <buttonCell key="cell" type="check" title="Log to File" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="Bsg-04-dry">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="o_log_to_file_a:" target="Voe-Tx-rLC" id="Sis-1M-3Pu"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="200" y="355.5"/>
