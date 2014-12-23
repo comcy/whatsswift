@@ -103,15 +103,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
                 }
                 
-                //refresh client count on gui
-                self.o_curr_clients.integerValue = self.client_db.get_client_count()
-                
-                //refresh msg count on gui
-                self.o_current_msg.integerValue = self.msg_db.get_message_count()
-                
-                //refresh client table
-                self.tabe.reloadData()
             }
+            
         }
     }
     
@@ -174,8 +167,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                         
                         //set sign of life and check if connected
                         var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
+                        var tmp = self.client_db.set_msgs_for(tmp_msg.msg.name)
                         
-                        if check.status {
+                        if check.status && tmp.status {
                             //add message to list
                             var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
                             self.add_log("\(list.message)")
@@ -186,6 +180,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                         }
                         else {
                             self.add_log("\(check.message)")
+                            self.add_log("\(tmp.message)")
                         }
                     break
                     default: /*default*/
@@ -195,14 +190,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 
             }
             
-            //refresh client count on gui
-            self.o_curr_clients.integerValue = self.client_db.get_client_count()
+            dispatch_async(dispatch_get_main_queue()) {
+                
+                //refresh client count on gui
+                self.o_curr_clients.integerValue = self.client_db.get_client_count()
             
-            //refresh msg count on gui
-            self.o_current_msg.integerValue = self.msg_db.get_message_count()
+                //refresh msg count on gui
+                self.o_current_msg.integerValue = self.msg_db.get_message_count()
             
-            //refresh client table
-            self.tabe.reloadData()
+                //refresh client table
+                self.tabe.reloadData()
+            }
         }
         
     }
@@ -300,7 +298,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     }
     
     /* ---------------------------- */
-    /* file handler */
+    /* logfile handler */
     @IBOutlet weak var o_log_to_file: NSButton!
     @IBAction func o_log_to_file_a(sender: AnyObject) {
     
@@ -310,19 +308,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //generate timestamp
             var timestamp = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: .MediumStyle, timeStyle: .ShortStyle)
             let newtimestamp = timestamp.stringByReplacingOccurrencesOfString(" ", withString: "_", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let newtimestamp2 = newtimestamp.stringByReplacingOccurrencesOfString(":", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
     
             //generate log name / path
-            logfile_location = "\(logfile_location)whatsswift_log_\(newtimestamp).txt"
+            logfile_location = "\(logfile_location)whatsswift_log_\(newtimestamp2).txt"
             
             //log
             add_log("generate logfile at '\(logfile_location)'")
-            add_log("start log to file")
+            add_log("start logging to file")
             
         }
         else {
             
             //log
-            add_log("stop log to file")
+            add_log("stop logging to file")
         }
         
     }
@@ -363,6 +362,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 string = clients[row].type
             case "Error":
                 string = "\(clients[row].error)"
+            case "Messages":
+                string = "\(clients[row].msgs)"
             case "Connected":
                 string = clients[row].time
             default:
@@ -372,6 +373,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         }
         //var newString = getDataArray().objectAtIndex(row).objectForKey(tableColumn.identifier)
         //println("\(row)  \(tableColumn.identifier)")
+        //println(string)
         return string
     }
     

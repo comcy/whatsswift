@@ -24,6 +24,7 @@ struct s_client {
     var name:String = ""
     var type:String = ""
     var time:String = ""
+    var msgs:Int = 0
     var error:Int = 0
 }
 
@@ -45,6 +46,25 @@ class client_list {
     //get client count
     func get_client_count() -> (Int) {
         return db.count
+    }
+    
+    //inc msgs count
+    func set_msgs_for(_name: String) -> (status: Bool, message: String) {
+        
+        //check if exists
+        var members = db.filter{$0.name == _name}.count
+        if  members == 0 {
+            return (false,"client '\(_name)' not exists")
+        }
+        
+        //set count
+        for (index, value) in enumerate(db) {
+            if value.name == _name {
+                db[index].msgs += 1
+                return (true,"set msgs for '\(_name)' to '\(db[index].error)'")
+            }
+        }
+        return (false,"msgs not set for '\(_name)'")
     }
     
     //inc. error for client
@@ -106,7 +126,7 @@ class client_list {
         
         //generate tmp client struct
         id += 1
-        var tmp_client = s_client(id: id,ip: _ip, port: _port, name: _name, type: _type, time: timestamp, error: 0)
+        var tmp_client = s_client(id: id,ip: _ip, port: _port, name: _name, type: _type, time: timestamp, msgs: 0, error: 0)
         
         //add client to db
         if db.count < max_clients {
