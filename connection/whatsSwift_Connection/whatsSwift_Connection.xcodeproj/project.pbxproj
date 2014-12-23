@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		724C85621A401C370079796C /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 724C85611A401C370079796C /* Connection.swift */; };
-		FC6373281A4445F400198E00 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6373271A4445F400198E00 /* Socket.swift */; };
+		FC1D1D2B1A4976B90063CC47 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1D1D2A1A4976B90063CC47 /* main.swift */; };
+		FC1D1D2D1A498D670063CC47 /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1D1D2C1A498D670063CC47 /* test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +27,8 @@
 /* Begin PBXFileReference section */
 		724C855E1A401C370079796C /* WhatsSWIFT_Connection */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = WhatsSWIFT_Connection; sourceTree = BUILT_PRODUCTS_DIR; };
 		724C85611A401C370079796C /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
-		FC6373271A4445F400198E00 /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Socket.swift; path = whatsSwift_Connection/Socket.swift; sourceTree = SOURCE_ROOT; };
+		FC1D1D2A1A4976B90063CC47 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = whatsSwift_Connection/main.swift; sourceTree = SOURCE_ROOT; };
+		FC1D1D2C1A498D670063CC47 /* test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = test.swift; path = whatsSwift_Connection/test.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +62,8 @@
 			isa = PBXGroup;
 			children = (
 				724C85611A401C370079796C /* Connection.swift */,
-				FC6373271A4445F400198E00 /* Socket.swift */,
+				FC1D1D2A1A4976B90063CC47 /* main.swift */,
+				FC1D1D2C1A498D670063CC47 /* test.swift */,
 			);
 			path = WhatsSWIFT_Connection;
 			sourceTree = "<group>";
@@ -121,7 +124,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC6373281A4445F400198E00 /* Socket.swift in Sources */,
+				FC1D1D2B1A4976B90063CC47 /* main.swift in Sources */,
+				FC1D1D2D1A498D670063CC47 /* test.swift in Sources */,
 				724C85621A401C370079796C /* Connection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,14 +211,18 @@
 		724C85661A401C370079796C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.10;
 			};
 			name = Debug;
 		};
 		724C85671A401C370079796C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.10;
 			};
 			name = Release;
 		};
