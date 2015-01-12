@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-
+https://github.com/daltoniam/starscream
 
 
 
@@ -17,6 +17,8 @@ import Cocoa
 import AppKit
 import Security
 import Foundation
+import StarscreamOSX
+
 
 /* main */
 @NSApplicationMain
@@ -212,7 +214,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
         
-        dispatch_async(dispatch_get_main_queue()) {
+        /*dispatch_async(dispatch_get_main_queue()) {
             
             //echoService to echo back what the client send
             func echoService(client c:TCPClient){
@@ -243,7 +245,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             println(msg)
         }
             
-        }
+        }*/
 
         
         //if offline go online
