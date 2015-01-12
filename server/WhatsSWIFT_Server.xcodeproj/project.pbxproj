@@ -18,6 +18,7 @@
 		DABA8CF51A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CF41A3EC8CE00070009 /* WhatsSWIFT_ServerTests.swift */; };
 		DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CFE1A3ECB0B00070009 /* Clients.swift */; };
 		DAC050BB1A63B18000753C3C /* StarscreamOSX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC050B81A63B14700753C3C /* StarscreamOSX.framework */; };
+		DAC050BF1A63B7F100753C3C /* WSConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC050BE1A63B7F100753C3C /* WSConnector.swift */; };
 		DACB12521A3F2B440091940D /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB12511A3F2B440091940D /* Messages.swift */; };
 		DACB12541A3F319F0091940D /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB12531A3F319F0091940D /* Helpers.swift */; };
 /* End PBXBuildFile section */
@@ -99,6 +100,7 @@
 		DAC050A91A63B14700753C3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DAC050AA1A63B14700753C3C /* StarscreamTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarscreamTests.swift; sourceTree = "<group>"; };
 		DAC050AB1A63B14700753C3C /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		DAC050BE1A63B7F100753C3C /* WSConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSConnector.swift; sourceTree = "<group>"; };
 		DACB12511A3F2B440091940D /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		DACB12531A3F319F0091940D /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -156,6 +158,7 @@
 				DACB12531A3F319F0091940D /* Helpers.swift */,
 				DA376F3F1A4050820058A8A5 /* Params.swift */,
 				DABA8CE11A3EC8CD00070009 /* Supporting Files */,
+				DAC050BE1A63B7F100753C3C /* WSConnector.swift */,
 			);
 			path = WhatsSWIFT_Server;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
 				DAB629F11A49B60700E34290 /* ytcpsocket.swift in Sources */,
 				DAB629F31A49B61100E34290 /* yudpsocket.c in Sources */,
+				DAC050BF1A63B7F100753C3C /* WSConnector.swift in Sources */,
 				DAB629F51A49B61A00E34290 /* yudpsocket.swift in Sources */,
 				DA376F401A4050820058A8A5 /* Params.swift in Sources */,
 				DACB12541A3F319F0091940D /* Helpers.swift in Sources */,

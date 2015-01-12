@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-https://github.com/daltoniam/starscream
 
 
 
@@ -18,7 +17,6 @@ import AppKit
 import Security
 import Foundation
 import StarscreamOSX
-
 
 /* main */
 @NSApplicationMain
@@ -48,6 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     var msg_db = message_list()
     var client_db = client_list()
     var connection = connection_debug() // -> replace with original
+    var ws_connection = ws_connect()
     
     /* ---------------------------- */
     /* vars */
@@ -71,6 +70,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         button_start_stopp.title = "start server"
         o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
         tabe.usesAlternatingRowBackgroundColors = true
+        
+        var msg = ws_connection.connect()
+        println("\(msg.message)")
+
+        
     }
     
     /* ---------------------------- */
@@ -246,6 +250,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         }
             
         }*/
+        
 
         
         //if offline go online

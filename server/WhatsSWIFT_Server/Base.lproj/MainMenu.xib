@@ -806,7 +806,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView ambiguous="YES" editable="NO" findStyle="panel" continuousSpellChecking="YES" allowsDocumentBackgroundColorChange="YES" allowsUndo="YES" allowsImageEditing="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="7tr-1H-Bjz">
-                                    <rect key="frame" x="0.0" y="0.0" width="223" height="157"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="223" height="172"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="550" height="172"/>
@@ -1613,7 +1613,7 @@
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.0089285714285714281" horizontal="YES" id="SS8-jn-EwZ">
+                        <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.0021929824561403508" horizontal="YES" id="SS8-jn-EwZ">
                             <rect key="frame" x="1" y="118.77508997917175" width="238" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>

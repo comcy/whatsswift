@@ -21,7 +21,7 @@ import Foundation
 var client_refresh_time = 5.0 //sec
 
 //msg refresh time
-var msg_refresh_time = 0.1 //sec
+var msg_refresh_time = 5.1 //sec
 
 //max error count befor disconnect (refresh_time*max_error) = time sec
 var max_error:Int = 10
@@ -34,3 +34,7 @@ var max_log_entries:Int = 500
 
 //logfile location
 var logfile_location = "/tmp/"
+
+//websocket server
+var ws_sock_server_1 = "echo.websocket.org"
+var ws_sock_server_2 = "sockets.mbed.org/ws/lol/rw"
