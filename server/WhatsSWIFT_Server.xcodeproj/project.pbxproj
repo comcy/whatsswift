@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		DA376F401A4050820058A8A5 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA376F3F1A4050820058A8A5 /* Params.swift */; };
+		DA55AAD71A651447001CBFEE /* UDPConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA55AAD61A651447001CBFEE /* UDPConnector.swift */; };
+		DA55AADE1A651452001CBFEE /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA55AADD1A651452001CBFEE /* Queue.swift */; };
+		DA55AAE61A652E2D001CBFEE /* yudpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = DA55AAE51A652E2D001CBFEE /* yudpsocket.c */; };
+		DA55AAE81A652E33001CBFEE /* yudpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA55AAE71A652E33001CBFEE /* yudpsocket.swift */; };
+		DA55AAEA1A652F1E001CBFEE /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA55AAE91A652F1E001CBFEE /* ysocket.swift */; };
 		DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */; };
 		DABA8CE61A3EC8CD00070009 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE51A3EC8CD00070009 /* Images.xcassets */; };
 		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
@@ -66,6 +71,11 @@
 
 /* Begin PBXFileReference section */
 		DA376F3F1A4050820058A8A5 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
+		DA55AAD61A651447001CBFEE /* UDPConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UDPConnector.swift; sourceTree = "<group>"; };
+		DA55AADD1A651452001CBFEE /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
+		DA55AAE51A652E2D001CBFEE /* yudpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yudpsocket.c; sourceTree = "<group>"; };
+		DA55AAE71A652E33001CBFEE /* yudpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = yudpsocket.swift; sourceTree = "<group>"; };
+		DA55AAE91A652F1E001CBFEE /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
 		DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsSWIFT_Server.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABA8CE21A3EC8CD00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -138,6 +148,11 @@
 		DABA8CE01A3EC8CD00070009 /* WhatsSWIFT_Server */ = {
 			isa = PBXGroup;
 			children = (
+				DA55AAE91A652F1E001CBFEE /* ysocket.swift */,
+				DA55AAE71A652E33001CBFEE /* yudpsocket.swift */,
+				DA55AAE51A652E2D001CBFEE /* yudpsocket.c */,
+				DA55AADD1A651452001CBFEE /* Queue.swift */,
+				DA55AAD61A651447001CBFEE /* UDPConnector.swift */,
 				DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */,
 				DABA8CE51A3EC8CD00070009 /* Images.xcassets */,
 				DABA8CFE1A3ECB0B00070009 /* Clients.swift */,
@@ -399,12 +414,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA55AAEA1A652F1E001CBFEE /* ysocket.swift in Sources */,
 				DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */,
 				DACB12521A3F2B440091940D /* Messages.swift in Sources */,
 				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
+				DA55AADE1A651452001CBFEE /* Queue.swift in Sources */,
 				DAC050BF1A63B7F100753C3C /* WSConnector.swift in Sources */,
 				DA376F401A4050820058A8A5 /* Params.swift in Sources */,
+				DA55AAE61A652E2D001CBFEE /* yudpsocket.c in Sources */,
 				DACB12541A3F319F0091940D /* Helpers.swift in Sources */,
+				DA55AAE81A652E33001CBFEE /* yudpsocket.swift in Sources */,
+				DA55AAD71A651447001CBFEE /* UDPConnector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

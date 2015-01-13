@@ -46,9 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* obj */
     var msg_db = message_list()
     var client_db = client_list()
-    var connection = connection_debug() // -> replace with original
-    var ws_connection = ws_connect()
-    var ws_connection2 = ws_connect()
+    var connection = Connection()
     
     /* ---------------------------- */
     /* vars */
@@ -62,11 +60,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         add_log("initialize server")
         
         //debug
-        addFakeClients(client_db)
-        
-        var msg = ws_connection.connect()
-        println("\(msg.message)")
-        
+        //addFakeClients(client_db)
+        //var msg = ws_connection.connect()
+        //println("\(msg.message)")
         //var msg2 = ws_connection2.connect()
         //println("\(msg2.message)")
 
@@ -79,6 +75,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
         tabe.usesAlternatingRowBackgroundColors = true
         
+        testudpserver()
+        testudpclient()
+        
     }
     
     /* ---------------------------- */
@@ -90,33 +89,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* ---------------------------- */
     /* send echo after timer and inc. error. if error is to high then disconnect */
     func client_refresh_cylce() {
-        add_log("send echo to '\(client_db.get_client_count())' clients")
         
-        //async
-        dispatch_async(queue_serial) {
+        if client_db.get_client_count() != 0 {
+            add_log("send echo to '\(client_db.get_client_count())' clients")
+        
+            //async
+            dispatch_async(queue_serial) {
             
-            //parse clients
-            for (index, value) in enumerate(self.client_db.get_client_list()) {
+                //parse clients
+                for (index, value) in enumerate(self.client_db.get_client_list()) {
                 
-                //check error count
-                if value.error >= max_error {
-                    //rem client
-                    var rem = self.client_db.rem_client(value.ip,_port: value.port,_name: value.name)
-                    self.add_log("\(rem.message) -> reason: not alive")
+                    //check error count
+                    if value.error >= max_error {
+                        //rem client
+                        var rem = self.client_db.rem_client(value.ip,_port: value.port,_name: value.name)
+                        self.add_log("\(rem.message) -> reason: not alive")
+                    }
+                
+                    //inc. error
+                    var err = self.client_db.set_error_for(value.name)
+                
+                    //check if exists and send echo
+                    if err.status {
+                        //connection send echo to...
+                        self.connection.sendMessage(message(ip: value.ip, port: value.port, message: "echo",  name: value.name, type: msg_type.ECHO.rawValue))
+                        //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                    }
+                
                 }
-                
-                //inc. error
-                var err = self.client_db.set_error_for(value.name)
-                
-                //check if exists and send echo
-                if err.status {
-                    //connection send echo to...
-                    self.connection.sendMessage(message(ip: value.ip, message: "echo", name: value.name, port: value.port, type: msg_type.ECHO.rawValue))
-                    //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
-                }
-                
+            
             }
-            
         }
     }
     
@@ -127,7 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //iterate clients
         for (index, value) in enumerate(self.client_db.get_client_list()) {
             //send message
-            self.connection.sendMessage(message(ip: value.ip, message: text, name: sender_name, port: value.port, type: 3))
+            self.connection.sendMessage(message(ip: value.ip, port: value.port, message: text, name: sender_name,  type: 3))
         }
         
     }
@@ -135,12 +137,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* ---------------------------- */
     /* msg refresh cycle. check connection afer timer for new messages */
     func msg_refresh_cycle() {
-
+        
         //async
         dispatch_async(queue_serial) {
-        
+    
             //check for msg
             var tmp_msg =  self.connection.receiveMessage()
+            println(tmp_msg.msg.message)
+            println(tmp_msg.status)
             
             //if new message check type and send broadcast and add to msg_db
             if tmp_msg.status {
@@ -189,7 +193,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                         
                             //send message to clients
                             self.sendBroadcast(tmp_msg.msg.message, sender_name: tmp_msg.msg.name)
-                            self.ws_connection.sendMessage(tmp_msg.msg)
                         }
                         else {
                             self.add_log("\(check.message)")
@@ -202,7 +205,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 }
                 
             }
-            
+            println("ende")
             dispatch_async(dispatch_get_main_queue()) {
                 
                 //refresh client count on gui
@@ -214,6 +217,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //refresh client table
                 self.tabe.reloadData()
             }
+            
+            println("ende ende")
         }
         
     }
@@ -237,7 +242,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBAction func o_ip_connection_a(sender: AnyObject) {
         //use ip
         if o_ip_connection.integerValue == 1 {
-            add_log("enable ip connection at IP: '!!!!!!!!!!!!!!!'")
+            add_log("enable ip connection at IP: '\(tcp_sock_ip):\(tcp_sock_port)'")
         }
         else {
             add_log("disbale ip connection")
@@ -269,7 +274,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             }
             
             //set vars
-            add_log("start server \(i_server_name.stringValue) at IP: '!!!!!!!!!!!!!!!")
+            add_log("start server \(i_server_name.stringValue) at IP: '\(tcp_sock_ip):\(tcp_sock_port)'")
             o_curr_status.stringValue = "online"
             o_status_indicator.startAnimation(sender)
             i_server_name.editable = false
@@ -277,6 +282,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             button_start_stopp.title = "stop server"
             o_ip_connection.enabled = false
             o_ws_connection.enabled = false
+            o_server_ip.stringValue = "\(tcp_sock_ip):\(tcp_sock_port)"
             
             //echo timer
             add_log("start echo refresh timer interval: '\(client_refresh_time)' [sec]")
@@ -390,7 +396,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     }
     
     /* ---------------------------- */
-    //set data
+    /* set table data*/
     func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject!
     {
         //show identifier

@@ -15,6 +15,37 @@
 /* import */
 import Foundation
 import Cocoa
+import Darwin.C
+
+/* ---------------------------- */
+/* udp server */
+func testudpserver(){
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+        var server:UDPServer=UDPServer(addr:"127.0.0.1",port:8080)
+        var run:Bool=true
+        while run{
+            var (data,remoteip,remoteport)=server.recv(1024)
+            println("recive")
+            if let d=data{
+                if let str=String(bytes: d, encoding: NSUTF8StringEncoding){
+                    println(str)
+                }
+            }
+            println(remoteip)
+            server.close()
+            break
+        }
+    })
+}
+
+/* ---------------------------- */
+/* udp client */
+func testudpclient(){
+    var client:UDPClient=UDPClient(addr: "localhost", port: 8080)
+    println("send hello world")
+    client.send(str: "hello world")
+    client.close()
+}
 
 /* ---------------------------- */
 /* log to file */
@@ -116,7 +147,7 @@ extension NSTextView {
 
 /* ---------------------------- */
 /* msg */
-struct message {
+struct messageii {
     
     var ip:String = ""
     var message:String = ""
@@ -183,13 +214,7 @@ class connection_debug {
     func receiveMessage() -> (status: Bool,msg: message) {
         
         var tmp:Array<message> = Array<message>()
-        tmp.append(message(ip: "192.168.2.222", message: "44rtggf", name: "Hannes", port: 12587, type: 1))
-        tmp.append(message(ip: "192.168.2.222", message: "rzzzr", name: "Lisa", port: 12587, type: 3))
-        tmp.append(message(ip: "192.168.2.222", message: "fgrgrg", name: "Mike", port: 12587, type: 3))
-        tmp.append(message(ip: "192.168.2.222", message: "rzgr", name: "Hannes", port: 12587, type: 0))
-        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Hannes", port: 12587, type: 3))
-        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Lukas", port: 12587, type: 2))
-        tmp.append(message(ip: "192.168.2.222", message: "dfgfff", name: "Hannes", port: 12587, type: 2))
+        tmp.append(message(ip: "192.168.2.222", port: 12587, message: "44rtggf",  name: "Hannes", type: 1))
         
         var diceRoll = Int(arc4random_uniform(7))
         
