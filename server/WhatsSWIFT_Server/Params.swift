@@ -15,13 +15,14 @@
 /* import */
 import Foundation
 
+/* ---------------------------- */
 /* params */
 
 //client refresh time
 var client_refresh_time = 5.0 //sec
 
 //msg refresh time
-var msg_refresh_time = 5.1 //sec
+var msg_refresh_time = 10.1 //sec
 
 //max error count befor disconnect (refresh_time*max_error) = time sec
 var max_error:Int = 10
@@ -37,4 +38,5 @@ var logfile_location = "/tmp/"
 
 //websocket server
 var ws_sock_server_1 = "echo.websocket.org"
-var ws_sock_server_2 = "sockets.mbed.org/ws/lol/rw"
+var ws_sock_server_2 = "141.18.49.242:9300"
+var ws_sock_server_3 = "141.18.49.242:8080"

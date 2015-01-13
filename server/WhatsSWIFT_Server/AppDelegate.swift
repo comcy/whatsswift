@@ -18,6 +18,7 @@ import Security
 import Foundation
 import StarscreamOSX
 
+/* ---------------------------- */
 /* main */
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource {
@@ -47,6 +48,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     var client_db = client_list()
     var connection = connection_debug() // -> replace with original
     var ws_connection = ws_connect()
+    var ws_connection2 = ws_connect()
     
     /* ---------------------------- */
     /* vars */
@@ -61,6 +63,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
         //debug
         addFakeClients(client_db)
+        
+        var msg = ws_connection.connect()
+        println("\(msg.message)")
+        
+        //var msg2 = ws_connection2.connect()
+        //println("\(msg2.message)")
 
         //init values
         o_server_ip.stringValue = ""
@@ -70,10 +78,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         button_start_stopp.title = "start server"
         o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
         tabe.usesAlternatingRowBackgroundColors = true
-        
-        var msg = ws_connection.connect()
-        println("\(msg.message)")
-
         
     }
     
@@ -131,7 +135,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* ---------------------------- */
     /* msg refresh cycle. check connection afer timer for new messages */
     func msg_refresh_cycle() {
-        
+
         //async
         dispatch_async(queue_serial) {
         
@@ -214,44 +218,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     }
     
     /* ---------------------------- */
+    /* use websockets */
+    @IBOutlet weak var o_ws_connection: NSButton!
+    @IBAction func o_ws_connection_a(sender: AnyObject) {
+        //use ws
+        if o_ws_connection.integerValue == 1 {
+            add_log("enable websocket connection to: '\(ws_sock_server_1)'")
+        }
+        else {
+            add_log("disable websocket connection")
+        }
+    }
+    
+    /* ---------------------------- */
+    /* use websockets */
+    @IBOutlet weak var o_ip_connection: NSButton!
+    @IBAction func o_ip_connection_a(sender: AnyObject) {
+        //use ip
+        if o_ip_connection.integerValue == 1 {
+            add_log("enable ip connection at IP: '!!!!!!!!!!!!!!!'")
+        }
+        else {
+            add_log("disbale ip connection")
+        }
+    }
+    
+    /* ---------------------------- */
     /* button - start, stop server */
     @IBOutlet weak var button_start_stopp: NSButton!
     @IBAction func start_stopp_server(sender: AnyObject) {
-        
-        /*dispatch_async(dispatch_get_main_queue()) {
-            
-            //echoService to echo back what the client send
-            func echoService(client c:TCPClient){
-                //print connection details on console
-                println("newclient from:\(c.addr)[\(c.port)]")
-                //read from client and send data back
-                var d=c.read(1024*10)
-                c.send(data: d!)
-                //close connection
-                c.close()
-            }
-
-            
-        //testserver listening on localhost on port 8080
-        var server:TCPServer = TCPServer(addr: "141.18.44.62", port: 8585)
-        //listen on incoming connections
-        var (success,msg)=server.listen()
-        if success{
-            while true{
-                if var client=server.accept(){
-                    println("accept")
-                    echoService(client: client)
-                }else{
-                    println("accept error")
-                }
-            }
-        }else{
-            println(msg)
-        }
-            
-        }*/
-        
-
         
         //if offline go online
         if server == server_state.OFFLINE {
@@ -264,13 +259,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 playSound("Funk.aiff")
                 //return
             }
+            if o_ip_connection.integerValue == 0 && o_ws_connection.integerValue == 0 {
+                add_log("can not start server -> no connection")
+                
+                //sound
+                playSound("Funk.aiff")
+                //return
+            }
             
-            add_log("start server \(i_server_name.stringValue) at IP: 192.168.0.100")
+            //set vars
+            add_log("start server \(i_server_name.stringValue) at IP: '!!!!!!!!!!!!!!!")
             o_curr_status.stringValue = "online"
             o_status_indicator.startAnimation(sender)
             i_server_name.editable = false
             i_server_pass.editable = false
             button_start_stopp.title = "stop server"
+            o_ip_connection.enabled = false
+            o_ws_connection.enabled = false
             
             //echo timer
             add_log("start echo refresh timer interval: '\(client_refresh_time)' [sec]")
@@ -285,12 +290,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         }
         else if server == server_state.ONLINE {
             
+            //set vars
             add_log("stop server")
             o_curr_status.stringValue = "offline"
             o_status_indicator.stopAnimation(sender)
             i_server_name.editable = true
             i_server_pass.editable = true
             button_start_stopp.title = "start server"
+            o_ip_connection.enabled = true
+            o_ws_connection.enabled = true
             
             //echo timer
             add_log("stop echo refresh timer interval: '\(client_refresh_time)' [sec]")
@@ -380,6 +388,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         return numberOfRows
     }
     
+    /* ---------------------------- */
     //set data
     func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject!
     {

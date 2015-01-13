@@ -22,6 +22,7 @@
 /* import */
 import Foundation
 
+/* ---------------------------- */
 /* message */
 struct s_message {
     
@@ -31,27 +32,33 @@ struct s_message {
     var time:String = ""
 }
 
+/* ---------------------------- */
 /* messagelist */
 class message_list {
     
-    //vars
+    /* ---------------------------- */
+    /* vars */
     var id:UInt64 = 0
     
-    //message db
+    /* ---------------------------- */
+    /* message db */
     var db : Array<s_message> = Array<s_message>()
     
-    //init
+    /* ---------------------------- */
+    /* init */
     init() {
         //clear all
         db.removeAll(keepCapacity: true)
     }
     
-    //get message count
+    /* ---------------------------- */
+    /* get message count */
     func get_message_count() -> (Int) {
         return db.count
     }
     
-    //add message to list
+    /* ---------------------------- */
+    /* add message to list */
     func add_message( _name: String, _message: String) -> (status: Bool, message: String) {
         
         //generate timestamp
@@ -66,7 +73,8 @@ class message_list {
         return (true,"message from '\(_name)' with id '\(id)' successfully added to list")
     }
     
-    //get last message
+    /* ---------------------------- */
+    /* get last message */
     func get_last_message() -> (s_message) {
         
         return db[db.count-1]

@@ -16,6 +16,7 @@
 import Foundation
 import Cocoa
 
+/* ---------------------------- */
 /* log to file */
 func writeToFile(text: String) {
     
@@ -41,6 +42,7 @@ func writeToFile(text: String) {
     
 }
 
+/* ---------------------------- */
 /* play sound */
 func playSound(name: String) {
     
@@ -54,6 +56,7 @@ func playSound(name: String) {
     mySound?.play()
 }
 
+/* ---------------------------- */
 /* colorize text */
 func colorizeText(ressource: String) -> NSMutableAttributedString {
     var theRessource = ressource
@@ -64,6 +67,7 @@ func colorizeText(ressource: String) -> NSMutableAttributedString {
     return attributedString
 }
 
+/* ---------------------------- */
 /* colorize text 2 */
 func attributeString(ressource: String) -> NSMutableAttributedString{
     var attributedRessource = NSMutableAttributedString(string: ressource)
@@ -82,6 +86,7 @@ func attributeString(ressource: String) -> NSMutableAttributedString{
     return attributedRessource
 }
 
+/* ---------------------------- */
 /* add some fake clients */
 func addFakeClients(db: client_list) {
     
@@ -100,6 +105,7 @@ func addFakeClients(db: client_list) {
     
 }
 
+/* ---------------------------- */
 /* append extension */
 extension NSTextView {
     func appendString(string:String) {
@@ -108,6 +114,7 @@ extension NSTextView {
     }
 }
 
+/* ---------------------------- */
 /* msg */
 struct message {
     
@@ -119,16 +126,19 @@ struct message {
     
 }
 
+/* ---------------------------- */
 /* enum msg type */
 enum msg_type: Int {
     case CONNECT = 0, DISCONNECT = 1, ECHO = 2, MESSAGE = 3
 }
 
+/* ---------------------------- */
 /* enum server stat */
 enum server_state: Int {
     case OFFLINE = 0, ONLINE = 1, ERROR = -1
 }
 
+/* ---------------------------- */
 /* add some fake connection */
 class connection_debug {
     
@@ -190,6 +200,7 @@ class connection_debug {
 
 }
 
+/* ---------------------------- */
 /* fake array for table view */
 func getDataArray () -> NSArray{
 var dataArray:[NSDictionary] = [["FirstName": "Debasis", "LastName": "Das"],

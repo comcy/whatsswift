@@ -8,6 +8,8 @@
 /*
 https://github.com/daltoniam/starscream
 https://www.websocket.org/echo.html
+https://github.com/Flynsarmy/PHPWebSocket-Chat
+https://github.com/james2doyle/php-socket-chat
 
 
 */
@@ -18,46 +20,50 @@ import StarscreamOSX
 
 class ws_connect: WebSocketDelegate {
     
-    //socket
+    /* ---------------------------- */
+    /* socket */
     //var socket = WebSocket(url: NSURL(scheme: "ws", host: ws_sock_server_1, path: "/")!, protocols: ["chat", "superchat"])
-    var socket = WebSocket(url: NSURL(scheme: "ws", host: ws_sock_server_1, path: "/")!)
+    var socket = WebSocket(url: NSURL(scheme: "ws", host: ws_sock_server_3, path: "/")!)
     
-    //state
+    /* ---------------------------- */
+    /* vars */
     var connected:Bool = false
-    
-    //error
     var error_text:String = ""
     
-    //init
+    /* ---------------------------- */
+    /* async gcd */
+    private let queue_global = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+    private let queue_concur = dispatch_queue_create ("concur" , DISPATCH_QUEUE_CONCURRENT)
+    private let queue_serial = dispatch_queue_create("serial", DISPATCH_QUEUE_SERIAL)
+    
+    /* ---------------------------- */
+    /* init */
     init() {
         
         
     }
     
-    //connect client to server
+    /* ---------------------------- */
+    /* connect client to server */
     func connect() -> (status: Bool, message: String) {
         
         dispatch_async(dispatch_get_main_queue()) {
             //connect
             self.socket.delegate = self
+            //self.socket.selfSignedSSL = true
             self.socket.connect()
             
-            // send echo
-            self.socket.writeString("hello there!")
+            // send echo U+0022
+            var text:String = "{\u{22}username\u{22}:\u{22}server\u{22},\u{22}message\u{22}:\u{22}welcome from whatsswift\u{22}}"
+            //println(text)
+            self.socket.writeString(text)
         }
-        
-        //state
-        if connected {
-            return (true,"websocket is connected")
-        }
-        else {
-            return (false,"websocket is disconnected \(error_text)")
-        }
-
-        
+            
+        return (true,"connect to websocket: \(ws_sock_server_3)")
     }
     
-    //disconnect from server
+    /* ---------------------------- */
+    /* disconnect from server */
     func disconnect() -> (status: Bool, message: String) {
         
         //disconnect
@@ -67,14 +73,24 @@ class ws_connect: WebSocketDelegate {
         
         return(true,"websocket is disconnected")
     }
+    
+    func sendMessage(text: String) {
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.socket.writeString(text)
+        }
+    }
 
-    //websocket delegate methods.
-    //if connected
+    /* ---------------------------- */
+    /* delegate methods */
+    /* if connected */
     func websocketDidConnect() {
         connected = true
+        println("websocket is connected")
     }
     
-    //if disconnected
+    /* ---------------------------- */
+    /* if disconnected */
     func websocketDidDisconnect(error: NSError?) {
         if let e = error {
             println("websocket is disconnected: \(e.localizedDescription)")
@@ -83,19 +99,22 @@ class ws_connect: WebSocketDelegate {
         }
     }
     
-    //if has error
+    /* ---------------------------- */
+    /* has errors */
     func websocketDidWriteError(error: NSError?) {
         if let e = error {
             println("wez got an error from the websocket: \(e.localizedDescription)")
         }
     }
     
-    //get message
+    /* ---------------------------- */
+    /* receive message */
     func websocketDidReceiveMessage(text: String) {
         println("Received text: \(text)")
     }
     
-    //get data
+    /* ---------------------------- */
+    /* receive data */
     func websocketDidReceiveData(data: NSData) {
         println("Received data: \(data.length)")
     }

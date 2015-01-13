@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		DA376F401A4050820058A8A5 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA376F3F1A4050820058A8A5 /* Params.swift */; };
-		DAB629EF1A49B5FC00E34290 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB629EE1A49B5FC00E34290 /* ytcpsocket.c */; };
-		DAB629F11A49B60700E34290 /* ytcpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB629F01A49B60700E34290 /* ytcpsocket.swift */; };
-		DAB629F31A49B61100E34290 /* yudpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = DAB629F21A49B61100E34290 /* yudpsocket.c */; };
-		DAB629F51A49B61A00E34290 /* yudpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB629F41A49B61A00E34290 /* yudpsocket.swift */; };
 		DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */; };
 		DABA8CE61A3EC8CD00070009 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE51A3EC8CD00070009 /* Images.xcassets */; };
 		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
@@ -70,10 +66,6 @@
 
 /* Begin PBXFileReference section */
 		DA376F3F1A4050820058A8A5 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
-		DAB629EE1A49B5FC00E34290 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ytcpsocket.c; path = ../../../Downloads/swift_files/SwiftSocket/ytcpsocket.c; sourceTree = "<group>"; };
-		DAB629F01A49B60700E34290 /* ytcpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ytcpsocket.swift; path = ../../../Downloads/swift_files/SwiftSocket/ytcpsocket.swift; sourceTree = "<group>"; };
-		DAB629F21A49B61100E34290 /* yudpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = yudpsocket.c; path = ../../../Downloads/swift_files/SwiftSocket/yudpsocket.c; sourceTree = "<group>"; };
-		DAB629F41A49B61A00E34290 /* yudpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = yudpsocket.swift; path = ../../../Downloads/swift_files/SwiftSocket/yudpsocket.swift; sourceTree = "<group>"; };
 		DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsSWIFT_Server.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABA8CE21A3EC8CD00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -128,10 +120,6 @@
 			isa = PBXGroup;
 			children = (
 				DAC050901A63B14700753C3C /* Starscream */,
-				DAB629F41A49B61A00E34290 /* yudpsocket.swift */,
-				DAB629F21A49B61100E34290 /* yudpsocket.c */,
-				DAB629F01A49B60700E34290 /* ytcpsocket.swift */,
-				DAB629EE1A49B5FC00E34290 /* ytcpsocket.c */,
 				DABA8CE01A3EC8CD00070009 /* WhatsSWIFT_Server */,
 				DABA8CF11A3EC8CE00070009 /* WhatsSWIFT_ServerTests */,
 				DABA8CDF1A3EC8CD00070009 /* Products */,
@@ -414,13 +402,9 @@
 				DABA8CFF1A3ECB0B00070009 /* Clients.swift in Sources */,
 				DACB12521A3F2B440091940D /* Messages.swift in Sources */,
 				DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */,
-				DAB629F11A49B60700E34290 /* ytcpsocket.swift in Sources */,
-				DAB629F31A49B61100E34290 /* yudpsocket.c in Sources */,
 				DAC050BF1A63B7F100753C3C /* WSConnector.swift in Sources */,
-				DAB629F51A49B61A00E34290 /* yudpsocket.swift in Sources */,
 				DA376F401A4050820058A8A5 /* Params.swift in Sources */,
 				DACB12541A3F319F0091940D /* Helpers.swift in Sources */,
-				DAB629EF1A49B5FC00E34290 /* ytcpsocket.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

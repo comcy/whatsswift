@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6249" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6249" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6249"/>
@@ -20,12 +20,14 @@
                 <outlet property="o_curr_clients" destination="CGp-ib-PRO" id="6Rp-st-MDc"/>
                 <outlet property="o_curr_status" destination="cNs-y7-Szc" id="zXP-oN-TKX"/>
                 <outlet property="o_current_msg" destination="kBc-eb-Zc9" id="L8x-A5-orU"/>
+                <outlet property="o_ip_connection" destination="NZI-kw-3gw" id="ErR-2i-Nzw"/>
                 <outlet property="o_log" destination="7tr-1H-Bjz" id="q0Q-fR-r7o"/>
                 <outlet property="o_log_info" destination="lU1-ih-EzN" id="FIO-oh-3rW"/>
                 <outlet property="o_log_into" destination="lU1-ih-EzN" id="dEk-8W-A6E"/>
                 <outlet property="o_log_to_file" destination="UmP-XM-AHJ" id="ywc-dG-wvw"/>
                 <outlet property="o_server_ip" destination="Rlh-BP-zyY" id="8Hc-DO-r5r"/>
                 <outlet property="o_status_indicator" destination="juY-gW-Uyz" id="sQ0-3u-ddJ"/>
+                <outlet property="o_ws_connection" destination="p3b-kf-kmm" id="LDQ-eg-c5V"/>
                 <outlet property="server_name" destination="PWL-0i-JEe" id="mSK-tV-2g3"/>
                 <outlet property="server_password" destination="LEU-Nl-Cbr" id="3br-aL-FiG"/>
                 <outlet property="server_progress" destination="juY-gW-Uyz" id="w4b-Ib-hxX"/>
@@ -1613,7 +1615,7 @@
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
-                        <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.0021929824561403508" horizontal="YES" id="SS8-jn-EwZ">
+                        <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="SS8-jn-EwZ">
                             <rect key="frame" x="1" y="118.77508997917175" width="238" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -1634,6 +1636,26 @@
                         </buttonCell>
                         <connections>
                             <action selector="o_log_to_file_a:" target="Voe-Tx-rLC" id="Sis-1M-3Pu"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NZI-kw-3gw">
+                        <rect key="frame" x="205" y="427" width="33" height="18"/>
+                        <buttonCell key="cell" type="check" title="IP" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="8so-Ui-Z4w">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="o_ip_connection_a:" target="Voe-Tx-rLC" id="j1s-ko-q97"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p3b-kf-kmm">
+                        <rect key="frame" x="277" y="427" width="90" height="18"/>
+                        <buttonCell key="cell" type="check" title="WebSocket" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="KOa-bC-Hlt">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="o_ws_connection_a:" target="Voe-Tx-rLC" id="PU4-Ks-IaR"/>
                         </connections>
                     </button>
                 </subviews>

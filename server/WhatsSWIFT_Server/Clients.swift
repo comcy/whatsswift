@@ -15,6 +15,7 @@
 /* import */
 import Foundation
 
+/* ---------------------------- */
 /* client */
 struct s_client {
     
@@ -28,27 +29,32 @@ struct s_client {
     var error:Int = 0
 }
 
-/* clientslist */
+/* ---------------------------- */
+/* clientlist */
 class client_list {
     
-    //vars
+    /* ---------------------------- */
+    /* vars */
     var id:Int = 0
     
     //client db
     var db : Array<s_client> = Array<s_client>()
     
-    //init
+    /* ---------------------------- */
+    /* init */
     init() {
         //clear all
         db.removeAll(keepCapacity: true)
     }
     
-    //get client count
+    /* ---------------------------- */
+    /* get client count */
     func get_client_count() -> (Int) {
         return db.count
     }
     
-    //inc msgs count
+    /* ---------------------------- */
+    /* inc message count */
     func set_msgs_for(_name: String) -> (status: Bool, message: String) {
         
         //check if exists
@@ -67,7 +73,8 @@ class client_list {
         return (false,"msgs not set for '\(_name)'")
     }
     
-    //inc. error for client
+    /* ---------------------------- */
+    /* inc error count */
     func set_error_for(_name: String) -> (status: Bool, message: String) {
         
         //check if exists
@@ -87,7 +94,8 @@ class client_list {
         
     }
     
-    //rcv sign of life from
+    /* ---------------------------- */
+    /* rcv sign of life */
     func rcv_sign_of_life_from(_name: String) -> (status: Bool, message: String) {
         
         //check if exists
@@ -107,12 +115,14 @@ class client_list {
         
     }
     
-    //get client list
+    /* ---------------------------- */
+    /* get client list */
     func get_client_list() -> (Array<s_client>) {
         return db
     }
     
-    //add client to list.
+    /* ---------------------------- */
+    /* add client to list */
     func add_client(_ip: String, _port: Int, _name: String, _type: String) -> (status: Bool, message: String) {
         
         //generate timestamp
@@ -139,7 +149,8 @@ class client_list {
         
     }
     
-    //rem client from list
+    /* ---------------------------- */
+    /* remove clietn from list */
     func rem_client(_ip: String, _port: Int, _name: String) -> (status: Bool, message: String) {
         
         //check if exists
