@@ -16,7 +16,6 @@
             <connections>
                 <outlet property="button_start_stopp" destination="NTV-Hu-aOb" id="fuH-2X-3nt"/>
                 <outlet property="i_server_name" destination="PWL-0i-JEe" id="oRj-5k-q7b"/>
-                <outlet property="i_server_pass" destination="LEU-Nl-Cbr" id="7Xw-UG-7dd"/>
                 <outlet property="o_curr_clients" destination="CGp-ib-PRO" id="6Rp-st-MDc"/>
                 <outlet property="o_curr_status" destination="cNs-y7-Szc" id="zXP-oN-TKX"/>
                 <outlet property="o_current_msg" destination="kBc-eb-Zc9" id="L8x-A5-orU"/>
@@ -29,7 +28,6 @@
                 <outlet property="o_status_indicator" destination="juY-gW-Uyz" id="sQ0-3u-ddJ"/>
                 <outlet property="o_ws_connection" destination="p3b-kf-kmm" id="LDQ-eg-c5V"/>
                 <outlet property="server_name" destination="PWL-0i-JEe" id="mSK-tV-2g3"/>
-                <outlet property="server_password" destination="LEU-Nl-Cbr" id="3br-aL-FiG"/>
                 <outlet property="server_progress" destination="juY-gW-Uyz" id="w4b-Ib-hxX"/>
                 <outlet property="tabe" destination="PtI-wd-47B" id="bwH-UH-SwN"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
@@ -712,28 +710,9 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LEU-Nl-Cbr">
-                        <rect key="frame" x="207" y="479" width="179" height="22"/>
-                        <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="nqG-HO-ipC">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                            <allowedInputSourceLocales>
-                                <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                            </allowedInputSourceLocales>
-                        </secureTextFieldCell>
-                    </secureTextField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KcI-JB-t9g">
                         <rect key="frame" x="18" y="503" width="45" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name:" id="ymT-Y1-02h">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7wv-Pv-RGR">
-                        <rect key="frame" x="205" y="503" width="66" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Password:" id="Ny1-0U-ApV">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

@@ -27,7 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     //outlet
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var i_server_name: NSTextField!
-    @IBOutlet weak var i_server_pass: NSSecureTextField!
     @IBOutlet weak var o_server_ip: NSTextField!
     @IBOutlet weak var o_curr_clients: NSTextField!
     @IBOutlet weak var o_log_info: NSTextField!
@@ -46,7 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* obj */
     var msg_db = message_list()
     var client_db = client_list()
-    var connection = Connection()
+    var udp_connection = Connection()
+    var ws_connection = ws_connect()
     
     /* ---------------------------- */
     /* vars */
@@ -74,9 +74,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         button_start_stopp.title = "start server"
         o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
         tabe.usesAlternatingRowBackgroundColors = true
-        
-        testudpserver()
-        testudpclient()
+        i_server_name.stringValue = "WS_Server"
         
     }
     
@@ -99,6 +97,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //parse clients
                 for (index, value) in enumerate(self.client_db.get_client_list()) {
                 
+                    if value.name != "websocket"
+                    {
                     //check error count
                     if value.error >= max_error {
                         //rem client
@@ -112,8 +112,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     //check if exists and send echo
                     if err.status {
                         //connection send echo to...
-                        self.connection.sendMessage(message(ip: value.ip, port: value.port, message: "echo",  name: value.name, type: msg_type.ECHO.rawValue))
-                        //self.add_log("send echo to \(value.id) \(value.name) at \(value.ip) \(value.type) \(value.error)")
+                        self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "echo",  name: value.name, type: msg_type.ECHO.rawValue))
+                        self.add_log("send echo to \(value.id) \(value.name) at \(value.ip):\(value.port) \(value.type) \(value.error)")
+                    }
                     }
                 
                 }
@@ -129,7 +130,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //iterate clients
         for (index, value) in enumerate(self.client_db.get_client_list()) {
             //send message
-            self.connection.sendMessage(message(ip: value.ip, port: value.port, message: text, name: sender_name,  type: 3))
+            self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: text, name: sender_name,  type: 3))
         }
         
     }
@@ -140,11 +141,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
         //async
         dispatch_async(queue_serial) {
+            
+            //check socket
+            self.udp_connection.receiveMsg()
     
             //check for msg
-            var tmp_msg =  self.connection.receiveMessage()
-            println(tmp_msg.msg.message)
-            println(tmp_msg.status)
+            var tmp_msg =  self.udp_connection.receiveMessage()
             
             //if new message check type and send broadcast and add to msg_db
             if tmp_msg.status {
@@ -153,27 +155,41 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 switch tmp_msg.msg.type {
                     
                     case 0: /*connect*/
-                        self.add_log("'\(tmp_msg.msg.name)' connecting to server")
+                        self.add_log("'\(tmp_msg.msg.name)' connecting to \(self.i_server_name.stringValue)")
                         
                         //add client
                         var check = self.client_db.add_client(tmp_msg.msg.ip, _port: tmp_msg.msg.port, _name: tmp_msg.msg.name, _type: "osx_client")
                         self.add_log(check.message)
                         
                         //send info to clients
-                        if check.status { self.sendBroadcast("\(tmp_msg.msg.name) connected", sender_name: self.i_server_name.stringValue) }
+                        if check.status {
+                            //send message to clients
+                            if self.o_ip_connection.integerValue == 1 {
+                                self.sendBroadcast("\(tmp_msg.msg.name) connected", sender_name: self.i_server_name.stringValue)
+                                self.udp_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "echo",  name: tmp_msg.msg.name, type: msg_type.ECHO.rawValue))
+                            }
+                            
+                            // send to websocket
+                            if self.o_ws_connection.integerValue == 1 {self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) connected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))}
+                        }
                     break
                     case 1: /*disconnect*/
-                        self.add_log("'\(tmp_msg.msg.name)' disconnecting from server")
+                        self.add_log("'\(tmp_msg.msg.name)' disconnecting from \(self.i_server_name.stringValue)")
                         
                         //rem client
                         var check = self.client_db.rem_client(tmp_msg.msg.ip, _port: tmp_msg.msg.port, _name: tmp_msg.msg.name)
                         self.add_log(check.message)
                         
                         //send info to clients
-                        if check.status { self.sendBroadcast("'\(tmp_msg.msg.name)' disconnected", sender_name: self.i_server_name.stringValue) }
+                        if check.status {
+                            // send message to clients
+                            if self.o_ip_connection.integerValue == 1 { self.sendBroadcast("'\(tmp_msg.msg.name)' disconnected", sender_name: self.i_server_name.stringValue)}
+                            
+                            // send to websocket
+                            if self.o_ws_connection.integerValue == 1 {self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) disconnected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))}
+                        }
                     break
                     case 2: /*echo*/
-
                         //set sign of life and check if connected
                         var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
                         self.add_log("rcv echo - \(check.message)")
@@ -192,7 +208,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                             self.add_log("broadcast message from '\(tmp_msg.msg.name)' to '\(self.client_db.get_client_count())' clients")
                         
                             //send message to clients
-                            self.sendBroadcast(tmp_msg.msg.message, sender_name: tmp_msg.msg.name)
+                            if self.o_ip_connection.integerValue == 1 {self.sendBroadcast(tmp_msg.msg.message, sender_name: tmp_msg.msg.name)}
+                            
+                            //send to websocket
+                            if self.o_ws_connection.integerValue == 1 && tmp_msg.msg.name != "websocket" {self.ws_connection.sendMessage(tmp_msg.msg)}
                         }
                         else {
                             self.add_log("\(check.message)")
@@ -205,7 +224,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 }
                 
             }
-            println("ende")
+           
             dispatch_async(dispatch_get_main_queue()) {
                 
                 //refresh client count on gui
@@ -218,7 +237,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 self.tabe.reloadData()
             }
             
-            println("ende ende")
         }
         
     }
@@ -229,7 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBAction func o_ws_connection_a(sender: AnyObject) {
         //use ws
         if o_ws_connection.integerValue == 1 {
-            add_log("enable websocket connection to: '\(ws_sock_server_1)'")
+            add_log("enable websocket connection to: '\(ws_sock_server_3)'")
         }
         else {
             add_log("disable websocket connection")
@@ -242,7 +260,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBAction func o_ip_connection_a(sender: AnyObject) {
         //use ip
         if o_ip_connection.integerValue == 1 {
-            add_log("enable ip connection at IP: '\(tcp_sock_ip):\(tcp_sock_port)'")
+            add_log("enable ip connection at IP: '\(udp_sock_ip_s):\(udp_sock_port_s)'")
         }
         else {
             add_log("disbale ip connection")
@@ -258,31 +276,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         if server == server_state.OFFLINE {
             
             //check conditions
-            if i_server_name.stringValue == "" || i_server_pass.stringValue == "" {
+            if i_server_name.stringValue == "" {
                 add_log("can not start server -> empty data")
                 
                 //sound
                 playSound("Funk.aiff")
-                //return
+                return
             }
             if o_ip_connection.integerValue == 0 && o_ws_connection.integerValue == 0 {
                 add_log("can not start server -> no connection")
                 
                 //sound
                 playSound("Funk.aiff")
-                //return
+                return
             }
             
             //set vars
-            add_log("start server \(i_server_name.stringValue) at IP: '\(tcp_sock_ip):\(tcp_sock_port)'")
             o_curr_status.stringValue = "online"
             o_status_indicator.startAnimation(sender)
             i_server_name.editable = false
-            i_server_pass.editable = false
             button_start_stopp.title = "stop server"
             o_ip_connection.enabled = false
             o_ws_connection.enabled = false
-            o_server_ip.stringValue = "\(tcp_sock_ip):\(tcp_sock_port)"
+            o_server_ip.stringValue = "\(udp_sock_ip_s):\(udp_sock_port_s)"
             
             //echo timer
             add_log("start echo refresh timer interval: '\(client_refresh_time)' [sec]")
@@ -291,6 +307,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //msg timer
             add_log("start msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
+            
+            
+            //start ws connection
+            if o_ws_connection.integerValue == 1 {
+                
+                var tmp = ws_connection.connect(self.i_server_name.stringValue,buff: udp_connection)
+                add_log(tmp.message)
+                
+                var check = self.client_db.add_client(ws_sock_server_3, _port: 0, _name: "websocket", _type: "ws_client")
+                self.add_log(check.message)
+            }
+            
+            //start ip connection
+            if o_ip_connection.integerValue == 1 {
+                
+                var tmp = udp_connection.connect()
+                add_log(tmp.message)
+            }
+            
             
             //set state
             server = server_state.ONLINE
@@ -302,7 +337,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             o_curr_status.stringValue = "offline"
             o_status_indicator.stopAnimation(sender)
             i_server_name.editable = true
-            i_server_pass.editable = true
             button_start_stopp.title = "start server"
             o_ip_connection.enabled = true
             o_ws_connection.enabled = true
@@ -314,6 +348,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //echo timer
             add_log("stop msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer.invalidate()
+            
+            //stop ws connection
+            if o_ws_connection.integerValue == 1 {
+                
+                var tmp = ws_connection.disconnect()
+                add_log(tmp.message)
+                
+                //rem client
+                var check = self.client_db.rem_client(ws_sock_server_3, _port: 0, _name: "websocket")
+                self.add_log(check.message)
+            }
+            
+            //stopp ip connection
+            if o_ip_connection.integerValue == 1 {
+                
+            }
+
             
             //set state
             server = server_state.OFFLINE

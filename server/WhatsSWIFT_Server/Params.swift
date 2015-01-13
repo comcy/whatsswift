@@ -22,10 +22,10 @@ import Foundation
 var client_refresh_time = 5.0 //sec
 
 //msg refresh time
-var msg_refresh_time = 1.0 //sec
+var msg_refresh_time = 0.1 //sec
 
 //max error count befor disconnect (refresh_time*max_error) = time sec
-var max_error:Int = 10
+var max_error:Int = 5
 
 //max number of simultanious connected clients
 var max_clients = 100
@@ -41,8 +41,11 @@ var ws_sock_server_1 = "echo.websocket.org"
 var ws_sock_server_2 = "141.18.49.242:9300"
 var ws_sock_server_3 = "141.18.49.242:8080" //bester, mit username
 
-//tcp server ip
-var udp_sock_ip = "141.18.44.66"
+//udp server ip
+var udp_sock_ip_s = getIFAddresses()[2]
 
-//tcp server port
-var udp_sock_port = 8585
+//udp server port
+var udp_sock_port_s = 8585
+
+//udp client port
+var udp_sock_port_c = 5252

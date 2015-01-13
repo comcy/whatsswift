@@ -76,6 +76,7 @@
 		DA55AAE51A652E2D001CBFEE /* yudpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yudpsocket.c; sourceTree = "<group>"; };
 		DA55AAE71A652E33001CBFEE /* yudpsocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = yudpsocket.swift; sourceTree = "<group>"; };
 		DA55AAE91A652F1E001CBFEE /* ysocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ysocket.swift; sourceTree = "<group>"; };
+		DA55AB021A656341001CBFEE /* Helpers-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Helpers-Bridging-Header.h"; sourceTree = "<group>"; };
 		DABA8CDE1A3EC8CD00070009 /* WhatsSWIFT_Server.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhatsSWIFT_Server.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABA8CE21A3EC8CD00070009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -162,6 +163,7 @@
 				DA376F3F1A4050820058A8A5 /* Params.swift */,
 				DABA8CE11A3EC8CD00070009 /* Supporting Files */,
 				DAC050BE1A63B7F100753C3C /* WSConnector.swift */,
+				DA55AB021A656341001CBFEE /* Helpers-Bridging-Header.h */,
 			);
 			path = WhatsSWIFT_Server;
 			sourceTree = "<group>";
@@ -552,6 +554,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WhatsSWIFT_Server/Helpers-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -564,6 +567,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WhatsSWIFT_Server/Helpers-Bridging-Header.h";
 			};
 			name = Release;
 		};

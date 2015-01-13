@@ -47,21 +47,32 @@ struct message {
 /* Connection */
 class Connection{
     
+    /* ---------------------------- */
     // Message delimiter
     let del:String = ">|<"
     
-    // FIFO Queue - for every instance its own
+    /* ---------------------------- */
+    // FIFO Queue
     let receiveBuffer = Queue<message>()
     let sendBuffer = Queue<message>()
+    var allow_udp:Bool = false
     
     init() {
         
+        
+    }
+    
+    func connect() -> (status: Bool, message: String) {
+        
+        allow_udp = true
+        return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
     }
     
     
     ///////////////////////////////////////////////////////////////////////////////////////
     // Client/Server (communication) functions
     ///////////////////////////////////////////////////////////////////////////////////////
+    
     
     /* ---------------------------- */
     /* send message */
@@ -91,6 +102,41 @@ class Connection{
             sendMsg( destIp:ip, destPort:port, msg:message )
         }
         
+    }
+    
+    /* ---------------------------- */
+    /* get server ip */
+    func getIFAddresses() -> [String] {
+        var addresses = [String]()
+        
+        // Get list of all interfaces on the local machine:
+        var ifaddr : UnsafeMutablePointer<ifaddrs> = nil
+        if getifaddrs(&ifaddr) == 0 {
+            
+            // For each interface ...
+            for (var ptr = ifaddr; ptr != nil; ptr = ptr.memory.ifa_next) {
+                let flags = Int32(ptr.memory.ifa_flags)
+                var addr = ptr.memory.ifa_addr.memory
+                
+                // Check for running IPv4, IPv6 interfaces. Skip the loopback interface.
+                if (flags & (IFF_UP|IFF_RUNNING|IFF_LOOPBACK)) == (IFF_UP|IFF_RUNNING) {
+                    if addr.sa_family == UInt8(AF_INET) || addr.sa_family == UInt8(AF_INET6) {
+                        
+                        // Convert interface address to a human readable string:
+                        var hostname = [CChar](count: Int(NI_MAXHOST), repeatedValue: 0)
+                        if (getnameinfo(&addr, socklen_t(addr.sa_len), &hostname, socklen_t(hostname.count),
+                            nil, socklen_t(0), NI_NUMERICHOST) == 0) {
+                                if let address = String.fromCString(hostname) {
+                                    addresses.append(address)
+                                }
+                        }
+                    }
+                }
+            }
+            freeifaddrs(ifaddr)
+        }
+        
+        return addresses
     }
     
     
@@ -143,13 +189,13 @@ class Connection{
     // This function splits a complete string which contains message information
     // to build a message object.
     // It returns a message object.
-    func splitString( msgStr:String ) -> message {
+    func splitString( msgStr:String, ip:String, port:Int ) -> message {
         
         // separation array
         var sepArr = msgStr.componentsSeparatedByString( del )
         
-        var ipSplit:String = sepArr[0]
-        var portSplit:Int! = sepArr[1].toInt()
+        var ipSplit:String = ip
+        var portSplit:Int! = udp_sock_port_c
         var textSplit:String = sepArr[2]
         var nameSplit:String = sepArr[3]
         var typeSplit:Int! = sepArr[4].toInt()
@@ -168,61 +214,43 @@ class Connection{
     // The transmission of the String is realized as an TCP socket.
     func sendMsg( #destIp:String, destPort:Int, msg:String  ){
         
-        // new tcp socket on client
-        /*var sender:TCPClient = TCPClient( addr: destIp, port: destPort )
-        
-        // connection to server with 2 minutes timeout
-        var ( success, errmsg )=sender.connect( timeout: 120 )
-        if success{
-            
-            // send message to server
-            var ( success, errmsg ) = sender.send( str: msg )
-            if success{
-                
-                // read string/answer
-                var data = sender.read( 1024*10 )
-                if let d = data{ // print received string on console
-                    if let rcvMsg = String( bytes: d, encoding: NSUTF8StringEncoding ) {
-                        println( rcvMsg )
-                    }
-                }
-            } else{
-                println( errmsg )
-            }
-        } else{
-            println( errmsg )
-        }*/
-        
+        var client:UDPClient=UDPClient(addr: destIp, port: destPort)
+        //println("send \(msg)")
+        client.send(str: msg)
+        client.close()
     }
-    
+
     /* ---------------------------- */
     /* receive message - thread */
     func receiveMsg() {
         
+        if allow_udp {
         //check for new message
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            var server:UDPServer=UDPServer(addr:"127.0.0.1",port:8080)
+            var server:UDPServer=UDPServer(addr:self.getIFAddresses()[2],port:udp_sock_port_s)
             var run:Bool=true
             while run{
                 var (data,remoteip,remoteport)=server.recv(1024)
-                println("recive")
+                //println("recive")
                 if let d=data{
                     if let str=String(bytes: d, encoding: NSUTF8StringEncoding){
-                        println(str)
+                        //println(str)
+                        
+                        // parse message
+                        var msg:message = self.splitString( str, ip: remoteip, port: remoteport )
+                        
+                        // ad message to a buffer
+                        self.receiveBuffer.enqueue( msg )
+                        
                     }
                 }
-                println(remoteip)
+                //println(remoteip)
                 server.close()
                 break
             }
         })
+        }
 
-        
-        // parse message
-        var msg:message = splitString( rcvMsg )
-        
-        // ad message to a buffer
-        receiveBuffer.enqueue( msg )
     }
 }
 

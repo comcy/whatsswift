@@ -36,6 +36,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <ifaddrs.h>
 #define yudpsocket_buff_len 8192
 
 //return socket fd

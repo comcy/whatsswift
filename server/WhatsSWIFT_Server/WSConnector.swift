@@ -29,6 +29,8 @@ class ws_connect: WebSocketDelegate {
     /* vars */
     var connected:Bool = false
     var error_text:String = ""
+    var server_name:String = ""
+    var buffer:Connection = Connection()
     
     /* ---------------------------- */
     /* async gcd */
@@ -45,8 +47,13 @@ class ws_connect: WebSocketDelegate {
     
     /* ---------------------------- */
     /* connect client to server */
-    func connect() -> (status: Bool, message: String) {
+    func connect(server:String, buff:Connection) -> (status: Bool, message: String) {
         
+        //set val
+        buffer = buff
+        server_name = server
+        
+        //connect
         dispatch_async(dispatch_get_main_queue()) {
             //connect
             self.socket.delegate = self
@@ -54,12 +61,12 @@ class ws_connect: WebSocketDelegate {
             self.socket.connect()
             
             // send echo U+0022
-            var text:String = "{\u{22}username\u{22}:\u{22}server\u{22},\u{22}message\u{22}:\u{22}welcome from whatsswift\u{22}}"
+            var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(self.server_name)\u{22}}"
             //println(text)
             self.socket.writeString(text)
         }
             
-        return (true,"connect to websocket: \(ws_sock_server_3)")
+        return (connected,"connect to websocket: '\(ws_sock_server_3)'")
     }
     
     /* ---------------------------- */
@@ -81,10 +88,13 @@ class ws_connect: WebSocketDelegate {
     /* disconnect from server */
     func disconnect() -> (status: Bool, message: String) {
         
+        // send echo U+0022
+        var text:String = "{\u{22}username\u{22}:\u{22}\(server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(server_name)\u{22}}"
+        //println(text)
+        self.socket.writeString(text)
+        
         //disconnect
-        if connected {
-            socket.disconnect()
-        }
+        socket.disconnect()
         
         return(true,"websocket is disconnected")
     }
@@ -94,7 +104,7 @@ class ws_connect: WebSocketDelegate {
     /* if connected */
     func websocketDidConnect() {
         connected = true
-        println("websocket is connected")
+        println("websocket")
     }
     
     /* ---------------------------- */
@@ -118,7 +128,12 @@ class ws_connect: WebSocketDelegate {
     /* ---------------------------- */
     /* receive message */
     func websocketDidReceiveMessage(text: String) {
-        println("Received text: \(text)")
+        //split text
+        var Array = text.componentsSeparatedByString("\u{22}")
+        
+        // ad message to a buffer
+        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_3, port: 0, message: "\(Array[3]): \(Array[7])",  name: "websocket", type: msg_type.MESSAGE.rawValue))
+        //println("Received text: \(text)")
     }
     
     /* ---------------------------- */
