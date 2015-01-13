@@ -63,6 +63,21 @@ class ws_connect: WebSocketDelegate {
     }
     
     /* ---------------------------- */
+    /* send message */
+    func sendMessage(msg:message) -> (status: Bool, message: String) {
+       
+        //build string
+        var text:String = "{\u{22}username\u{22}:\u{22}\(msg.name)\u{22},\u{22}message\u{22}:\u{22}\(msg.message)\u{22}}"
+        
+        //send async
+        dispatch_async(dispatch_get_main_queue()) {
+            self.socket.writeString(text)
+        }
+        
+        return(true,"")
+    }
+    
+    /* ---------------------------- */
     /* disconnect from server */
     func disconnect() -> (status: Bool, message: String) {
         
@@ -72,13 +87,6 @@ class ws_connect: WebSocketDelegate {
         }
         
         return(true,"websocket is disconnected")
-    }
-    
-    func sendMessage(text: String) {
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            self.socket.writeString(text)
-        }
     }
 
     /* ---------------------------- */
@@ -103,7 +111,7 @@ class ws_connect: WebSocketDelegate {
     /* has errors */
     func websocketDidWriteError(error: NSError?) {
         if let e = error {
-            println("wez got an error from the websocket: \(e.localizedDescription)")
+            println("ws got an error from the websocket: \(e.localizedDescription)")
         }
     }
     
@@ -119,23 +127,6 @@ class ws_connect: WebSocketDelegate {
         println("Received data: \(data.length)")
     }
 
-    // MARK: Write Text Action
-    
-    /* @IBAction func writeText(sender: UIBarButtonItem) {
-    socket.writeString("hello there!")
-    }
-    
-    // MARK: Disconnect Action
-    
-    @IBAction func disconnect(sender: UIBarButtonItem) {
-    if socket.isConnected {
-    sender.title = "Connect"
-    socket.disconnect()
-    } else {
-    sender.title = "Disconnect"
-    socket.connect()
-    }
-    }*/
 
     
     

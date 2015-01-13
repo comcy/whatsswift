@@ -189,6 +189,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                         
                             //send message to clients
                             self.sendBroadcast(tmp_msg.msg.message, sender_name: tmp_msg.msg.name)
+                            self.ws_connection.sendMessage(tmp_msg.msg)
                         }
                         else {
                             self.add_log("\(check.message)")
