@@ -18,7 +18,6 @@ import AppKit
 //  * message: message itself
 //  * name: name of desination
 //  * type: type of message
-// https://github.com/xyyc/SwiftSocket/blob/master/SwiftSocket/main.swift
 //
 struct message {
     var ip:String = ""
@@ -43,36 +42,21 @@ struct message {
 //  * sendBuffer: array to buffer outgoing client messages - add in receiveMsg()
 //  * receiveBuffer: array to buffer incoming client messages - add in sendMsg()
 //
-/* ---------------------------- */
-/* Connection */
 class Connection{
     
-    /* ---------------------------- */
+    // receiver always listening on "localhost|127.0.0.1" an Port 666
+   // var receiver:TCPServer = TCPServer( addr: "127.0.0.1", port: 666 )
+    
     // Message delimiter
     let del:String = ">|<"
     
-    /* ---------------------------- */
-    // FIFO Queue
+    // FIFO Queue - for every instance its own
     let receiveBuffer = Queue<message>()
     let sendBuffer = Queue<message>()
-    var allow_udp:Bool = false
     
     init() {
         
-        
     }
-    
-    func connect() -> (status: Bool, message: String) {
-        
-        allow_udp = true
-        return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
-    }
-	
-	func disconnect -> (status: Bool, message: String) {
-		
-		allow_udp = false
-		return (true,"disconnect from udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
-	}
     
     
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -80,10 +64,11 @@ class Connection{
     ///////////////////////////////////////////////////////////////////////////////////////
     
     
-    /* ---------------------------- */
-    /* send message */
+    // func: sendMessage( msg:message )
+    //
     // This function is called by a client to send a message to the server.
     // A message object as paramter is needed.
+    //
     func sendMessage( msg:message ) {
         
         var firstMsg:message!
@@ -91,11 +76,17 @@ class Connection{
         // add incoming messages to buffer
         sendBuffer.enqueue( msg )
         
-        //send all messages
         while( !sendBuffer.isEmpty() ){
-            
             // remove first element (FIFO)
             firstMsg = sendBuffer.dequeue()
+            
+            // DEBUGGING
+            println( firstMsg.ip )
+            println( firstMsg.port )
+            println( firstMsg.message )
+            println( firstMsg.name )
+            println( firstMsg.type )
+            
             
             // extract ip and port for server
             var ip:String = firstMsg.ip
@@ -106,12 +97,128 @@ class Connection{
             
             // send server over network
             sendMsg( destIp:ip, destPort:port, msg:message )
+            
         }
         
     }
     
-    /* ---------------------------- */
-    /* get server ip */
+    
+    // func: receiveMessage( ) -> message
+    //
+    // A function which is called by a instance to
+    // receive all message sent by clients during a period
+    // of time.
+    // It returns a message object.
+    //
+    func receiveMessage( ) -> message {
+        
+        while( !receiveBuffer.isEmpty() ){
+            
+            let msg:message! = receiveBuffer.dequeue()
+            
+            return msg
+        }
+        
+        // DEBUGGING ---> NIL o.ä. zurück geben
+        var msg:message = message(ip: "localhostiii", port: 12, message: "asd asd", name: "asd asd", type: 1)
+        return msg
+        
+    }
+    
+    
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Connection functions
+    ///////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    // func: buildString( msg: message )
+    //
+    // This function is a helper function to build a string
+    // out of an message object.
+    // It returns a string which contains the built message and 
+    // awaits a message object.
+    //
+    func buildString( msg:message ) -> String {
+        
+        var ip = msg.ip + del
+        var port = String(msg.port) + del // convert to string
+        var message = msg.message + del
+        var name = msg.name + del
+        var type = String(msg.type) // convert to string
+        
+        var rValue:String = ip + port + message + name + type
+        
+        return rValue
+        
+    }
+    
+    
+    // func: splitString( msg:String )
+    //
+    // This function splits a complete string which contains message information
+    // to build a message object.
+    // It returns a message object.
+    //
+    func splitString( msgStr:String ) -> message {
+        
+        // separation array
+        var sepArr = msgStr.componentsSeparatedByString( del )
+        
+        var ipSplit:String = sepArr[0]
+        var portSplit:Int! = sepArr[1].toInt()
+        var textSplit:String = sepArr[2]
+        var nameSplit:String = sepArr[3]
+        var typeSplit:Int! = sepArr[4].toInt()
+        
+        // build a message object out of the splitted string
+        var msg:message = message(ip: ipSplit , port: portSplit!, message: textSplit, name: nameSplit, type: typeSplit!)
+
+        return msg
+    }
+    
+    
+    // func: sendMsg( destIp:addr, destPort:port, msg:str )
+    //
+    // Function which sends a Message/String to a receiver instance.
+    // The Function needs a destination IP address an a destination port.
+    // The transmission of the String is realized as an TCP socket.
+    //
+    func sendMsg( #destIp:String, destPort:Int, msg:String  ){
+        
+        // new tcp socket on client
+        var sender:UDPClient = UDPClient( addr: destIp, port: destPort )
+        sender.send(str: msg);
+        sender.close()
+                
+    }
+    
+    // func: receiveMsg()
+    //
+    // TODO -> Threading für ständige Prüfung, ob etwas da is
+    func receiveMsg(){
+   
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+            var server:UDPServer=UDPServer(addr:self.getIFAddresses()[2],port:5252)
+            var run:Bool=true
+            while run{
+                var (data,remoteip,remoteport)=server.recv(1024)
+                println("recive")
+                if let d=data{
+                    if let str=String(bytes: d, encoding: NSUTF8StringEncoding){
+                        println(str)
+                        var msg:message = self.splitString(str)
+                        self.receiveBuffer.enqueue(msg)
+                    }
+                }
+                println(remoteip)
+                server.close()
+                break
+            }
+        })
+    }
+    
+    
+    
     func getIFAddresses() -> [String] {
         var addresses = [String]()
         
@@ -144,120 +251,8 @@ class Connection{
         
         return addresses
     }
-    
-    
-    /* ---------------------------- */
-    /* receive message */
-    func receiveMessage( ) -> (status: Bool,msg: message) {
-        
-        if( !receiveBuffer.isEmpty() ){
-            
-            let msg:message! = receiveBuffer.dequeue()
-            
-            return (true,msg)
-        }
-        else
-        {
-            var msg:message = message(ip: "xx", port: 00, message: "xx", name: "xx", type: 0)
-            return (false,msg)
-        }
-        
-    }
-    
-    
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Connection functions
-    ///////////////////////////////////////////////////////////////////////////////////////
-    
-    /* ---------------------------- */
-    /* build string */
-    // This function is a helper function to build a string
-    // out of an message object.
-    // It returns a string which contains the built message and 
-    // awaits a message object.
-    func buildString( msg:message ) -> String {
-        
-        var ip = msg.ip + del
-        var port = String(msg.port) + del // convert to string
-        var message = msg.message + del
-        var name = msg.name + del
-        var type = String(msg.type) // convert to string
-        
-        var rValue:String = ip + port + message + name + type
-        
-        return rValue
-        
-    }
-    
-    
-    /* ---------------------------- */
-    /* split string */
-    // This function splits a complete string which contains message information
-    // to build a message object.
-    // It returns a message object.
-    func splitString( msgStr:String, ip:String, port:Int ) -> message {
-        
-        // separation array
-        var sepArr = msgStr.componentsSeparatedByString( del )
-        
-        var ipSplit:String = ip
-        var portSplit:Int! = udp_sock_port_c
-        var textSplit:String = sepArr[2]
-        var nameSplit:String = sepArr[3]
-        var typeSplit:Int! = sepArr[4].toInt()
-        
-        // build a message object out of the splitted string
-        var msg:message = message(ip: ipSplit , port: portSplit!, message: textSplit, name: nameSplit, type: typeSplit!)
-
-        return msg
-    }
-    
-    
-    /* ---------------------------- */
-    /* send message */
-    // Function which sends a Message/String to a receiver instance.
-    // The Function needs a destination IP address an a destination port.
-    // The transmission of the String is realized as an TCP socket.
-    func sendMsg( #destIp:String, destPort:Int, msg:String  ){
-        
-        var client:UDPClient=UDPClient(addr: destIp, port: destPort)
-        //println("send \(msg)")
-        client.send(str: msg)
-        client.close()
-    }
-
-    /* ---------------------------- */
-    /* receive message - thread */
-    func receiveMsg() {
-        
-        if allow_udp {
-        //check for new message
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            var server:UDPServer=UDPServer(addr:self.getIFAddresses()[2],port:udp_sock_port_s)
-            var run:Bool=true
-            while run{
-                var (data,remoteip,remoteport)=server.recv(1024)
-                //println("recive")
-                if let d=data{
-                    if let str=String(bytes: d, encoding: NSUTF8StringEncoding){
-                        //println(str)
-                        
-                        // parse message
-                        var msg:message = self.splitString( str, ip: remoteip, port: remoteport )
-                        
-                        // ad message to a buffer
-                        self.receiveBuffer.enqueue( msg )
-                        
-                    }
-                }
-                //println(remoteip)
-                server.close()
-                break
-            }
-        })
-        }
-
-    }
 }
+
+
 
 
