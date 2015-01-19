@@ -190,6 +190,7 @@ class Connection{
         // separation array
         var sepArr = msgStr.componentsSeparatedByString( del )
         
+        // parse array
         var ipSplit:String = ip
         var portSplit:Int! = udp_sock_port_send
         var textSplit:String = sepArr[2]

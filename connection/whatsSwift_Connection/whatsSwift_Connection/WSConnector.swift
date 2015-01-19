@@ -167,7 +167,7 @@ class ws_connect: WebSocketDelegate {
         var Array = text.componentsSeparatedByString("\u{22}")
         
         // ad message to buffer
-        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_ip, port: ws_sock_server_port, message: "\(Array[3]): \(Array[7])",  name: "webchat", type: msg_type.MESSAGE.rawValue))
+        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_ip, port: ws_sock_server_port, message: "(\(Array[3])) \(Array[7])",  name: "webchat", type: msg_type.MESSAGE.rawValue))
         //println("Received text: \(text)")
     }
     
