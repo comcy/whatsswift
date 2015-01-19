@@ -5,21 +5,19 @@
 //  Created by comcy on 21/12/14.
 //  Copyright (c) 2014 comcy. All rights reserved.
 //
+/*
+TODO: Noch zu befüllen............
 
+*/
+
+/* import */
 import Foundation
 import Cocoa
 import AppKit
 
-//
-// Struct: Message
-//  ( messaging protocol )
-//  * ip: ip addres of destination
-//  * port: port of destination
-//  * message: message itself
-//  * name: name of desination
-//  * type: type of message
-// https://github.com/xyyc/SwiftSocket/blob/master/SwiftSocket/main.swift
-//
+
+/* ---------------------------- */
+/* message */
 struct message {
     var ip:String = ""
     var port:Int = 0
@@ -28,21 +26,6 @@ struct message {
     var type:Int = 2 // echo
 }
 
-
-// Class: Connection
-//  ( represents a connection object for client and server )
-//  * var serverPort: port for server connection [666]
-//  * var clientPort: port for client connection [667]
-//
-//  * func sendMessage( ) -> message: function for receiving messages from [SRC]
-//  * func receiveMessage( message ): function to send messages to destination [DEST]
-//
-//  * func receiveServerMsg( type:Int ) -> message: function for receiving messages from [SRC]
-//  * func sendServerMsg( message ): function to send messages to destination [DEST]
-//
-//  * sendBuffer: array to buffer outgoing client messages - add in receiveMsg()
-//  * receiveBuffer: array to buffer incoming client messages - add in sendMsg()
-//
 /* ---------------------------- */
 /* Connection */
 class Connection{

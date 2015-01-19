@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-
+Diese Datei beinhaltet Methoden die für Debug und Testzwecke verwendet wurden oder den Programmablauf nicht direkt betreffen. Also Hilfsmethoden.....
 
 
 
@@ -52,9 +52,8 @@ func getAddresses() -> [String] {
     return addresses
 }
 
-
 /* ---------------------------- */
-/* udp server */
+/* udp test server */
 func testudpserver(){
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
         var server:UDPServer=UDPServer(addr:"127.0.0.1",port:8080)
@@ -75,7 +74,7 @@ func testudpserver(){
 }
 
 /* ---------------------------- */
-/* udp client */
+/* udp test client */
 func testudpclient(){
     var client:UDPClient=UDPClient(addr: "localhost", port: 8080)
     //println("send hello world")

@@ -5,7 +5,12 @@
 //  Created by Silfang, Christian on 12.01.15.
 //  Copyright (c) 2015 comcy. All rights reserved.
 //
+/*
+TODO: Noch zu befüllen............
 
+*/
+
+/* import */
 import Foundation
 
 // inner class -> compiler crash (not allowed)

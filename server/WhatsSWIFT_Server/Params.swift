@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-
+Diese Datei beinhaltet statische Parameter des Servers. Bitte nur anpassen, wenn die Auswirkungen klar bekannt sind! Alle Parameter sind einzeln beschrieben...
 
 
 
@@ -18,34 +18,36 @@ import Foundation
 /* ---------------------------- */
 /* params */
 
-//client refresh time
+//client refresh time - time between echo requests
 var client_refresh_time = 5.0 //sec
 
-//msg refresh time
+//msg refresh time - time to check for new messages
 var msg_refresh_time = 0.01 //sec
 
-//max error count befor disconnect (refresh_time*max_error) = time sec
-var max_error:Int = 5
+//max error count before disconnect users (refresh_time*max_error) = time sec
+var max_error:Int = 5 //cylces
 
 //max number of simultanious connected clients
 var max_clients = 100
 
-//max count of log entries
-var max_log_entries:Int = 500
+//max count of log entries at scroll view. No impact to file size
+var max_log_entries:Int = 500 //lines
 
-//logfile location
+//logfile location - name is set from gui e.g. /tmp/whatsswift_log_19.01.2015_1149.txt
 var logfile_location = "/tmp/"
 
-//websocket server
-var ws_sock_server_1 = "echo.websocket.org"
-var ws_sock_server_2 = "141.18.49.242:9300"
-var ws_sock_server_3 = "141.18.49.242:8080" //bester, mit username
+//websocket server ip
+var ws_sock_server_ip = "141.18.49.242" //only ip, path not needed
 
-//udp server ip
-var udp_sock_ip_s = getAddresses()[2]
+//websocket server port
+var ws_sock_server_port = 9090 //set port in server.php
 
 //udp server port
 var udp_sock_port_s = 8585
 
 //udp client port
 var udp_sock_port_c = 5252
+
+//udp server ip
+var udp_sock_ip_s = getAddresses()[2]
+

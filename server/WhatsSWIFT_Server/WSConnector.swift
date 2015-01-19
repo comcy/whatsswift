@@ -6,11 +6,16 @@
 //  Copyright (c) 2015 Bauer, Daniel. All rights reserved.
 //
 /*
-https://github.com/daltoniam/starscream
-https://www.websocket.org/echo.html
-https://github.com/Flynsarmy/PHPWebSocket-Chat
-https://github.com/james2doyle/php-socket-chat
+Diese Klasse stellt einen Websocket Client zur Verfügung. Dieser basiert auf dem Startsream Framework
+Links:
+ https://github.com/daltoniam/starscream
+ https://www.websocket.org/echo.html
+ https://github.com/Flynsarmy/PHPWebSocket-Chat
+ https://github.com/james2doyle/php-socket-chat
 
+Der Chatserver stellt eine Verbindung zum Websocket Server her und verwaltet die Nachrichten. Eine Sessionverwaltung wurde nicht in PHP implementiert. Somit wird der Chatserver nur als ein Client im Server angezeigt. Benutzernamen werden angezeigt. Eine Benutzerverwaltung muss in PHP mit dem Message Typ implementiert werden. Error Messages werden ausgelesen und im Log angezeigt.
+
+Dazu wird noch ein Websocket Server benötigt. Dieser wurde angepasst und ist ebenfalls Teil des Repos. Anleitung zum Server in der Readme.md. Es wird ein Webserver mit PHP benötigt....
 
 */
 
@@ -18,12 +23,13 @@ https://github.com/james2doyle/php-socket-chat
 import Foundation
 import StarscreamOSX
 
+/* ---------------------------- */
+/* websocket connection */
 class ws_connect: WebSocketDelegate {
     
     /* ---------------------------- */
     /* socket */
-    //var socket = WebSocket(url: NSURL(scheme: "ws", host: ws_sock_server_1, path: "/")!, protocols: ["chat", "superchat"])
-    var socket = WebSocket(url: NSURL(scheme: "ws", host: ws_sock_server_3, path: "/")!)
+    var socket = WebSocket(url: NSURL(scheme: "ws", host: "\(ws_sock_server_ip):\(ws_sock_server_port)", path: "/")!)
     
     /* ---------------------------- */
     /* vars */
@@ -64,12 +70,12 @@ class ws_connect: WebSocketDelegate {
             self.socket.connect()
             
             // send echo U+0022
-            var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(self.server_name)\u{22}}"
+            var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}Welcome @all from \(self.server_name)\u{22}}"
             self.socket.writeString(text)
         }
         
         //set state
-        state = "connect to websocket: '\(ws_sock_server_3)'"
+        state = "connect to websocket: '\(ws_sock_server_ip):\(ws_sock_server_port)'"
         connected = true
         return (connected,state)
     }
@@ -78,8 +84,8 @@ class ws_connect: WebSocketDelegate {
     /* get current ws state */
     func getState() -> (newMessage:Bool, state:Bool, text:String) {
         
+        //check for new message / state
         var tmp:Bool = false
-        
         if state != lastState {
             tmp = true
             lastState = state
@@ -107,13 +113,18 @@ class ws_connect: WebSocketDelegate {
     /* disconnect from server */
     func disconnect() -> (status: Bool, message: String) {
         
-        // send echo U+0022
-        var text:String = "{\u{22}username\u{22}:\u{22}\(server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(server_name)\u{22}}"
-        //println(text)
-        self.socket.writeString(text)
+        //disconnect async
+        dispatch_async(dispatch_get_main_queue()) {
+
+            // send echo U+0022
+            var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(self.server_name)\u{22}}"
+            
+            self.socket.writeString(text)
         
-        //disconnect
-        socket.disconnect()
+            //disconnect
+            self.socket.disconnect()
+        
+        }
         
         //set state
         state = "websocket is disconnected"
@@ -141,6 +152,8 @@ class ws_connect: WebSocketDelegate {
     /* ---------------------------- */
     /* ws has errors */
     func websocketDidWriteError(error: NSError?) {
+        
+        //if error
         if let e = error {
             state = "websocket get error from server \(e.localizedDescription)"
             connected = false
@@ -153,8 +166,8 @@ class ws_connect: WebSocketDelegate {
         //split text
         var Array = text.componentsSeparatedByString("\u{22}")
         
-        // ad message to a buffer
-        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_3, port: 0, message: "\(Array[3]): \(Array[7])",  name: "websocket", type: msg_type.MESSAGE.rawValue))
+        // ad message to buffer
+        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_ip, port: ws_sock_server_port, message: "\(Array[3]): \(Array[7])",  name: "webchat", type: msg_type.MESSAGE.rawValue))
         //println("Received text: \(text)")
     }
     

@@ -90,7 +90,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         
         //check client count
         if client_db.get_client_count() != 0 {
-            add_log("send echo to '\(client_db.get_client_count())' clients")
         
             //async
             dispatch_async(queue_serial) {
@@ -209,7 +208,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     case 3: /*message*/
                         self.add_log("rcv msg from '\(tmp_msg.msg.name)'")
                         
-                        //set sign of life, connected
+                        //set sign of life, and check if user is valid
                         var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
                         var tmp = self.client_db.set_msgs_for(tmp_msg.msg.name)
                         
@@ -219,15 +218,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                             //add message to db
                             var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
                             self.add_log("\(list.message)")
-                            self.add_log("broadcast message from '\(tmp_msg.msg.name)' to '\(self.client_db.get_client_count())' clients")
+                            self.add_log("broadcast message to clients")
                         
                             //send message to clients
                             if self.o_ip_connection.integerValue == 1 && self.udp_state {
                                 
                                 //iterate clients
                                 for (index, value) in enumerate(self.client_db.get_client_list()) {
-                                    //send message
-                                    self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: tmp_msg.msg.message, name: tmp_msg.msg.name,  type: msg_type.MESSAGE.rawValue))
+                                    
+                                    //send message if client is udp
+                                    if value.type != "ws_client" {
+                                        self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: tmp_msg.msg.message, name: tmp_msg.msg.name,  type: msg_type.MESSAGE.rawValue))
+                                    }
+
                                 }
                             }
                             
@@ -270,7 +273,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     if !self.ws_state {
                         
                         //rem client
-                        var check = self.client_db.rem_client(ws_sock_server_3, _port: 0, _name: "webchat")
+                        var check = self.client_db.rem_client(ws_sock_server_ip, _port: ws_sock_server_port, _name: "webchat")
                         self.add_log(check.message)
                         self.o_ws_state.backgroundColor = NSColor.redColor()
                     }
@@ -288,7 +291,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBAction func o_ws_connection_a(sender: AnyObject) {
         //use ws
         if o_ws_connection.integerValue == 1 {
-            add_log("enable websocket connection to: '\(ws_sock_server_3)'")
+            add_log("enable websocket connection to: '\(ws_sock_server_ip):\(ws_sock_server_port)'")
         }
         else {
             add_log("disable websocket connection")
@@ -358,7 +361,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 add_log(tmp.message)
                 
                 //add client to list
-                var check = self.client_db.add_client(ws_sock_server_3, _port: 0, _name: "webchat", _type: "ws_client")
+                var check = self.client_db.add_client(ws_sock_server_ip, _port: ws_sock_server_port, _name: "webchat", _type: "ws_client")
                 self.add_log(check.message)
                 
                 //set state
@@ -408,7 +411,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 add_log(tmp.message)
                 
                 //rem client
-                var check = self.client_db.rem_client(ws_sock_server_3, _port: 0, _name: "webchat")
+                var check = self.client_db.rem_client(ws_sock_server_ip, _port: ws_sock_server_port, _name: "webchat")
                 self.add_log(check.message)
                 
                 //set state
