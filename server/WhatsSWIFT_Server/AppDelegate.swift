@@ -34,6 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBOutlet weak var o_curr_status: NSTextField!
     @IBOutlet weak var o_status_indicator: NSProgressIndicator!
     @IBOutlet var o_log: NSTextView!
+    @IBOutlet weak var o_udp_state: NSTextField!
+    @IBOutlet weak var o_ws_state: NSTextField!
     
     /* ---------------------------- */
     /* async gcd */
@@ -53,18 +55,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     var server = server_state.OFFLINE
     var client_refresh_timer = NSTimer()
     var msg_refresh_timer = NSTimer()
+    var ws_state:Bool = false
+    var udp_state:Bool = false
 
     /* ---------------------------- */
     /* startup */
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         add_log("initialize server")
-        
-        //debug
-        //addFakeClients(client_db)
-        //var msg = ws_connection.connect()
-        //println("\(msg.message)")
-        //var msg2 = ws_connection2.connect()
-        //println("\(msg2.message)")
 
         //init values
         o_server_ip.stringValue = ""
@@ -75,7 +72,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         o_log_info.stringValue = "Log (max. \(max_log_entries) entries on display)"
         tabe.usesAlternatingRowBackgroundColors = true
         i_server_name.stringValue = "WS_Server"
-        
+        o_udp_state.backgroundColor = NSColor.redColor()
+        o_udp_state.drawsBackground = true
+        o_ws_state.backgroundColor = NSColor.redColor()
+        o_ws_state.drawsBackground = true
     }
     
     /* ---------------------------- */
@@ -88,6 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* send echo after timer and inc. error. if error is to high then disconnect */
     func client_refresh_cylce() {
         
+        //check client count
         if client_db.get_client_count() != 0 {
             add_log("send echo to '\(client_db.get_client_count())' clients")
         
@@ -97,24 +98,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //parse clients
                 for (index, value) in enumerate(self.client_db.get_client_list()) {
                 
-                    if value.name != "websocket"
+                    //if client is not ws_client
+                    if value.type != "ws_client"
                     {
-                    //check error count
-                    if value.error >= max_error {
-                        //rem client
-                        var rem = self.client_db.rem_client(value.ip,_port: value.port,_name: value.name)
-                        self.add_log("\(rem.message) -> reason: not alive")
-                    }
+                        //check error count
+                        if value.error >= max_error {
+                            
+                            //rem client if error is to high
+                            var rem = self.client_db.rem_client(value.ip,_port: value.port,_name: value.name)
+                            self.add_log("\(rem.message) -> reason: not alive")
+                        }
                 
-                    //inc. error
-                    var err = self.client_db.set_error_for(value.name)
+                        //inc. error
+                        var err = self.client_db.set_error_for(value.name)
                 
-                    //check if exists and send echo
-                    if err.status {
-                        //connection send echo to...
-                        self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "echo",  name: value.name, type: msg_type.ECHO.rawValue))
-                        self.add_log("send echo to \(value.id) \(value.name) at \(value.ip):\(value.port) \(value.type) \(value.error)")
-                    }
+                        //check if exists and send echo to clients
+                        if err.status {
+                            
+                            //connection send echo to...
+                            self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "echo",  name: value.name, type: msg_type.ECHO.rawValue))
+                            self.add_log("send echo to \(value.id) \(value.name) at \(value.ip):\(value.port) \(value.type) \(value.error)")
+                        }
                     }
                 
                 }
@@ -124,69 +128,77 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     }
     
     /* ---------------------------- */
-    /* send broadcast */
-    func sendBroadcast(text: String, sender_name: String) {
-        
-        //iterate clients
-        for (index, value) in enumerate(self.client_db.get_client_list()) {
-            //send message
-            self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: text, name: sender_name,  type: 3))
-        }
-        
-    }
-    
-    /* ---------------------------- */
     /* msg refresh cycle. check connection afer timer for new messages */
     func msg_refresh_cycle() {
         
         //async
         dispatch_async(queue_serial) {
             
-            //check socket
+            //cycle call of udp socket buffer
             self.udp_connection.receiveMsg()
     
-            //check for msg
+            //check for msg at buffer
             var tmp_msg =  self.udp_connection.receiveMessage()
             
             //if new message check type and send broadcast and add to msg_db
             if tmp_msg.status {
                 
-                //switch type
+                //switch message type
                 switch tmp_msg.msg.type {
                     
                     case 0: /*connect*/
                         self.add_log("'\(tmp_msg.msg.name)' connecting to \(self.i_server_name.stringValue)")
                         
-                        //add client
+                        //add client to db
                         var check = self.client_db.add_client(tmp_msg.msg.ip, _port: tmp_msg.msg.port, _name: tmp_msg.msg.name, _type: "osx_client")
                         self.add_log(check.message)
                         
-                        //send info to clients
+                        //send info to clients if successfully connected
                         if check.status {
-                            //send message to clients
-                            if self.o_ip_connection.integerValue == 1 {
-                                self.sendBroadcast("\(tmp_msg.msg.name) connected", sender_name: self.i_server_name.stringValue)
+                            
+                            //send info message to udp clients
+                            if self.o_ip_connection.integerValue == 1 && self.udp_state {
+
+                                //iterate clients
+                                for (index, value) in enumerate(self.client_db.get_client_list()) {
+                                    //send message
+                                    self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "\(tmp_msg.msg.name) connected", name: self.i_server_name.stringValue,  type: msg_type.MESSAGE.rawValue))
+                                }
+                                
+                                // send echo after connected to check response
                                 self.udp_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "echo",  name: tmp_msg.msg.name, type: msg_type.ECHO.rawValue))
                             }
                             
-                            // send to websocket
-                            if self.o_ws_connection.integerValue == 1 {self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) connected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))}
+                            // send info message to websocket
+                            if self.o_ws_connection.integerValue == 1 && self.ws_state {
+                                self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) connected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))
+                            }
                         }
                     break
                     case 1: /*disconnect*/
                         self.add_log("'\(tmp_msg.msg.name)' disconnecting from \(self.i_server_name.stringValue)")
                         
-                        //rem client
+                        //rem client from db
                         var check = self.client_db.rem_client(tmp_msg.msg.ip, _port: tmp_msg.msg.port, _name: tmp_msg.msg.name)
                         self.add_log(check.message)
                         
-                        //send info to clients
+                        //send info to clients if successfull disconnected
                         if check.status {
-                            // send message to clients
-                            if self.o_ip_connection.integerValue == 1 { self.sendBroadcast("'\(tmp_msg.msg.name)' disconnected", sender_name: self.i_server_name.stringValue)}
                             
-                            // send to websocket
-                            if self.o_ws_connection.integerValue == 1 {self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) disconnected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))}
+                            // send info message to udp clients
+                            if self.o_ip_connection.integerValue == 1 && self.udp_state {
+                                
+                                //iterate clients
+                                for (index, value) in enumerate(self.client_db.get_client_list()) {
+                                    //send message
+                                    self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "\(tmp_msg.msg.name) disconnected", name: self.i_server_name.stringValue,  type: msg_type.MESSAGE.rawValue))
+                                }
+                            }
+                            
+                            // send info message to websocket
+                            if self.o_ws_connection.integerValue == 1 && self.ws_state {
+                                self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) disconnected",  name: self.i_server_name.stringValue, type: msg_type.MESSAGE.rawValue))
+                            }
                         }
                     break
                     case 2: /*echo*/
@@ -197,21 +209,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                     case 3: /*message*/
                         self.add_log("rcv msg from '\(tmp_msg.msg.name)'")
                         
-                        //set sign of life and check if connected
+                        //set sign of life, connected
                         var check = self.client_db.rcv_sign_of_life_from(tmp_msg.msg.name)
                         var tmp = self.client_db.set_msgs_for(tmp_msg.msg.name)
                         
+                        // if successfully
                         if check.status && tmp.status {
-                            //add message to list
+                            
+                            //add message to db
                             var list = self.msg_db.add_message(tmp_msg.msg.name, _message: tmp_msg.msg.message)
                             self.add_log("\(list.message)")
                             self.add_log("broadcast message from '\(tmp_msg.msg.name)' to '\(self.client_db.get_client_count())' clients")
                         
                             //send message to clients
-                            if self.o_ip_connection.integerValue == 1 {self.sendBroadcast(tmp_msg.msg.message, sender_name: tmp_msg.msg.name)}
+                            if self.o_ip_connection.integerValue == 1 && self.udp_state {
+                                
+                                //iterate clients
+                                for (index, value) in enumerate(self.client_db.get_client_list()) {
+                                    //send message
+                                    self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: tmp_msg.msg.message, name: tmp_msg.msg.name,  type: msg_type.MESSAGE.rawValue))
+                                }
+                            }
                             
-                            //send to websocket
-                            if self.o_ws_connection.integerValue == 1 && tmp_msg.msg.name != "websocket" {self.ws_connection.sendMessage(tmp_msg.msg)}
+                            //send message to websocket
+                            if self.o_ws_connection.integerValue == 1 && self.ws_state && tmp_msg.msg.name != "webchat" {
+                                self.ws_connection.sendMessage(tmp_msg.msg)
+                            }
                         }
                         else {
                             self.add_log("\(check.message)")
@@ -225,6 +248,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 
             }
            
+            //async
             dispatch_async(dispatch_get_main_queue()) {
                 
                 //refresh client count on gui
@@ -235,6 +259,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             
                 //refresh client table
                 self.tabe.reloadData()
+                
+                //check ws state
+                var tmp_ws = self.ws_connection.getState()
+                if self.o_ws_connection.integerValue == 1 && tmp_ws.newMessage {
+                    self.ws_state = tmp_ws.state
+                    self.add_log(tmp_ws.text)
+                    
+                    //if state is false - disconnect
+                    if !self.ws_state {
+                        
+                        //rem client
+                        var check = self.client_db.rem_client(ws_sock_server_3, _port: 0, _name: "webchat")
+                        self.add_log(check.message)
+                        self.o_ws_state.backgroundColor = NSColor.redColor()
+                    }
+                }
+                
             }
             
         }
@@ -260,7 +301,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     @IBAction func o_ip_connection_a(sender: AnyObject) {
         //use ip
         if o_ip_connection.integerValue == 1 {
-            add_log("enable ip connection at IP: '\(udp_sock_ip_s):\(udp_sock_port_s)'")
+            add_log("enable udp connection at IP: '\(udp_sock_ip_s):\(udp_sock_port_s)'")
         }
         else {
             add_log("disbale ip connection")
@@ -300,11 +341,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             o_ws_connection.enabled = false
             o_server_ip.stringValue = "\(udp_sock_ip_s):\(udp_sock_port_s)"
             
-            //echo timer
+            //start echo timer
             add_log("start echo refresh timer interval: '\(client_refresh_time)' [sec]")
             client_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(client_refresh_time, target: self, selector: Selector("client_refresh_cylce"), userInfo: nil,repeats: true)
             
-            //msg timer
+            //start msg timer
             add_log("start msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer = NSTimer.scheduledTimerWithTimeInterval(msg_refresh_time, target: self, selector: Selector("msg_refresh_cycle"), userInfo: nil,repeats: true)
             
@@ -312,20 +353,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //start ws connection
             if o_ws_connection.integerValue == 1 {
                 
-                var tmp = ws_connection.connect(self.i_server_name.stringValue,buff: udp_connection)
+                //connect websocket
+                var tmp = self.ws_connection.connect(self.i_server_name.stringValue,buff: udp_connection)
                 add_log(tmp.message)
                 
-                var check = self.client_db.add_client(ws_sock_server_3, _port: 0, _name: "websocket", _type: "ws_client")
+                //add client to list
+                var check = self.client_db.add_client(ws_sock_server_3, _port: 0, _name: "webchat", _type: "ws_client")
                 self.add_log(check.message)
+                
+                //set state
+                ws_state = true
+                o_ws_state.backgroundColor = NSColor.greenColor()
             }
             
-            //start ip connection
+            //start udp connection
             if o_ip_connection.integerValue == 1 {
                 
+                //connect udp
                 var tmp = udp_connection.connect()
                 add_log(tmp.message)
+                
+                //set state
+                udp_state = true
+                o_udp_state.backgroundColor = NSColor.greenColor()
             }
-            
             
             //set state
             server = server_state.ONLINE
@@ -349,23 +400,35 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             add_log("stop msg refresh timer interval: '\(msg_refresh_time)' [sec]")
             msg_refresh_timer.invalidate()
             
-            //stop ws connection
+            //stopp ws connection
             if o_ws_connection.integerValue == 1 {
                 
+                //disconnect websocket
                 var tmp = ws_connection.disconnect()
                 add_log(tmp.message)
                 
                 //rem client
-                var check = self.client_db.rem_client(ws_sock_server_3, _port: 0, _name: "websocket")
+                var check = self.client_db.rem_client(ws_sock_server_3, _port: 0, _name: "webchat")
                 self.add_log(check.message)
+                
+                //set state
+                ws_state = true
+                o_ws_state.backgroundColor = NSColor.redColor()
             }
             
-            //stopp ip connection
+            //stopp udp connection
             if o_ip_connection.integerValue == 1 {
+                
+                //connect udp
+                var tmp = udp_connection.disconnect()
+                add_log(tmp.message)
+                
+                //set state
+                udp_state = true
+                o_udp_state.backgroundColor = NSColor.redColor()
                 
             }
 
-            
             //set state
             server = server_state.OFFLINE
         }

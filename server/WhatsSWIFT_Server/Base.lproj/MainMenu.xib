@@ -26,7 +26,9 @@
                 <outlet property="o_log_to_file" destination="UmP-XM-AHJ" id="ywc-dG-wvw"/>
                 <outlet property="o_server_ip" destination="Rlh-BP-zyY" id="8Hc-DO-r5r"/>
                 <outlet property="o_status_indicator" destination="juY-gW-Uyz" id="sQ0-3u-ddJ"/>
+                <outlet property="o_udp_state" destination="3Pf-pl-g37" id="Yct-vI-OuL"/>
                 <outlet property="o_ws_connection" destination="p3b-kf-kmm" id="LDQ-eg-c5V"/>
+                <outlet property="o_ws_state" destination="Qth-xd-RgV" id="Ipy-3U-Afb"/>
                 <outlet property="server_name" destination="PWL-0i-JEe" id="mSK-tV-2g3"/>
                 <outlet property="server_progress" destination="juY-gW-Uyz" id="w4b-Ib-hxX"/>
                 <outlet property="tabe" destination="PtI-wd-47B" id="bwH-UH-SwN"/>
@@ -1617,18 +1619,8 @@
                             <action selector="o_log_to_file_a:" target="Voe-Tx-rLC" id="Sis-1M-3Pu"/>
                         </connections>
                     </button>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NZI-kw-3gw">
-                        <rect key="frame" x="205" y="427" width="33" height="18"/>
-                        <buttonCell key="cell" type="check" title="IP" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="8so-Ui-Z4w">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="o_ip_connection_a:" target="Voe-Tx-rLC" id="j1s-ko-q97"/>
-                        </connections>
-                    </button>
                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p3b-kf-kmm">
-                        <rect key="frame" x="277" y="427" width="90" height="18"/>
+                        <rect key="frame" x="311" y="428" width="90" height="18"/>
                         <buttonCell key="cell" type="check" title="WebSocket" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="KOa-bC-Hlt">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -1637,6 +1629,40 @@
                             <action selector="o_ws_connection_a:" target="Voe-Tx-rLC" id="PU4-Ks-IaR"/>
                         </connections>
                     </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NZI-kw-3gw">
+                        <rect key="frame" x="230" y="428" width="33" height="18"/>
+                        <buttonCell key="cell" type="check" title="IP" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="8so-Ui-Z4w">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="o_ip_connection_a:" target="Voe-Tx-rLC" id="j1s-ko-q97"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6yu-FF-KjG">
+                        <rect key="frame" x="421" y="427" width="4" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="cGN-9i-yzD">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Pf-pl-g37">
+                        <rect key="frame" x="211" y="432" width="10" height="10"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" placeholderString="" id="pKa-8Y-vRB">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qth-xd-RgV">
+                        <rect key="frame" x="292" y="432" width="10" height="10"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="Slw-I1-RtE">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <point key="canvasLocation" x="200" y="355.5"/>

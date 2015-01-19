@@ -31,6 +31,8 @@ class ws_connect: WebSocketDelegate {
     var error_text:String = ""
     var server_name:String = ""
     var buffer:Connection = Connection()
+    var state:String = ""
+    var lastState:String = ""
     
     /* ---------------------------- */
     /* async gcd */
@@ -49,12 +51,13 @@ class ws_connect: WebSocketDelegate {
     /* connect client to server */
     func connect(server:String, buff:Connection) -> (status: Bool, message: String) {
         
-        //set val
+        //set values
         buffer = buff
         server_name = server
         
-        //connect
+        //connect async
         dispatch_async(dispatch_get_main_queue()) {
+            
             //connect
             self.socket.delegate = self
             //self.socket.selfSignedSSL = true
@@ -62,11 +65,27 @@ class ws_connect: WebSocketDelegate {
             
             // send echo U+0022
             var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(self.server_name)\u{22}}"
-            //println(text)
             self.socket.writeString(text)
         }
-            
-        return (connected,"connect to websocket: '\(ws_sock_server_3)'")
+        
+        //set state
+        state = "connect to websocket: '\(ws_sock_server_3)'"
+        connected = true
+        return (connected,state)
+    }
+    
+    /* ---------------------------- */
+    /* get current ws state */
+    func getState() -> (newMessage:Bool, state:Bool, text:String) {
+        
+        var tmp:Bool = false
+        
+        if state != lastState {
+            tmp = true
+            lastState = state
+        }
+        
+        return (tmp,connected,state)
     }
     
     /* ---------------------------- */
@@ -81,7 +100,7 @@ class ws_connect: WebSocketDelegate {
             self.socket.writeString(text)
         }
         
-        return(true,"")
+        return(connected,state)
     }
     
     /* ---------------------------- */
@@ -96,32 +115,35 @@ class ws_connect: WebSocketDelegate {
         //disconnect
         socket.disconnect()
         
-        return(true,"websocket is disconnected")
+        //set state
+        state = "websocket is disconnected"
+        connected = false
+        return(true,state)
     }
 
     /* ---------------------------- */
     /* delegate methods */
     /* if connected */
     func websocketDidConnect() {
+        state = "websocket did connect"
         connected = true
-        println("websocket")
     }
     
     /* ---------------------------- */
     /* if disconnected */
     func websocketDidDisconnect(error: NSError?) {
         if let e = error {
-            println("websocket is disconnected: \(e.localizedDescription)")
-            error_text = "-> \(e.localizedDescription)"
+            state = "websocket did disconnect -> \(e.localizedDescription)"
             connected = false
         }
     }
     
     /* ---------------------------- */
-    /* has errors */
+    /* ws has errors */
     func websocketDidWriteError(error: NSError?) {
         if let e = error {
-            println("ws got an error from the websocket: \(e.localizedDescription)")
+            state = "websocket get error from server \(e.localizedDescription)"
+            connected = false
         }
     }
     
@@ -139,7 +161,7 @@ class ws_connect: WebSocketDelegate {
     /* ---------------------------- */
     /* receive data */
     func websocketDidReceiveData(data: NSData) {
-        println("Received data: \(data.length)")
+        //println("Received data: \(data.length)")
     }
 
 

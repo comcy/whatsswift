@@ -62,17 +62,27 @@ class Connection{
         
     }
     
-    func connect() -> (status: Bool, message: String) {
-        
-        allow_udp = true
-        return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
-    }
-    
-    
     ///////////////////////////////////////////////////////////////////////////////////////
     // Client/Server (communication) functions
     ///////////////////////////////////////////////////////////////////////////////////////
     
+    /* ---------------------------- */
+    /* connect */
+    func connect() -> (status: Bool, message: String) {
+        
+        allow_udp = true
+        return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
+        
+    }
+    
+    /* ---------------------------- */
+    /* disconnect */
+    func disconnect() -> (status: Bool, message: String) {
+        
+        allow_udp = false
+        return (true,"disconnect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
+    }
+
     
     /* ---------------------------- */
     /* send message */
@@ -219,6 +229,8 @@ class Connection{
         client.send(str: msg)
         client.close()
     }
+    
+    
 
     /* ---------------------------- */
     /* receive message - thread */

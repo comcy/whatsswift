@@ -19,7 +19,7 @@ import Darwin.C
 
 /* ---------------------------- */
 /* get server ip */
-func getIFAddresses() -> [String] {
+func getAddresses() -> [String] {
     var addresses = [String]()
     
     // Get list of all interfaces on the local machine:
