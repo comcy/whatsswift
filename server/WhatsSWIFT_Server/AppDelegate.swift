@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-
+App exportieren: http://stackoverflow.com/questions/5287213/how-can-i-build-for-release-distribution-on-the-xcode-4
 
 
 */
