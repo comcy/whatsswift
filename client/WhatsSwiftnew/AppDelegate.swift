@@ -44,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var myMessage: message = message()
     var myMessageSound = NSSound(named: "Pop.aiff")
     var myErrorSound = NSSound(named: "Funk.aiff")
-    var myConnection: Connection = Connection();
+    var myConnection: Connection = Connection(rcv_port: 5252, send_port: 8585);
 
     
     @IBAction func gui_btn_verbinden(sender: NSButton) {
@@ -64,6 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return;
         } else {
             dispatch_async(dispatch_get_main_queue()) {
+                self.myConnection.connect()
                 self.myConnection.receiveMsg();
             }
             sendMessageOverConnection(0, msg: "");
@@ -72,12 +73,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             gui_label_verbindungsstatus.stringValue = "Verbinde";
             gui_tf_name.editable = false;
             gui_tf_ip.editable = false;
-            refresh_timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateGui_task"), userInfo: nil, repeats: true)
+            refresh_timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateGui_taskStarter"), userInfo: nil, repeats: true)
         }
     }
 
     @IBAction func gui_btn_trennen(sender: NSButton) {
         sendMessageOverConnection(1, msg: "");
+        myConnection.disconnect()
         refresh_timer.invalidate();
         gui_tf_name.editable = true;
         gui_tf_ip.editable = true;
@@ -114,60 +116,84 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+/***********************************************************************************
+**** "applicationDidFinishLaunching"                                            ****
+**** - Hier können Initialisierungen vorgenommen werden                         ****
+***********************************************************************************/
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
         gui_label_verbindungsstatus.stringValue = "Getrennt";
-        dispatch_async(dispatch_get_main_queue()) {
-            self.myConnection.receiveMsg();
-        }
-       // sendMessageOverConnection(1, msg: ""); // TODO soll das drinn bleiben?
     }
 
+/***********************************************************************************
+**** "applicationWillTerminate"                                                 ****
+**** - Hier werden die letzten Aktionen vor dem Programmende ausgeführt         ****
+**** - Meldet sich vom Server ab                                                ****
+**** - Schließt den Socket                                                      ****
+***********************************************************************************/
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
         sendMessageOverConnection(1, msg: ""); // trennen
+        myConnection.disconnect()
     }
-
+    
+/***********************************************************************************
+**** "sendMessageOverConnection"                                                ****
+**** - Bereitet Nachricht(myMessage) vor, die über myConnection versendet wird  ****
+**** - Sendet die Nachricht über eine asynchrone Task damit bei längerer        ****
+****   Ausführungszeit nicht das GUI eingefroren wird                           ****
+***********************************************************************************/
     func sendMessageOverConnection(type: Int, msg: String) {
 
         myMessage.ip = serverIP;
         myMessage.name = name;
         myMessage.type = type;
-        myMessage.port = 8585; //TODO welcher Port?
+        myMessage.port = 8585;
         myMessage.message = msg;
         dispatch_async(dispatch_get_main_queue()) {
             self.myConnection.sendMessage(self.myMessage);
         }
     }
     
-    func updateGui_task () {
+/***********************************************************************************
+**** "updateGui_taskStarter"                                                    ****
+**** - Startet zu jedem Tick von "refresh_timer" einen asynchronen Task         ****
+**** - Der Task führt "updateGUI" in jedem zyklus einmal aus                    ****
+***********************************************************************************/
+    func updateGui_taskStarter () {
         dispatch_async(dispatch_get_main_queue()) {
             self.updateGUI ();
         }
     }
-    
 
+/***********************************************************************************
+**** "updateGUI"                                                                ****
+**** - Fordert "myConnection" auf nach neuen Nachrichten zu schauen und         ****
+****   fragt dessen Empfangspuffer ab                                           ****
+**** - Unterscheidet den Nachrichtentyp und ändert entsprechend das GUI         ****
+**** - Bei einer Nachrichte wird der Nutzername mit seiner entsprechenden       ****
+****   Farbe eingefärbt                                                         ****
+**** - Bei einem Echo ist eine Alive-Nachricht, welche beantwortet wird         ****
+***********************************************************************************/
     func updateGUI () {
 
-        
-        // Kann ev. mit MyMessage ausgetauscht werden.
-        var msg:message = message();
         self.myConnection.receiveMsg();
-        msg = self.myConnection.receiveMessage();
+        self.myMessage = self.myConnection.receiveMessage().msg;
         
-        switch msg.type {
+        switch myMessage.type {
             
         case 3: // Message
-            if (!msg.message.isEmpty && !msg.name.isEmpty) {
+            if (!myMessage.message.isEmpty && !myMessage.name.isEmpty) {
                // println("Message erhalten!!!")
                 myMessageSound?.play();
-                addInList(msg.name);
+                addInList(myMessage.name);
                 
                 var anfang = gui_ScrollableTextView.string?.utf16Count
-                self.gui_ScrollableTextView.insertText(msg.name +  "\n");
-                var laenge = msg.name.utf16Count;
-                self.gui_ScrollableTextView.insertText(msg.message + "\n");
-                gui_ScrollableTextView.setTextColor(clientNamens[msg.name], range: NSMakeRange(anfang!, laenge)) // Merke: Range will nicht anfang und ende sondern anfang und anzahl zeichen! NSMakeRange(5,10) würde also bis 15 gehen.
+                self.gui_ScrollableTextView.insertText(myMessage.name +  "\n");
+                var laenge = myMessage.name.utf16Count;
+                self.gui_ScrollableTextView.insertText(myMessage.message + "\n");
+                gui_ScrollableTextView.setTextColor(clientNamens[myMessage.name], range: NSMakeRange(anfang!, laenge))
+                // Merke: Range will nicht anfang und ende sondern anfang und anzahl zeichen! NSMakeRange(5,10) würde also bis 15 gehen.
             }
             return;
             
@@ -175,7 +201,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             gui_progress.stopAnimation(self);
             gui_progress.hidden = true;
             gui_label_verbindungsstatus.stringValue = "Verbunden";
-          //  writeRedMessageToTextView(msg.message)
             sendMessageOverConnection(2, msg: "echo")
             return;
         case 1: // Disconnect
@@ -186,7 +211,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return;
         }
     }
-
+    
+/***********************************************************************************
+ **** "addInList"                                                               ****
+ **** - Verwaltet das Dictionary <String, NSColor> clientNamens                 ****
+ **** - Das Dictionary ermöglich das Einfärben der Nutzernamen im Chat          ****
+ **** - Legt für jeden Member (Nutzername) "einen" Eintrag in clientNamens an   ****
+ **** - Jeder Eintrag bekommt eine Farbe von getRandomColor() zugewiesen        ****
+ **********************************************************************************/
     func addInList(member: String) ->Bool {
 
         if(clientNamens[member] != nil) {
