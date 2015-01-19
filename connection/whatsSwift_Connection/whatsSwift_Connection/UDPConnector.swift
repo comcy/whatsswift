@@ -191,11 +191,21 @@ class Connection{
         var sepArr = msgStr.componentsSeparatedByString( del )
         
         // parse array
-        var ipSplit:String = ip
-        var portSplit:Int! = udp_sock_port_send
-        var textSplit:String = sepArr[2]
-        var nameSplit:String = sepArr[3]
-        var typeSplit:Int! = sepArr[4].toInt()
+        var ipSplit:String = ""
+        var portSplit:Int! = 0
+        var textSplit:String = ""
+        var nameSplit:String = ""
+        var typeSplit:Int! = 3
+        
+        // check array boundaries
+        if sepArr.count == 5 {
+            // parse array
+            ipSplit = ip
+            portSplit = udp_sock_port_send
+            textSplit = sepArr[2]
+            nameSplit = sepArr[3]
+            typeSplit = sepArr[4].toInt()
+        }
         
         // build a message object out of the splitted string
         var msg:message = message(ip: ipSplit , port: portSplit!, message: textSplit, name: nameSplit, type: typeSplit!)

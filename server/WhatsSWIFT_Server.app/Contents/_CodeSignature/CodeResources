@@ -6,13 +6,13 @@
 	<dict>
 		<key>Resources/AppIcon.icns</key>
 		<data>
-		LIywjO04ZIDDwt2gntRk9awctXE=
+		cQNuc3GDvapsXvyD7NizpVuGYcg=
 		</data>
 		<key>Resources/Base.lproj/MainMenu.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			WTVQHyldJcyUrmoF54r3KpXoybw=
+			3+Todu7MERC3FvlQ83syNbVZFEo=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -24,10 +24,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			1CUV9mXQ1xaL9THb+WF22P9RvEg=
+			ijLg6qKp4uUTi8iArw2zTJ+U4go=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"d42515f665d0d7168bf531dbf96176d8ff51bc48"</string>
+			<string>cdhash H"8a32e0eaa2a9e2e5138bc880af0db34c9f94e20a"</string>
 		</dict>
 		<key>Frameworks/libswiftAppKit.dylib</key>
 		<dict>
@@ -112,13 +112,13 @@
 		</dict>
 		<key>Resources/AppIcon.icns</key>
 		<data>
-		LIywjO04ZIDDwt2gntRk9awctXE=
+		cQNuc3GDvapsXvyD7NizpVuGYcg=
 		</data>
 		<key>Resources/Base.lproj/MainMenu.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			WTVQHyldJcyUrmoF54r3KpXoybw=
+			3+Todu7MERC3FvlQ83syNbVZFEo=
 			</data>
 			<key>optional</key>
 			<true/>
