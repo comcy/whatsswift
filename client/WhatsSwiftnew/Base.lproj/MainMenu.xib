@@ -733,7 +733,7 @@
                                 <rect key="frame" x="0.0" y="66" width="373" height="534"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3H-au-hXQ">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3H-au-hXQ">
                                         <rect key="frame" x="20" y="49" width="333" height="27"/>
                                         <textFieldCell key="cell" selectable="YES" editable="YES" state="on" borderStyle="border" drawsBackground="YES" usesSingleLineMode="YES" id="PgP-52-jwJ">
                                             <font key="font" metaFont="system"/>

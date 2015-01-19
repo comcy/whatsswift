@@ -77,6 +77,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+/***********************************************************************************
+**** "gui_btn_trennen"                                                          ****
+**** - Aufruf von Button Trennen                                                ****
+**** - Meldet Client vom Server ab und schließt den Socket                      ****
+**** - refresh_timer wird gestoppt damit keine Nachrichten abgefragt werden     ****
+**** - Verbindungsstatus wird auf "Getrennt" gesetzt                            ****
+**** - Animation bei Verbingungsstatus wird ausgeschaltet und unsichtbar gesetzt****
+***********************************************************************************/
     @IBAction func gui_btn_trennen(sender: NSButton) {
         sendMessageOverConnection(1, msg: "");
         myConnection.disconnect()
@@ -90,29 +98,56 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             writeRedMessageToTextView("Verbindung wurde getrennt.");
         }
     }
-
+    
+/***********************************************************************************
+**** "writeRedMessageToTextView"                                                ****
+**** - Wird genutzt um z.B. Fehlernachrichten in den Chatverlauf zu schreiben   ****
+**** - Eingabeparameter wird in roter Farbe in den Chatverlauf geschrieben      ****
+***********************************************************************************/
     func writeRedMessageToTextView(str: String) {
     
         var anfang = gui_ScrollableTextView.string?.utf16Count
         self.gui_ScrollableTextView.insertText(str +  "\n");
         var laenge = str.utf16Count;
         gui_ScrollableTextView.setTextColor(NSColor.redColor(), range: NSMakeRange(anfang!, laenge))
-    
     }
     
+/***********************************************************************************
+**** "gui_btn_senden"                                                           ****
+**** - Aufruf wenn der Senden Button gedrückt wird                              ****
+***********************************************************************************/
     @IBAction func gui_btn_senden(sender: NSButton) {
         performActionToSendMessage();
-
     }
     
+/***********************************************************************************
+**** "gui_tf_onEnter"                                                           ****
+**** - Aufruf wenn im Nachrichtenfeld "gui_tf_nachricht" Enter gedrückt wird    ****
+***********************************************************************************/
     @IBAction func gui_tf_onEnter(sender: NSTextField) {
         performActionToSendMessage();
     }
-    
+
+/***********************************************************************************
+**** "performActionToSendMessage"                                               ****
+**** - Wird von gui_btn_senden und gui_tf_onEnter aufgerufen                    ****
+**** - Prüft ob Nachrichtenfeld leer ist, zu viele Zeichen oder eine ungültige  ****
+****   Eingabe gemacht wurde, falls nicht wird eine Nachricht an                ****
+****   "sendMessageOverConnection" mit ensprechendem Typ weiter gegeben         ****
+**** - Anschließend wird das Nachrichtenfeld geleert                            ****
+***********************************************************************************/
     func performActionToSendMessage() {
-        if (!gui_tf_nachricht.stringValue.isEmpty) {
-            sendMessageOverConnection(3, msg: gui_tf_nachricht.stringValue);
-            gui_tf_nachricht.stringValue = "";
+        if (!(gui_tf_nachricht.stringValue.isEmpty) && !(gui_label_verbindungsstatus.stringValue == "Getrennt")) {
+            
+            // separation array
+            if (gui_tf_nachricht.stringValue.utf16Count > 600) {
+                writeRedMessageToTextView("Zu viele Zeichen");
+            } else if (gui_tf_nachricht.stringValue.componentsSeparatedByString( ">|<" ).count > 1) {
+                writeRedMessageToTextView("Ungültige Eingabe");
+            } else {
+                sendMessageOverConnection(3, msg: gui_tf_nachricht.stringValue);
+                gui_tf_nachricht.stringValue = "";
+            }
         }
     }
 
@@ -123,18 +158,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
         gui_label_verbindungsstatus.stringValue = "Getrennt";
+        gui_ScrollableTextView.font = NSFont(name:"HelveticaNeue-Bold", size: 12)
     }
 
+/***********************************************************************************
+**** "applicationWillTerminate"                                                 ****
+***********************************************************************************/
+    func applicationWillTerminate(aNotification: NSNotification) {
+        // Insert code here to tear down your application
+    }
+    
 /***********************************************************************************
 **** "applicationWillTerminate"                                                 ****
 **** - Hier werden die letzten Aktionen vor dem Programmende ausgeführt         ****
 **** - Meldet sich vom Server ab                                                ****
 **** - Schließt den Socket                                                      ****
 ***********************************************************************************/
-    func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+    func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+        
         sendMessageOverConnection(1, msg: ""); // trennen
         myConnection.disconnect()
+        return true;
     }
     
 /***********************************************************************************
@@ -187,12 +231,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                // println("Message erhalten!!!")
                 myMessageSound?.play();
                 addInList(myMessage.name);
-                
+
                 var anfang = gui_ScrollableTextView.string?.utf16Count
-                self.gui_ScrollableTextView.insertText(myMessage.name +  "\n");
+                self.gui_ScrollableTextView.insertText(myMessage.name +  ":" + "\n");
                 var laenge = myMessage.name.utf16Count;
-                self.gui_ScrollableTextView.insertText(myMessage.message + "\n");
+                self.gui_ScrollableTextView.insertText(myMessage.message + "\n" + "\n");
                 gui_ScrollableTextView.setTextColor(clientNamens[myMessage.name], range: NSMakeRange(anfang!, laenge))
+                
                 // Merke: Range will nicht anfang und ende sondern anfang und anzahl zeichen! NSMakeRange(5,10) würde also bis 15 gehen.
             }
             return;
