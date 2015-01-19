@@ -222,7 +222,7 @@ class Connection{
     /* receive message - thread */
     var s_open:Bool = false
     func receiveMsg() {
-        println(s_open)
+        
         if allow_udp && !s_open{
         //check for new message
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
