@@ -8,6 +8,7 @@
 /*
 TODO: Noch zu befüllen............
 
+https://github.com/xyyc/SwiftSocket
 */
 
 /* import */
@@ -210,7 +211,7 @@ class Connection{
     func sendMsg( #destIp:String, destPort:Int, msg:String  ){
         
         var client:UDPClient=UDPClient(addr: destIp, port: destPort)
-        //println("send \(msg)")
+        //println("send \(destPort) \(destIp)")
         client.send(str: msg)
         client.close()
     }
@@ -219,20 +220,22 @@ class Connection{
 
     /* ---------------------------- */
     /* receive message - thread */
+    var s_open:Bool = false
     func receiveMsg() {
-        
-        if allow_udp {
+        println(s_open)
+        if allow_udp && !s_open{
         //check for new message
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
             var server:UDPServer=UDPServer(addr:self.getIFAddresses()[2],port:self.udp_sock_port_rcv)
             var run:Bool=true
-            while run{
+            self.s_open = true
+            while run {
                 var (data,remoteip,remoteport)=server.recv(1024)
                 //println("recive")
                 if let d=data{
                     if let str=String(bytes: d, encoding: NSUTF8StringEncoding){
                         //println(str)
-                        
+                        self.s_open = false
                         // parse message
                         var msg:message = self.splitString( str, ip: remoteip, port: remoteport )
                         

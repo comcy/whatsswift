@@ -22,7 +22,7 @@ import Foundation
 var client_refresh_time = 5.0 //sec
 
 //msg refresh time - time to check for new messages
-var msg_refresh_time = 0.01 //sec
+var msg_refresh_time = 0.1 //sec
 
 //max error count before disconnect users (refresh_time*max_error) = time sec
 var max_error:Int = 5 //cylces

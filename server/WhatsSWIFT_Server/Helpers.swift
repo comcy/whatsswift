@@ -56,7 +56,7 @@ func getAddresses() -> [String] {
 /* udp test server */
 func testudpserver(){
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-        var server:UDPServer=UDPServer(addr:"127.0.0.1",port:8080)
+        var server:UDPServer=UDPServer(addr:"141.18.44.66",port:8586)
         var run:Bool=true
         while run{
             var (data,remoteip,remoteport)=server.recv(1024)
@@ -76,7 +76,7 @@ func testudpserver(){
 /* ---------------------------- */
 /* udp test client */
 func testudpclient(){
-    var client:UDPClient=UDPClient(addr: "localhost", port: 8080)
+    var client:UDPClient=UDPClient(addr: "141.18.44.66", port: 8586)
     //println("send hello world")
     client.send(str: "hello world")
     client.close()

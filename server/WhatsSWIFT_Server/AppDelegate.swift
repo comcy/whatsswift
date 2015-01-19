@@ -173,6 +173,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                                 self.ws_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: "\(tmp_msg.msg.name) connected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))
                             }
                         }
+                        else {
+                           self.udp_connection.sendMessage(message(ip: tmp_msg.msg.ip, port: tmp_msg.msg.port, message: check.message, name: self.i_server_name.stringValue,  type: msg_type.MESSAGE.rawValue))
+                        }
                     break
                     case 1: /*disconnect*/
                         self.add_log("'\(tmp_msg.msg.name)' disconnecting from \(self.i_server_name.stringValue)")
