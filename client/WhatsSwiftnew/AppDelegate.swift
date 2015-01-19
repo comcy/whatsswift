@@ -233,7 +233,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 addInList(myMessage.name);
 
                 var anfang = gui_ScrollableTextView.string?.utf16Count
-                self.gui_ScrollableTextView.insertText(myMessage.name +  ":" + "\n");
+                self.gui_ScrollableTextView.insertText(myMessage.name +  ":" + " ");
                 var laenge = myMessage.name.utf16Count;
                 self.gui_ScrollableTextView.insertText(myMessage.message + "\n" + "\n");
                 gui_ScrollableTextView.setTextColor(clientNamens[myMessage.name], range: NSMakeRange(anfang!, laenge))
