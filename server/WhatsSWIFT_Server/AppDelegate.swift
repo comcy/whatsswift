@@ -24,7 +24,7 @@ import StarscreamOSX
 class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTableViewDataSource {
     
     /* ---------------------------- */
-    //outlet
+    /* outlet */
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var i_server_name: NSTextField!
     @IBOutlet weak var o_server_ip: NSTextField!
