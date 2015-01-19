@@ -74,12 +74,6 @@ class Connection{
         return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
         
     }
-	
-	func disconnect -> (status: Bool, message: String) {
-		
-		allow_udp = false
-		return (true,"disconnect from udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
-	}
     
     /* ---------------------------- */
     /* disconnect */
