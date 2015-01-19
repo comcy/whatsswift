@@ -12,6 +12,7 @@
 		DA82ADA41A6D20DD00360A95 /* ysocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA82ADA11A6D20DD00360A95 /* ysocket.swift */; };
 		DA82ADA51A6D20DD00360A95 /* yudpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = DA82ADA21A6D20DD00360A95 /* yudpsocket.c */; };
 		DA82ADA61A6D20DD00360A95 /* yudpsocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA82ADA31A6D20DD00360A95 /* yudpsocket.swift */; };
+		DA82ADB11A6D562200360A95 /* StarscreamOSX.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = DAC050B81A63B14700753C3C /* StarscreamOSX.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DABA8CE41A3EC8CD00070009 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABA8CE31A3EC8CD00070009 /* AppDelegate.swift */; };
 		DABA8CE61A3EC8CD00070009 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE51A3EC8CD00070009 /* Images.xcassets */; };
 		DABA8CE91A3EC8CD00070009 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DABA8CE71A3EC8CD00070009 /* MainMenu.xib */; };
@@ -68,6 +69,20 @@
 			remoteInfo = StarscreamOSXTests;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DA82ADAA1A6D55EE00360A95 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DA82ADB11A6D562200360A95 /* StarscreamOSX.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DA376F3F1A4050820058A8A5 /* Params.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
@@ -288,6 +303,7 @@
 				DABA8CDA1A3EC8CD00070009 /* Sources */,
 				DABA8CDB1A3EC8CD00070009 /* Frameworks */,
 				DABA8CDC1A3EC8CD00070009 /* Resources */,
+				DA82ADAA1A6D55EE00360A95 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);

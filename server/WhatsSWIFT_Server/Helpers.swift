@@ -8,7 +8,7 @@
 /*
 Diese Datei beinhaltet Methoden die für Debug und Testzwecke verwendet wurden oder den Programmablauf nicht direkt betreffen. Also Hilfsmethoden.....
 
-
+Um alle offenen Ports im Terminal anzuzeigen: lsof -i
 
 */
 

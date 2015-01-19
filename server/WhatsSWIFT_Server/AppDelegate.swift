@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-
+App exportieren: http://stackoverflow.com/questions/5287213/how-can-i-build-for-release-distribution-on-the-xcode-4
 
 
 */
@@ -17,6 +17,7 @@ import AppKit
 import Security
 import Foundation
 import StarscreamOSX
+import Darwin
 
 /* ---------------------------- */
 /* main */
@@ -81,7 +82,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     /* ---------------------------- */
     /* shutdowm */
     func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+        NSApplication.sharedApplication().terminate(self)
+        
+    }
+    
+    /* ---------------------------- */
+    /* kill app after closing the last window */
+    func applicationShouldTerminateAfterLastWindowClosed(theApplication: NSApplication) -> Bool {
+        return true
     }
     
     /* ---------------------------- */
