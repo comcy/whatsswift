@@ -44,10 +44,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     private let queue_serial = dispatch_queue_create("serial", DISPATCH_QUEUE_SERIAL)
     
     /* ---------------------------- */
-    /* obj */
+    /* objects */
     var msg_db = message_list()
     var client_db = client_list()
-    var udp_connection = Connection()
+    var udp_connection = Connection(rcv_port: udp_sock_port_s, send_port: udp_sock_port_c)
     var ws_connection = ws_connect()
     
     /* ---------------------------- */
@@ -85,7 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
     }
     
     /* ---------------------------- */
-    /* send echo after timer and inc. error. if error is to high then disconnect */
+    /* send echo after timer and inc. error -> if error is to high then disconnect client */
     func client_refresh_cylce() {
         
         //check client count
@@ -94,7 +94,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //async
             dispatch_async(queue_serial) {
             
-                //parse clients
+                //parse all clients
                 for (index, value) in enumerate(self.client_db.get_client_list()) {
                 
                     //if client is not ws_client
@@ -111,7 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                         //inc. error
                         var err = self.client_db.set_error_for(value.name)
                 
-                        //check if exists and send echo to clients
+                        //check if client exists and send echo to clients
                         if err.status {
                             
                             //connection send echo to...
@@ -133,13 +133,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //async
         dispatch_async(queue_serial) {
             
-            //cycle call of udp socket buffer
+            //cycle call of udp socket buffer - do not change
             self.udp_connection.receiveMsg()
     
-            //check for msg at buffer
+            //check for new msg in buffer
             var tmp_msg =  self.udp_connection.receiveMessage()
             
-            //if new message check type and send broadcast and add to msg_db
+            //if new message, check type and send broadcast and add to msg_db
             if tmp_msg.status {
                 
                 //switch message type
@@ -220,7 +220,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                             self.add_log("\(list.message)")
                             self.add_log("broadcast message to clients")
                         
-                            //send message to clients
+                            //send message to udp clients
                             if self.o_ip_connection.integerValue == 1 && self.udp_state {
                                 
                                 //iterate clients
@@ -319,7 +319,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
         //if offline go online
         if server == server_state.OFFLINE {
             
-            //check conditions
+            //check for empty server name
             if i_server_name.stringValue == "" {
                 add_log("can not start server -> empty data")
                 
@@ -327,6 +327,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 playSound("Funk.aiff")
                 return
             }
+            
+            //check for empty conections
             if o_ip_connection.integerValue == 0 && o_ws_connection.integerValue == 0 {
                 add_log("can not start server -> no connection")
                 

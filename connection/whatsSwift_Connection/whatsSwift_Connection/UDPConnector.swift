@@ -39,10 +39,12 @@ class Connection{
     let receiveBuffer = Queue<message>()
     let sendBuffer = Queue<message>()
     var allow_udp:Bool = false
+    var udp_sock_port_rcv = 0
+    var udp_sock_port_send = 0
     
-    init() {
-        
-        
+    init(rcv_port:Int,send_port:Int) {
+        udp_sock_port_rcv = rcv_port
+        udp_sock_port_send = send_port
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +56,7 @@ class Connection{
     func connect() -> (status: Bool, message: String) {
         
         allow_udp = true
-        return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
+        return (true,"connect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_rcv)'")
         
     }
     
@@ -63,7 +65,7 @@ class Connection{
     func disconnect() -> (status: Bool, message: String) {
         
         allow_udp = false
-        return (true,"disconnect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_s)'")
+        return (true,"disconnect to udp socket: '\(getIFAddresses()[2]):\(udp_sock_port_rcv)'")
     }
 
     
@@ -188,7 +190,7 @@ class Connection{
         var sepArr = msgStr.componentsSeparatedByString( del )
         
         var ipSplit:String = ip
-        var portSplit:Int! = udp_sock_port_c
+        var portSplit:Int! = udp_sock_port_send
         var textSplit:String = sepArr[2]
         var nameSplit:String = sepArr[3]
         var typeSplit:Int! = sepArr[4].toInt()
@@ -222,7 +224,7 @@ class Connection{
         if allow_udp {
         //check for new message
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-            var server:UDPServer=UDPServer(addr:self.getIFAddresses()[2],port:udp_sock_port_s)
+            var server:UDPServer=UDPServer(addr:self.getIFAddresses()[2],port:self.udp_sock_port_rcv)
             var run:Bool=true
             while run{
                 var (data,remoteip,remoteport)=server.recv(1024)

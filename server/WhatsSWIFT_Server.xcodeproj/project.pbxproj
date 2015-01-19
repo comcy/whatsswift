@@ -575,6 +575,7 @@
 				INFOPLIST_FILE = WhatsSWIFT_Server/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WhatsSWIFT_Server/Helpers-Bridging-Header.h";
 			};

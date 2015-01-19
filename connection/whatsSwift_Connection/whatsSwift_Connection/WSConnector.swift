@@ -36,7 +36,7 @@ class ws_connect: WebSocketDelegate {
     var connected:Bool = false
     var error_text:String = ""
     var server_name:String = ""
-    var buffer:Connection = Connection()
+    var buffer:Connection = Connection(rcv_port: udp_sock_port_s, send_port: udp_sock_port_c)
     var state:String = ""
     var lastState:String = ""
     
