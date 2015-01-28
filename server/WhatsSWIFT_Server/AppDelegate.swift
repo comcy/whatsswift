@@ -380,6 +380,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //set state
                 ws_state = true
                 o_ws_state.backgroundColor = NSColor.greenColor()
+                
+                // send info message to websocket
+                if self.o_ws_connection.integerValue == 1 && self.ws_state {
+                    self.ws_connection.sendMessage(message(ip: "", port: 0, message: "\(self.i_server_name.stringValue) connected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))
+                }
             }
             
             //start udp connection
@@ -392,6 +397,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //set state
                 udp_state = true
                 o_udp_state.backgroundColor = NSColor.greenColor()
+                
+                // send info message to udp clients
+                if self.o_ip_connection.integerValue == 1 && self.udp_state {
+                    
+                    //iterate clients
+                    for (index, value) in enumerate(self.client_db.get_client_list()) {
+                        //send message
+                        self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "\(self.i_server_name.stringValue) is online", name: self.i_server_name.stringValue,  type: msg_type.MESSAGE.rawValue))
+                    }
+                }
             }
             
             //set state
@@ -419,6 +434,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
             //stopp ws connection
             if o_ws_connection.integerValue == 1 {
                 
+                // send info message to websocket
+                if self.o_ws_connection.integerValue == 1 && self.ws_state {
+                    self.ws_connection.sendMessage(message(ip: "", port: 0, message: "\(self.i_server_name.stringValue) disconnected",  name: self.i_server_name.stringValue, type: msg_type.ECHO.rawValue))
+                }
+                
                 //disconnect websocket
                 var tmp = ws_connection.disconnect()
                 add_log(tmp.message)
@@ -430,10 +450,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSTableViewDelegate, NSTable
                 //set state
                 ws_state = true
                 o_ws_state.backgroundColor = NSColor.redColor()
+                
             }
             
             //stopp udp connection
             if o_ip_connection.integerValue == 1 {
+                
+                // send info message to udp clients
+                if self.o_ip_connection.integerValue == 1 && self.udp_state {
+                    
+                    //iterate clients
+                    for (index, value) in enumerate(self.client_db.get_client_list()) {
+                        //send message
+                        self.udp_connection.sendMessage(message(ip: value.ip, port: value.port, message: "\(self.i_server_name.stringValue) is offline", name: self.i_server_name.stringValue,  type: msg_type.MESSAGE.rawValue))
+                    }
+                }
                 
                 //connect udp
                 var tmp = udp_connection.disconnect()

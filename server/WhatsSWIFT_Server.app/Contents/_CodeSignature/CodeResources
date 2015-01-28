@@ -12,7 +12,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3+Todu7MERC3FvlQ83syNbVZFEo=
+			rUK0rM3/wP6LE2ieDOgmWhZv+hw=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -24,10 +24,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			ijLg6qKp4uUTi8iArw2zTJ+U4go=
+			1CUV9mXQ1xaL9THb+WF22P9RvEg=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"8a32e0eaa2a9e2e5138bc880af0db34c9f94e20a"</string>
+			<string>cdhash H"d42515f665d0d7168bf531dbf96176d8ff51bc48"</string>
 		</dict>
 		<key>Frameworks/libswiftAppKit.dylib</key>
 		<dict>
@@ -118,7 +118,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			3+Todu7MERC3FvlQ83syNbVZFEo=
+			rUK0rM3/wP6LE2ieDOgmWhZv+hw=
 			</data>
 			<key>optional</key>
 			<true/>

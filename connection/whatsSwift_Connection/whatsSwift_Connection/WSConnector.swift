@@ -71,7 +71,7 @@ class ws_connect: WebSocketDelegate {
             
             // send echo U+0022
             var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}Welcome @all from \(self.server_name)\u{22}}"
-            self.socket.writeString(text)
+            //self.socket.writeString(text)
         }
         
         //set state
@@ -98,11 +98,12 @@ class ws_connect: WebSocketDelegate {
     /* send message */
     func sendMessage(msg:message) -> (status: Bool, message: String) {
        
-        //build string
-        var text:String = "{\u{22}username\u{22}:\u{22}\(msg.name)\u{22},\u{22}message\u{22}:\u{22}\(msg.message)\u{22}}"
-        
         //send async
         dispatch_async(dispatch_get_main_queue()) {
+        
+            //build string
+            var text:String = "{\u{22}username\u{22}:\u{22}\(msg.name)\u{22},\u{22}message\u{22}:\u{22}\(msg.message)\u{22}}"
+        
             self.socket.writeString(text)
         }
         
@@ -117,9 +118,9 @@ class ws_connect: WebSocketDelegate {
         dispatch_async(dispatch_get_main_queue()) {
 
             // send echo U+0022
-            var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}welcome from \(self.server_name)\u{22}}"
+            var text:String = "{\u{22}username\u{22}:\u{22}\(self.server_name)\u{22},\u{22}message\u{22}:\u{22}\(self.server_name) disconnected\u{22}}"
             
-            self.socket.writeString(text)
+            //self.socket.writeString(text)
         
             //disconnect
             self.socket.disconnect()
