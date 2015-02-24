@@ -31,6 +31,10 @@ struct message {
 /* Connection */
 class Connection{
     
+	/* ---------------------------- */
+	// Passframe
+	var pass_char = "46gtdf553refwegergreg" //min. 1 char.
+	
     /* ---------------------------- */
     // Message delimiter
     let del:String = ">|<"
@@ -158,6 +162,58 @@ class Connection{
     ///////////////////////////////////////////////////////////////////////////////////////
     // Connection functions
     ///////////////////////////////////////////////////////////////////////////////////////
+	
+	/* ---------------------------- */
+	// encrypt msg
+	func encrypt_text(p_text:String,pass_text:String) -> (state:Bool,e_text:String?) {
+		//generate pass
+		var pass = ""
+		for var index = 0; index <= 99999; ++index {
+			pass+=pass_text
+		}
+		let cipher = [UInt8](pass.utf8)
+		
+		//input to encrypt
+		var intext:String = p_text
+		println("text: \(intext)")
+
+		//generate utf8
+		let text = [UInt8](intext.utf8)
+
+		//encrypt bytes
+		var encrypted = [UInt8]()
+		for t in enumerate(text) {
+			encrypted.append(t.element ^ cipher[t.index])
+		}
+		var to_send:String? = (String(bytes: encrypted, encoding: NSUTF8StringEncoding))
+		println("send: \(to_send)")
+		return (true,to_send)
+	}
+
+	/* ---------------------------- */
+	// decrypt msg
+	func decrypt_text(e_text:String?,pass_text:String) -> (state:Bool,p_text:String?) {
+		//generate pass
+		var pass = ""
+		for var index = 0; index <= 99999; ++index {
+			pass+=pass_text
+		}
+		let cipher = [UInt8](pass.utf8)
+		
+		var in_text:String = e_text!
+
+		//decrypt bytes
+		let utext = [UInt8](in_text.utf8)
+		var decrypted = [UInt8]()
+		for t in enumerate(utext) {
+			decrypted.append(t.element ^ cipher[t.index])
+		}
+		var rcv_text:String? = (String(bytes: decrypted, encoding: NSUTF8StringEncoding))
+		println("rcv: \(rcv_text)")
+		return (true,rcv_text)
+	}
+	//var hallo = encrypt_text("halllo du kleiner homo",pass_char)
+	//var blub = decrypt_text(hallo.e_text,pass_char)
     
     /* ---------------------------- */
     /* build string */

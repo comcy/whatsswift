@@ -28,6 +28,9 @@ func ~> (
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
+/***********************************************************************************
+**** Outlets, Variablen und Konstanten. Es kann noch weitere im Code geben      ****
+***********************************************************************************/
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var gui_tf_name: NSTextField!
     @IBOutlet weak var gui_tf_ip: NSTextField!
@@ -36,20 +39,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var gui_progress: NSProgressIndicator!
     @IBOutlet weak var gui_test_scrollview: NSScrollView!
     @IBOutlet var gui_ScrollableTextView: NSTextView!
-    
+    @IBOutlet weak var gui_btn_verbinden: NSButtonCell!
+/**********************************************************************************/
     var refresh_timer = NSTimer()
     var name = "default";
     var serverIP = "127.0.0.1"
-    var clientNamens: Dictionary <String, NSColor> = Dictionary()
     var myMessage: message = message()
     var myMessageSound = NSSound(named: "Pop.aiff")
     var myErrorSound = NSSound(named: "Funk.aiff")
     var myConnection: Connection = Connection(rcv_port: 5252, send_port: 8585);
+    var serverIsAliveCounter = 0;
+    var SERVER_ALIVE_BOARDER = 40;
+/**********************************************************************************/
 
+    /* FUNKTIONEN */
+    
+/***********************************************************************************
+**** "gui_btn_verbinden"                                                        ****
+**** - Führt folgende Schritte nur aus falls Verbindung getrennt ist:           ****
+**** - Prüfen ob Name und gültige Server-Ip eingegeben wurden                   ****
+**** - Verbindungssaufbau über "myConnection" in asynchroner Task               ****
+**** - Animation wird gestartet, Verbindungsstatus auf "Verbinde" gesetzt       ****
+**** - Starten des Timers, welcher alle 0.2 sek. "updateGui_taskStarter" aufruft****
+***********************************************************************************/
     
     @IBAction func gui_btn_verbinden(sender: NSButton) {
-        
-        if (gui_tf_name.stringValue.isEmpty || gui_tf_ip.stringValue.isEmpty || gui_label_verbindungsstatus.stringValue != "Getrennt") {
+        if (gui_label_verbindungsstatus.stringValue == "Getrennt") {
+            
+        if (gui_tf_name.stringValue.isEmpty || gui_tf_ip.stringValue.utf16Count < 1) {
             myErrorSound?.play()
             writeRedMessageToTextView("Bitte Name und Server-IP eingeben.")
             return;
@@ -57,7 +74,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         name = gui_tf_name.stringValue;
         serverIP = gui_tf_ip.stringValue;
-        
+            
+        // SERVER-IP gültig?
         if (!isValidIp(serverIP)){
             myErrorSound?.play()
             writeRedMessageToTextView("Bitte gültige Server-IP eingeben.")
@@ -67,25 +85,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.myConnection.connect()
                 self.myConnection.receiveMsg();
             }
+            
             sendMessageOverConnection(0, msg: "");
             gui_progress.hidden = false;
             gui_progress.startAnimation(self);
             gui_label_verbindungsstatus.stringValue = "Verbinde";
             gui_tf_name.editable = false;
             gui_tf_ip.editable = false;
-            refresh_timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateGui_taskStarter"), userInfo: nil, repeats: true)
+            refresh_timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: Selector("updateGui_taskStarter"), userInfo: nil, repeats: true)
+            }
         }
     }
 
 /***********************************************************************************
 **** "gui_btn_trennen"                                                          ****
-**** - Aufruf von Button Trennen                                                ****
+**** - Callback von Button Trennen                                              ****
+**** - Ruft Funktion "trennen" auf                                              ****
+***********************************************************************************/
+    @IBAction func gui_btn_trennen(sender: NSButton) {
+        trennen ();
+    }
+    
+/***********************************************************************************
+**** "trennen"                                                                  ****
 **** - Meldet Client vom Server ab und schließt den Socket                      ****
 **** - refresh_timer wird gestoppt damit keine Nachrichten abgefragt werden     ****
 **** - Verbindungsstatus wird auf "Getrennt" gesetzt                            ****
 **** - Animation bei Verbingungsstatus wird ausgeschaltet und unsichtbar gesetzt****
 ***********************************************************************************/
-    @IBAction func gui_btn_trennen(sender: NSButton) {
+    func trennen() {
         sendMessageOverConnection(1, msg: "");
         myConnection.disconnect()
         refresh_timer.invalidate();
@@ -137,7 +165,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 **** - Anschließend wird das Nachrichtenfeld geleert                            ****
 ***********************************************************************************/
     func performActionToSendMessage() {
-        if (!(gui_tf_nachricht.stringValue.isEmpty) && !(gui_label_verbindungsstatus.stringValue == "Getrennt")) {
+        if (!(gui_tf_nachricht.stringValue.isEmpty) && (gui_label_verbindungsstatus.stringValue == "Verbunden")) {
             
             // separation array
             if (gui_tf_nachricht.stringValue.utf16Count > 600) {
@@ -203,11 +231,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 **** "updateGui_taskStarter"                                                    ****
 **** - Startet zu jedem Tick von "refresh_timer" einen asynchronen Task         ****
 **** - Der Task führt "updateGUI" in jedem zyklus einmal aus                    ****
+**** - Falls verbunden wird geprüft ob Server alive ist                         ****
 ***********************************************************************************/
     func updateGui_taskStarter () {
+        if (gui_label_verbindungsstatus.stringValue == "Verbunden") {
+            serverIsAliveCounter += 1;
+            if (serverIsAliveCounter > SERVER_ALIVE_BOARDER) {
+                trennen();
+                writeRedMessageToTextView("Server nicht erreichbar. Bitte erneut verbinden.");
+            }
+        } else {
+            serverIsAliveCounter = 0;
+        }
+        
+        // Asynchrone Task starten
         dispatch_async(dispatch_get_main_queue()) {
             self.updateGUI ();
         }
+        
     }
 
 /***********************************************************************************
@@ -217,7 +258,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 **** - Unterscheidet den Nachrichtentyp und ändert entsprechend das GUI         ****
 **** - Bei einer Nachrichte wird der Nutzername mit seiner entsprechenden       ****
 ****   Farbe eingefärbt                                                         ****
-**** - Bei einem Echo ist eine Alive-Nachricht, welche beantwortet wird         ****
+**** - Bei einem Echo ist es eine Alive-Nachricht, welche beantwortet wird      ****
+**** - Bei Echo wird der serverIsAliveCounter auf 0 gesetzt, da Server alive..  ****
 ***********************************************************************************/
     func updateGUI () {
 
@@ -243,35 +285,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return;
             
         case 2: // Echo
+            // Muss nur beim Verbindungsaufbau durchgeführt werden
+            serverIsAliveCounter = 0;
+            if (!gui_progress.hidden) {
             gui_progress.stopAnimation(self);
             gui_progress.hidden = true;
             gui_label_verbindungsstatus.stringValue = "Verbunden";
+            }
+            // Dem Server auf das Echo antworten => Alive
             sendMessageOverConnection(2, msg: "echo")
             return;
         case 1: // Disconnect
+            writeRedMessageToTextView("Server beendet Verbindung.")
+            trennen();
+            
             return;
-        case 0: // Connect
+        case 0: // Connect bzw. falls keine Nachricht vorhanden ist!
             return;
         default:
             return;
         }
     }
     
-/***********************************************************************************
- **** "addInList"                                                               ****
- **** - Verwaltet das Dictionary <String, NSColor> clientNamens                 ****
- **** - Das Dictionary ermöglich das Einfärben der Nutzernamen im Chat          ****
- **** - Legt für jeden Member (Nutzername) "einen" Eintrag in clientNamens an   ****
- **** - Jeder Eintrag bekommt eine Farbe von getRandomColor() zugewiesen        ****
- **********************************************************************************/
-    func addInList(member: String) ->Bool {
-
-        if(clientNamens[member] != nil) {
-            return true;
-        } else {
-            clientNamens[member] = getRandomColor();
-            return false;
-        }
-    }
 }
 

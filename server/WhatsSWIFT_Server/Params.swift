@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-Diese Datei beinhaltet statische Parameter des Servers. Bitte nur anpassen, wenn die Auswirkungen klar bekannt sind! Alle Parameter sind einzeln beschrieben...
-
+Diese Datei beinhaltet statische Parameter des Servers. 
+Bitte nur anpassen, wenn die Auswirkungen klar bekannt sind! Alle Parameter sind einzeln beschrieben...
 
 
 */

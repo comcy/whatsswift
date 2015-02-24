@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-Diese Klasse beinhaltet die Verarbeitung der Clients. Hier werden die Cients in einem Array mit dem Typ s_client gespeichert. Die Liste wird beim Programmstart geleert. Die maximale Anzahl der Cleints kann in den Params eingestellt werden. Es können alle Typen von clients gespeichert werden. Alle Methoden geben einen Status une eine Nachricht zurück...
-
+Diese Klasse beinhaltet die Verarbeitung der Clients. 
+Hier werden die Cients in einem Array mit dem Typ s_client gespeichert. Die Liste wird beim Programmstart geleert. 
+Die maximale Anzahl der Cleints kann in den Params eingestellt werden. Es können alle Typen von clients gespeichert werden. 
+Alle Methoden geben einen Status une eine Nachricht zurück...
 
 */
 

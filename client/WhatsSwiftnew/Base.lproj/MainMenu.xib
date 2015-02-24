@@ -15,10 +15,14 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WhatsSwiftnew" customModuleProvider="target">
             <connections>
                 <outlet property="gui_ScrollableTextView" destination="id3-Mw-o5t" id="gQD-C8-YEl"/>
+                <outlet property="gui_TextView" destination="id3-Mw-o5t" id="G6b-u7-mWK"/>
                 <outlet property="gui_btn_connect" destination="r6Y-ph-GGf" id="fcV-HM-dLS"/>
+                <outlet property="gui_btn_verbinden" destination="r6Y-ph-GGf" id="9pr-k9-Ucj"/>
                 <outlet property="gui_label_verbindungsstatus" destination="3nl-SC-w5e" id="45Z-3s-ROT"/>
                 <outlet property="gui_progress" destination="mIr-dg-NnS" id="bNM-Iy-Y3e"/>
                 <outlet property="gui_test_scrollview" destination="wcI-6Q-i8R" id="TtA-Ec-hRE"/>
+                <outlet property="gui_textField" destination="id3-Mw-o5t" id="bjC-jE-81l"/>
+                <outlet property="gui_textView" destination="id3-Mw-o5t" id="Y9d-dI-amD"/>
                 <outlet property="gui_tf_ip" destination="Qhc-65-8Pt" id="jTm-Xi-mmo"/>
                 <outlet property="gui_tf_nachricht" destination="L3H-au-hXQ" id="rcV-4y-7Ps"/>
                 <outlet property="gui_tf_name" destination="wMW-lM-zhT" id="FGG-am-LlZ"/>
@@ -733,7 +737,7 @@
                                 <rect key="frame" x="0.0" y="66" width="373" height="534"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3H-au-hXQ">
+                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3H-au-hXQ">
                                         <rect key="frame" x="20" y="49" width="333" height="27"/>
                                         <textFieldCell key="cell" selectable="YES" editable="YES" state="on" borderStyle="border" drawsBackground="YES" usesSingleLineMode="YES" id="PgP-52-jwJ">
                                             <font key="font" metaFont="system"/>
@@ -750,34 +754,6 @@
                                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <font key="titleFont" metaFont="system"/>
                                     </box>
-                                    <scrollView canDrawConcurrently="YES" focusRingType="none" fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcI-6Q-i8R">
-                                        <rect key="frame" x="20" y="93" width="333" height="428"/>
-                                        <clipView key="contentView" canDrawConcurrently="YES" focusRingType="none" ambiguous="YES" misplaced="YES" id="TW0-hp-euV">
-                                            <rect key="frame" x="1" y="1" width="223" height="133"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <textView canDrawConcurrently="YES" ambiguous="YES" importsGraphics="NO" selectionGranularity="paragraph" findStyle="panel" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" linkDetection="YES" dashSubstitution="YES" textReplacement="YES" smartInsertDelete="YES" id="id3-Mw-o5t">
-                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="426"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <color key="backgroundColor" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="331" height="426"/>
-                                                    <size key="maxSize" width="463" height="10000000"/>
-                                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                    <size key="minSize" width="331" height="426"/>
-                                                    <size key="maxSize" width="463" height="10000000"/>
-                                                </textView>
-                                            </subviews>
-                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </clipView>
-                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="DAQ-0m-kjg">
-                                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="mbi-Vo-Hxi">
-                                            <rect key="frame" x="224" y="1" width="15" height="133"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </scroller>
-                                    </scrollView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VPV-r3-GsU">
                                         <rect key="frame" x="196" y="24" width="85" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Verbindung:" id="MQz-gs-xkd">
@@ -807,6 +783,34 @@
                                             <action selector="gui_btn_senden:" target="Voe-Tx-rLC" id="Uy5-Jm-Sl9"/>
                                         </connections>
                                     </button>
+                                    <scrollView canDrawConcurrently="YES" focusRingType="none" fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wcI-6Q-i8R">
+                                        <rect key="frame" x="20" y="93" width="333" height="428"/>
+                                        <clipView key="contentView" canDrawConcurrently="YES" focusRingType="none" ambiguous="YES" misplaced="YES" id="TW0-hp-euV">
+                                            <rect key="frame" x="1" y="1" width="223" height="133"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textView canDrawConcurrently="YES" ambiguous="YES" importsGraphics="NO" selectionGranularity="paragraph" findStyle="panel" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" linkDetection="YES" dashSubstitution="YES" textReplacement="YES" smartInsertDelete="YES" id="id3-Mw-o5t">
+                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="426"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <color key="backgroundColor" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
+                                                    <size key="minSize" width="331" height="426"/>
+                                                    <size key="maxSize" width="463" height="10000000"/>
+                                                    <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <size key="minSize" width="331" height="426"/>
+                                                    <size key="maxSize" width="463" height="10000000"/>
+                                                </textView>
+                                            </subviews>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </clipView>
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="DAQ-0m-kjg">
+                                            <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </scroller>
+                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="mbi-Vo-Hxi">
+                                            <rect key="frame" x="224" y="1" width="15" height="133"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </scroller>
+                                    </scrollView>
                                 </subviews>
                             </customView>
                         </subviews>

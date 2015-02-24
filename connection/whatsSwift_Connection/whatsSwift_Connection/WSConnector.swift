@@ -165,10 +165,12 @@ class ws_connect: WebSocketDelegate {
     /* receive message */
     func websocketDidReceiveMessage(text: String) {
         //split text
+        //println(text)
         var Array = text.componentsSeparatedByString("\u{22}")
+        var type:String = "\(Array[11])"
         
         // ad message to buffer
-        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_ip, port: ws_sock_server_port, message: "(\(Array[3])) \(Array[7])",  name: "webchat", type: msg_type.MESSAGE.rawValue))
+        buffer.receiveBuffer.enqueue(message(ip: ws_sock_server_ip, port: ws_sock_server_port, message: "\(Array[7])",  name: "\(Array[3])", type: type.toInt()!))
         //println("Received text: \(text)")
     }
     

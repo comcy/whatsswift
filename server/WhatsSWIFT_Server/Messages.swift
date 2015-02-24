@@ -13,7 +13,10 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-Diese Klasse beinhaltet die Verarbeitung der Messages. Hier werden die Messages in einem Array mit dem Typ s_message gespeichert. Alle Messages können anhand ihrer ID ausgelese werden. Dies wurde aber aufgrund des Datenschutzes nicht implementiert. Aktuell wird nur die ID und die Anzahl der Messages verwendet. Beim Programmstart werden alle Nachrichten gelöscht. Alle Methoden geben einen Status une eine Nachricht zurück...
+Diese Klasse beinhaltet die Verarbeitung der Messages. 
+Hier werden die Messages in einem Array mit dem Typ s_message gespeichert. Alle Messages können anhand ihrer ID ausgelese werden. 
+Dies wurde aber aufgrund des Datenschutzes nicht implementiert. Aktuell wird nur die ID und die Anzahl der Messages verwendet. 
+Beim Programmstart werden alle Nachrichten gelöscht. Alle Methoden geben einen Status une eine Nachricht zurück...
 
 */
 

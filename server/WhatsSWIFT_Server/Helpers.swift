@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Bauer, Daniel. All rights reserved.
 //
 /*
-Diese Datei beinhaltet Methoden die für Debug und Testzwecke verwendet wurden oder den Programmablauf nicht direkt betreffen. Also Hilfsmethoden.....
+Diese Datei beinhaltet Methoden die für Debug und Testzwecke verwendet wurden oder den Programmablauf nicht direkt betreffen. 
+Also Hilfsmethoden.....
 
 Um alle offenen Ports im Terminal anzuzeigen: lsof -i
-
 */
 
 /* import */
@@ -18,7 +18,7 @@ import Cocoa
 import Darwin.C
 
 /* ---------------------------- */
-/* get server ip */
+/* get server ip - Objective-C Bridge needed*/
 func getAddresses() -> [String] {
     var addresses = [String]()
     
